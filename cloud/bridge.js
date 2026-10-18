@@ -56,7 +56,10 @@ if (URL_ && KEY) {
         options: { redirectTo: SCHEME, skipBrowserRedirect: true },
       });
       if (error) throw error;
-      await Browser.open({ url: data.url });
+      // the gateway wants the key on the authorize URL too
+      const target = new URL(data.url);
+      if (!target.searchParams.has('apikey')) target.searchParams.set('apikey', KEY);
+      await Browser.open({ url: target.toString() });
     },
     async signOut() {
       const { error } = await client.auth.signOut();

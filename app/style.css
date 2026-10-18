@@ -8,6 +8,11 @@
 
 /* --- Tokens ---------------------------------------------------------------- */
 :root {
+  /* Android WebView reports no env() insets; Capacitor injects --safe-area-inset-* instead. */
+  --sa-top: max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px));
+  --sa-bottom: max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px));
+  --sa-left: max(env(safe-area-inset-left, 0px), var(--safe-area-inset-left, 0px));
+  --sa-right: max(env(safe-area-inset-right, 0px), var(--safe-area-inset-right, 0px));
   /* Surfaces: 0 page, 1 cards, 2 inputs and tonal fills, 3 pressed */
   --bg: #0b0c0f;
   --surface-1: #14161b;
@@ -135,7 +140,10 @@ body {
   font-size: var(--fs-body);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  padding: var(--sa-top) var(--sa-right) 0 var(--sa-left);
 }
+/* keeps scrolling content from showing through the status bar */
+body::before { content: ""; position: fixed; inset: 0 0 auto 0; height: var(--sa-top); background: var(--bg); z-index: 40; pointer-events: none; }
 
 h1, h2, h3, p { margin: 0; }
 button, input, select { font: inherit; color: inherit; }
@@ -462,7 +470,7 @@ button.tile:active, button.card:active { background: var(--surface-3); transform
 .logo .figure { width: 100%; height: 100%; stroke-width: 1.4px; }
 
 /* --- Navigation chrome ------------------------------------------------------- */
-#toolbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; }
+#toolbar { position: sticky; top: var(--sa-top); z-index: 5; }
 .toolbar { border-radius: 0; box-shadow: inset 0 -1px 0 var(--glass-edge); }
 .toolbar-inner { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); padding-block: var(--sp-2); }
 .brand { display: flex; align-items: center; gap: var(--sp-3); font-weight: 800; font-size: var(--fs-h2); letter-spacing: -0.02em; line-height: 1.3; }
@@ -490,7 +498,7 @@ button.tile:active, button.card:active { background: var(--surface-3); transform
 .tabbar {
   position: fixed;
   left: 50%;
-  bottom: calc(var(--sp-4) + env(safe-area-inset-bottom, 0px));
+  bottom: calc(var(--sp-4) + var(--sa-bottom));
   z-index: 6;
   width: min(calc(100% - 32px), 528px);
   transform: translateX(-50%);
@@ -805,7 +813,7 @@ button.tile:active, button.card:active { background: var(--surface-3); transform
   width: calc(100% - 16px);
   max-width: 544px;
   max-height: calc(100% - 48px);
-  margin-bottom: calc(var(--sp-2) + env(safe-area-inset-bottom, 0px));
+  margin-bottom: calc(var(--sp-2) + var(--sa-bottom));
   padding: var(--sp-6);
   overflow: auto;
   border-radius: var(--r-xl);
@@ -819,7 +827,7 @@ button.tile:active, button.card:active { background: var(--surface-3); transform
   z-index: 30;
   display: flex;
   flex-direction: column;
-  padding-top: env(safe-area-inset-top, 0px);
+  padding-top: var(--sa-top);
   background: var(--bg);
 }
 .lesson-bar { display: flex; align-items: center; gap: var(--sp-4); width: 100%; max-width: 560px; margin-inline: auto; padding: var(--sp-2) var(--sp-4); }
@@ -832,7 +840,7 @@ button.tile:active, button.card:active { background: var(--surface-3); transform
   gap: var(--sp-4);
   width: calc(100% - 32px);
   max-width: 528px;
-  margin: 0 auto calc(var(--sp-4) + env(safe-area-inset-bottom, 0px));
+  margin: 0 auto calc(var(--sp-4) + var(--sa-bottom));
   padding: var(--sp-4);
   border-radius: var(--r-xl);
 }
@@ -847,7 +855,7 @@ button.tile:active, button.card:active { background: var(--surface-3); transform
 .toast {
   position: fixed;
   left: 50%;
-  bottom: calc(104px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(104px + var(--sa-bottom));
   z-index: 40;
   max-width: calc(100% - 32px);
   padding: var(--sp-3) var(--sp-6);
