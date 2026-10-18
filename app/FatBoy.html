@@ -1024,6 +1024,15 @@ label.btn:has(+ .sr-only:focus-visible) { outline: 3px solid var(--accent); outl
 :root[data-motion="full"] .stat-streak.is-lit .icon { animation: flicker 2.6s ease-in-out infinite; transform-origin: 50% 90%; }
 @keyframes flicker { 0%, 100% { transform: scale(1) rotate(0); } 40% { transform: scale(1.1) rotate(-5deg); } 65% { transform: scale(0.96) rotate(3deg); } }
 
+/* Day navigation, macros, fasting */
+.day-nav { gap: var(--sp-2); }
+.more { border-radius: 12px; }
+.more summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 600; color: var(--accent); list-style-position: inside; }
+.more summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+.more[open] summary { margin-bottom: var(--sp-2); }
+.fast-clock { margin: 0; font-size: var(--fs-display); line-height: 1.1; font-weight: 700; font-variant-numeric: tabular-nums; text-align: center; }
+.segmented[role="tablist"] button { min-width: 0; padding-inline: var(--sp-1); font-size: var(--fs-small); }
+
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><path id="fb-figure" vector-effect="non-scaling-stroke"/><path id="fb-figure-soft" vector-effect="non-scaling-stroke"/></defs></svg>
 <div id="app">
@@ -1610,6 +1619,51 @@ STRINGS.en = {
   'result.nice.2': 'Small steps add up.',
   'result.nice.3': 'Nicely done.',
   'learn.nextTip': 'Another tip',
+  'profile.previewWeight': 'Figure at {weight}, BMI {bmi}',
+  'panel.fast': 'Fast',
+  'macro.protein': 'Protein',
+  'macro.carbs': 'Carbs',
+  'macro.fat': 'Fat',
+  'macro.of': '{n} of {goal} g',
+  'macro.note': 'Only foods logged with macros are counted here.',
+  'food.macros': 'Add macros (optional)',
+  'food.protein': 'Protein (g)',
+  'food.carbs': 'Carbs (g)',
+  'food.fat': 'Fat (g)',
+  'food.recent': 'Recent',
+  'day.today': 'Today',
+  'day.prev': 'Previous day',
+  'day.next': 'Next day',
+  'day.backToToday': 'Back to today',
+  'day.total': '{n} kcal logged',
+  'checkin.title': 'Weekly check-in',
+  'checkin.logged': 'Days with food logged',
+  'checkin.avg': 'Average calories',
+  'checkin.change': 'Weight change this week',
+  'checkin.locked': 'To work out your real maintenance, log food on 7 of the last 14 days and weigh in at least a week apart. So far: {days} food days, {weighs} weigh-ins over {span} days.',
+  'checkin.result': 'You eat about {intake} kcal a day and your weight is moving {rate} a week. That puts your real maintenance near {m} kcal. The formula guessed {f}.',
+  'checkin.apply': 'Use a {n} kcal target',
+  'checkin.using': 'Your target now uses your own data.',
+  'checkin.reset': 'Go back to the formula',
+  'toast.targetUpdated': 'Target updated',
+  'toast.targetReset': 'Back to the formula',
+  'fast.title': 'Fasting timer',
+  'fast.pick': 'Fasting window',
+  'fast.hours': '{n} h',
+  'fast.start': 'Start fast',
+  'fast.end': 'End fast',
+  'fast.since': 'Started at {time}',
+  'fast.goalAt': 'Your {hours} h goal is reached at {time}',
+  'fast.done': 'Goal reached',
+  'fast.progress': 'Fasting progress',
+  'fast.history': 'Recent fasts',
+  'fast.completed': 'Goals reached',
+  'fast.longest': 'Longest fast',
+  'fast.empty': 'No fasts yet. Pick a window and start.',
+  'fast.entry': '{hours} h of {goal} h',
+  'fast.reached': 'Reached',
+  'fast.toastEnd': 'Fast ended after {hours} h',
+  'fast.help': 'A fasting window is just a stretch of time without eating. It is optional and not for everyone, so skip it if you have a medical condition, are pregnant or have had an eating disorder.',
 };
 
 'use strict';
@@ -2157,6 +2211,51 @@ STRINGS.el = {
   'result.nice.2': 'Τα μικρά βήματα μετράνε.',
   'result.nice.3': 'Ωραία δουλειά.',
   'learn.nextTip': 'Άλλη συμβουλή',
+  'profile.previewWeight': 'Φιγούρα στα {weight}, ΔΜΣ {bmi}',
+  'panel.fast': 'Νηστεία',
+  'macro.protein': 'Πρωτεΐνη',
+  'macro.carbs': 'Υδατάνθρακες',
+  'macro.fat': 'Λιπαρά',
+  'macro.of': '{n} από {goal} g',
+  'macro.note': 'Μετράνε μόνο τα φαγητά που καταγράφηκαν με macros.',
+  'food.macros': 'Πρόσθεσε macros (προαιρετικό)',
+  'food.protein': 'Πρωτεΐνη (g)',
+  'food.carbs': 'Υδατάνθρακες (g)',
+  'food.fat': 'Λιπαρά (g)',
+  'food.recent': 'Πρόσφατα',
+  'day.today': 'Σήμερα',
+  'day.prev': 'Προηγούμενη μέρα',
+  'day.next': 'Επόμενη μέρα',
+  'day.backToToday': 'Πίσω στο σήμερα',
+  'day.total': '{n} kcal καταγράφηκαν',
+  'checkin.title': 'Εβδομαδιαίος έλεγχος',
+  'checkin.logged': 'Μέρες με καταγραφή φαγητού',
+  'checkin.avg': 'Μέσες θερμίδες',
+  'checkin.change': 'Αλλαγή βάρους αυτή την εβδομάδα',
+  'checkin.locked': 'Για να υπολογίσουμε τη πραγματική σου συντήρηση, κατάγραψε φαγητό σε 7 από τις τελευταίες 14 μέρες και ζυγίσου με διαφορά τουλάχιστον μιας εβδομάδας. Μέχρι τώρα: {days} μέρες φαγητού, {weighs} ζυγίσματα σε {span} μέρες.',
+  'checkin.result': 'Τρως περίπου {intake} kcal την ημέρα και το βάρος σου κινείται {rate} την εβδομάδα. Αυτό βάζει τη πραγματική συντήρησή σου κοντά στις {m} kcal. Ο τύπος υπολόγισε {f}.',
+  'checkin.apply': 'Χρήση στόχου {n} kcal',
+  'checkin.using': 'Ο στόχος σου βασίζεται πλέον στα δικά σου δεδομένα.',
+  'checkin.reset': 'Επιστροφή στον τύπο',
+  'toast.targetUpdated': 'Ο στόχος ενημερώθηκε',
+  'toast.targetReset': 'Επιστροφή στον τύπο',
+  'fast.title': 'Χρονόμετρο νηστείας',
+  'fast.pick': 'Παράθυρο νηστείας',
+  'fast.hours': '{n} ώρ.',
+  'fast.start': 'Έναρξη νηστείας',
+  'fast.end': 'Τέλος νηστείας',
+  'fast.since': 'Ξεκίνησε στις {time}',
+  'fast.goalAt': 'Ο στόχος των {hours} ωρών συμπληρώνεται στις {time}',
+  'fast.done': 'Ο στόχος επιτεύχθηκε',
+  'fast.progress': 'Πρόοδος νηστείας',
+  'fast.history': 'Πρόσφατες νηστείες',
+  'fast.completed': 'Στόχοι που επιτεύχθηκαν',
+  'fast.longest': 'Μεγαλύτερη νηστεία',
+  'fast.empty': 'Καμία νηστεία ακόμα. Διάλεξε παράθυρο και ξεκίνα.',
+  'fast.entry': '{hours} ώρ. από {goal} ώρ.',
+  'fast.reached': 'Επιτεύχθηκε',
+  'fast.toastEnd': 'Η νηστεία τελείωσε μετά από {hours} ώρ.',
+  'fast.help': 'Το παράθυρο νηστείας είναι απλώς ένα διάστημα χωρίς φαγητό. Είναι προαιρετικό και δεν ταιριάζει σε όλους, οπότε παράλειψέ το αν έχεις ιατρική πάθηση, είσαι έγκυος ή έχεις ιστορικό διατροφικής διαταραχής.',
 };
 
 'use strict';
@@ -2704,6 +2803,51 @@ STRINGS.es = {
   'result.nice.2': 'Los pasos pequeños suman.',
   'result.nice.3': 'Buen trabajo.',
   'learn.nextTip': 'Otro consejo',
+  'profile.previewWeight': 'Figura a {weight}, IMC {bmi}',
+  'panel.fast': 'Ayuno',
+  'macro.protein': 'Proteína',
+  'macro.carbs': 'Carbohidratos',
+  'macro.fat': 'Grasa',
+  'macro.of': '{n} de {goal} g',
+  'macro.note': 'Aquí solo cuentan los alimentos registrados con macros.',
+  'food.macros': 'Añadir macros (opcional)',
+  'food.protein': 'Proteína (g)',
+  'food.carbs': 'Carbohidratos (g)',
+  'food.fat': 'Grasa (g)',
+  'food.recent': 'Recientes',
+  'day.today': 'Hoy',
+  'day.prev': 'Día anterior',
+  'day.next': 'Día siguiente',
+  'day.backToToday': 'Volver a hoy',
+  'day.total': '{n} kcal registradas',
+  'checkin.title': 'Revisión semanal',
+  'checkin.logged': 'Días con comida registrada',
+  'checkin.avg': 'Calorías medias',
+  'checkin.change': 'Cambio de peso esta semana',
+  'checkin.locked': 'Para calcular tu mantenimiento real, registra comida en 7 de los últimos 14 días y pésate con al menos una semana de diferencia. Por ahora: {days} días de comida, {weighs} pesajes en {span} días.',
+  'checkin.result': 'Comes unas {intake} kcal al día y tu peso se mueve {rate} por semana. Eso sitúa tu mantenimiento real cerca de {m} kcal. La fórmula calculó {f}.',
+  'checkin.apply': 'Usar objetivo de {n} kcal',
+  'checkin.using': 'Tu objetivo ahora usa tus propios datos.',
+  'checkin.reset': 'Volver a la fórmula',
+  'toast.targetUpdated': 'Objetivo actualizado',
+  'toast.targetReset': 'Vuelta a la fórmula',
+  'fast.title': 'Temporizador de ayuno',
+  'fast.pick': 'Ventana de ayuno',
+  'fast.hours': '{n} h',
+  'fast.start': 'Empezar ayuno',
+  'fast.end': 'Terminar ayuno',
+  'fast.since': 'Empezó a las {time}',
+  'fast.goalAt': 'Tu meta de {hours} h se cumple a las {time}',
+  'fast.done': 'Meta cumplida',
+  'fast.progress': 'Progreso del ayuno',
+  'fast.history': 'Ayunos recientes',
+  'fast.completed': 'Metas cumplidas',
+  'fast.longest': 'Ayuno más largo',
+  'fast.empty': 'Aún no hay ayunos. Elige una ventana y empieza.',
+  'fast.entry': '{hours} h de {goal} h',
+  'fast.reached': 'Cumplida',
+  'fast.toastEnd': 'Ayuno terminado tras {hours} h',
+  'fast.help': 'Una ventana de ayuno es solo un rato sin comer. Es opcional y no es para todos, así que sáltatela si tienes una condición médica, estás embarazada o has tenido un trastorno alimentario.',
 };
 
 'use strict';
@@ -2740,18 +2884,18 @@ const TOTAL_LESSONS = UNIT_ICONS.length * LESSONS_PER_UNIT;
 const units = () => CONTENT[state.settings.language].map((unit, i) => ({ ...unit, icon: UNIT_ICONS[i] }));
 
 const QUICK_FOODS = [
-  { key: 'apple', kcal: 95 },
-  { key: 'banana', kcal: 105 },
-  { key: 'egg', kcal: 70 },
-  { key: 'yogurt', kcal: 100 },
-  { key: 'oatmeal', kcal: 160 },
-  { key: 'chicken', kcal: 165 },
-  { key: 'rice', kcal: 200 },
-  { key: 'pizza', kcal: 285 },
-  { key: 'coffee', kcal: 50 },
-  { key: 'peanutButter', kcal: 95 },
-  { key: 'avocado', kcal: 120 },
-  { key: 'salad', kcal: 90 },
+  { key: 'apple', kcal: 95, p: 0, c: 25, f: 0 },
+  { key: 'banana', kcal: 105, p: 1, c: 27, f: 0 },
+  { key: 'egg', kcal: 70, p: 6, c: 0, f: 5 },
+  { key: 'yogurt', kcal: 100, p: 10, c: 8, f: 2 },
+  { key: 'oatmeal', kcal: 160, p: 6, c: 27, f: 3 },
+  { key: 'chicken', kcal: 165, p: 31, c: 0, f: 4 },
+  { key: 'rice', kcal: 200, p: 4, c: 44, f: 0 },
+  { key: 'pizza', kcal: 285, p: 12, c: 36, f: 10 },
+  { key: 'coffee', kcal: 50, p: 3, c: 5, f: 2 },
+  { key: 'peanutButter', kcal: 95, p: 4, c: 3, f: 8 },
+  { key: 'avocado', kcal: 120, p: 2, c: 6, f: 11 },
+  { key: 'salad', kcal: 90, p: 3, c: 8, f: 5 },
 ];
 
 // Metabolic equivalents, used to estimate calories burned. Keys are stored in the log.
@@ -3973,6 +4117,8 @@ const createState = settings => ({
   saved: {},            // recipe id -> 1
   recipes: {},          // saved recipes written by Claude, by id
   cooked: {},           // date -> recipes logged
+  fast: null,           // { start, hours } while a fast is running
+  fasts: [],            // finished fasts, { start, end, goal }
   plus: false,          // FatBoy Plus
   aiUsed: {},           // date -> Claude recipes written
   claimed: {},          // quest and chest claims
@@ -4015,7 +4161,8 @@ const KCAL_PER_KG_FAT = 7700;
 function planCalories(profile, weightKg, kgPerWeek) {
   const base = 10 * weightKg + 6.25 * profile.heightCm - 5 * profile.age;
   const bmr = base + (profile.sex === 'm' ? 5 : -161);
-  const maintenance = bmr * ACTIVITY_FACTORS[profile.activity];
+  // After a check-in the person's own logs can replace the formula.
+  const maintenance = profile.maintenanceOverride || bmr * ACTIVITY_FACTORS[profile.activity];
   const wanted = maintenance - (kgPerWeek * KCAL_PER_KG_FAT) / 7;
   const floor = profile.sex === 'm' ? 1500 : 1200;
   return {
@@ -4060,8 +4207,14 @@ const slimProgress = () => {
 const BMI_HEAVY = 36;
 const BMI_LEAN = 22;
 const bmiOf = (kg, heightCm) => kg / Math.pow(heightCm / 100, 2);
+// Someone who starts above a BMI of 36 gets a heaviest point of their own, so the first kilos they lose
+// already change the drawing instead of disappearing into the flat top of the scale.
+const heaviestBmi = () => (state.profile ? Math.max(BMI_HEAVY, bmiOf(state.profile.weightKg, state.profile.heightCm)) : BMI_HEAVY);
 const figureProgress = (kg = currentWeightKg()) =>
-  state.profile ? clamp((BMI_HEAVY - bmiOf(kg, state.profile.heightCm)) / (BMI_HEAVY - BMI_LEAN), 0, 1) : 0;
+  state.profile ? clamp((heaviestBmi() - bmiOf(kg, state.profile.heightCm)) / (heaviestBmi() - BMI_LEAN), 0, 1) : 0;
+// The weight (and BMI) the drawing stands for at a given point of the slider.
+const bmiAtFigure = progress => heaviestBmi() - progress * (heaviestBmi() - BMI_LEAN);
+const weightAtFigure = progress => bmiAtFigure(progress) * Math.pow(state.profile.heightCm / 100, 2);
 
 const lessonId = (unit, lesson) => `${unit}.${lesson}`;
 const lessonsDone = () => Object.keys(state.done).length;
@@ -4275,7 +4428,7 @@ const figureShape = (() => {
 
   // The jaw line and the front of the neck are lifted so the chin sits on a clean angle, with no second chin.
   const jawLift = (x, y) =>
-    30 * smooth(472, 525, x) * (1 - smooth(560, 620, x)) * smooth(270, 300, y) * (1 - smooth(335, 410, y));
+    54 * smooth(462, 548, x) * (1 - smooth(585, 640, x)) * smooth(270, 300, y) * (1 - smooth(335, 410, y));
 
   // The drawing has a second curve under the chin. Everything between the chin line and that curve is
   // squashed flat onto the chin line, so the jaw reads as one clean line (jawLift takes over toward the neck).
@@ -4313,8 +4466,42 @@ const figureShape = (() => {
     }).join('');
   };
 
+  // Where the jaw meets the ear. The traced drawing leaves the jawline hanging in the air once it is
+  // lifted, so a short stroke carries it round the angle of the jaw and up the ramus to the earlobe.
+  const EAR_FOOT = [576, 243];
+  const JAW_END = [552, 310];
+  const HALF_WIDTH = 2.2;
+  const ramus = progress => {
+    const amount = faceAmount(progress);
+    if (amount < 0.05) return '';
+    const e = warp(JAW_END[0], JAW_END[1], progress);
+    const top = [e[0] + (EAR_FOOT[0] - e[0]) * amount, e[1] + (EAR_FOOT[1] - e[1]) * amount];
+    const c1 = [e[0] + 12, e[1] + 2 * amount];
+    const c2 = [top[0] - 1, top[1] + 15 * amount];
+    const at = t => {
+      const u = 1 - t;
+      return [0, 1].map(i => u * u * u * e[i] + 3 * u * u * t * c1[i] + 3 * u * t * t * c2[i] + t * t * t * top[i]);
+    };
+    const left = [];
+    const right = [];
+    const steps = 16;
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const [x, y] = at(t);
+      const [x2, y2] = at(Math.min(1, t + 0.02));
+      const [x1, y1] = at(Math.max(0, t - 0.02));
+      const length = Math.hypot(x2 - x1, y2 - y1) || 1;
+      const nx = -(y2 - y1) / length;
+      const ny = (x2 - x1) / length;
+      left.push([x + nx * HALF_WIDTH, y + ny * HALF_WIDTH]);
+      right.push([x - nx * HALF_WIDTH, y - ny * HALF_WIDTH]);
+    }
+    const points = left.concat(right.reverse()).map(([x, y]) => `${round(x)} ${round(y)}`);
+    return `M${points[0]}L${points.slice(1).join('L')}Z`;
+  };
+
   return {
-    main: progress => outline(progress, false),
+    main: progress => outline(progress, false) + ramus(progress),
     soft: progress => outline(progress, true),
     softOpacity: progress => clamp(1 - progress * 1.6, 0, 1),
   };
@@ -4639,6 +4826,8 @@ const ui = {
   tab: 'learn',
   trackPanel: 'food',
   profileView: 'main',  // main | settings
+  day: null,            // past day shown in the food log, null for today
+  fastHours: 16,
   tipShift: 0,          // taps on the mascot to see another tip
   errors: {},           // form name -> message
   draft: null,          // onboarding answers
@@ -4862,14 +5051,16 @@ function todayCard() {
         ${legendRow('var(--sky)', t('track.water'), t('track.glassesOf', { n: glasses }), glasses >= 8 ? t('common.done') : t('track.toGo', { n: 8 - glasses }))}
         ${legendRow('var(--on-tonal)', t('track.movement'), t('track.minutesOf', { n: minutes, burned: formatInt(caloriesBurned()) }), minutes >= 30 ? t('common.done') : t('track.minToGo', { n: 30 - minutes }))}
       </div>
+      ${macroBars()}
     </section>`;
 }
 
 function foodPanel() {
   const error = ui.errors.food;
-  const byMeal = MEALS.map(meal => ({ meal, items: foodToday().filter(item => item.meal === meal) })).filter(group => group.items.length);
+  const byMeal = MEALS.map(meal => ({ meal, items: foodOn(foodDayKey()).filter(item => item.meal === meal) })).filter(group => group.items.length);
 
   return html`
+    ${dayNav()}
     <form class="card" data-form="food" novalidate>
       <h2>${t('food.add')}</h2>
       <div class="field">
@@ -4886,9 +5077,16 @@ function foodPanel() {
           <select class="input" id="food-meal">${MEALS.map(meal => html`<option value="${meal}">${t(`meal.${meal}`)}</option>`)}</select>
         </div>
       </div>
+      ${macroInputs()}
       ${errorLine('food-error', error)}
       <button class="btn btn-large" type="submit">${icon('plus')}${t('food.addButton')}</button>
       <button type="button" class="btn btn-tonal" data-action="open-food-search">${icon('search')}${t('food.search')}</button>
+      ${recentFoods().length ? html`<div class="stack-tight">
+        <p class="field-label">${t('food.recent')}</p>
+        <div class="row row-wrap row-tight">${recentFoods().map((food, i) => html`
+          <button type="button" class="btn btn-tonal btn-small" data-action="recent-food" data-index="${i}">${food.name}, ${formatInt(food.kcal)}</button>`)}
+        </div>
+      </div>` : ''}
       <div class="stack-tight">
         <p class="field-label">${t('food.quick')}</p>
         <div class="row row-wrap row-tight">${QUICK_FOODS.map((food, i) => html`
@@ -5059,6 +5257,7 @@ const TRACK_PANELS = [
   { id: 'water', render: waterPanel },
   { id: 'move', render: movePanel },
   { id: 'weight', render: weightPanel },
+  { id: 'fast', render: fastPanel },
 ];
 
 function trackScreen() {
@@ -5232,6 +5431,8 @@ function questsScreen() {
 /* ==========================================================================
    Profile and settings
    ========================================================================== */
+const scrubLabel = progress => t('profile.previewWeight', { weight: mass.format(weightAtFigure(progress)), bmi: formatDecimal(bmiAtFigure(progress)) });
+
 function profileScreen() {
   const { profile } = state;
   const current = currentWeightKg();
@@ -5248,6 +5449,7 @@ function profileScreen() {
       <div class="field fill scrub">
         <label for="scrub">${t('profile.preview')}</label>
         <input class="range" id="scrub" type="range" min="0" max="100" value="${Math.round(figureProgress() * 100)}" data-scrub>
+        <p class="caption num" data-scrub-label aria-live="polite">${scrubLabel(figureProgress())}</p>
         <p class="caption">${t('profile.previewHelp')}</p>
       </div>
     </section>
@@ -5275,6 +5477,7 @@ function profileScreen() {
       ${plan.limited ? html`<p class="caption">${t('profile.limited', { n: formatInt(plan.floor) })}</p>` : ''}
       <button class="btn btn-tonal" data-action="edit-goal">${t('profile.editGoal')}</button>
     </section>
+    ${checkinCard()}
     ${photosCard()}
     ${plusCard()}
     <button class="card nav-card" data-action="open-settings">
@@ -5883,7 +6086,7 @@ function logRecipe(id) {
   const recipe = findRecipe(id);
   if (!recipe) return;
   const { title } = recipeView(recipe);
-  logFood(title, recipe.kcal, recipe.meal);
+  logFood(title, recipe.kcal, recipe.meal, { p: recipe.protein });
   state.cooked[today()] = (state.cooked[today()] || 0) + 1;
   saveState();
   toast(t('toast.added', { name: title, kcal: recipe.kcal }));
@@ -6020,7 +6223,8 @@ function foodFromProduct(product) {
   const name = cleanText(product?.product_name, 60);
   if (!name || !(kcal >= 0 && kcal <= 900)) return null;
   const brand = cleanText(String(product.brands || '').split(',')[0], 30);
-  return { code: String(product.code || ''), name, brand, kcal100: Math.round(kcal) };
+  const per100 = key => Math.max(0, Number(n[`${key}_100g`]) || 0);
+  return { code: String(product.code || ''), name, brand, kcal100: Math.round(kcal), p100: per100('proteins'), c100: per100('carbohydrates'), f100: per100('fat') };
 }
 
 async function requestFoods(path, signal) {
@@ -6101,7 +6305,8 @@ function addFound(index) {
   }
   const name = cleanText(food.name, 40);
   const kcal = Math.max(1, Math.round((food.kcal100 * grams) / 100));
-  logFood(name, kcal, mealForNow());
+  const scale = grams / 100;
+  logFood(name, kcal, mealForNow(), { p: Math.round(food.p100 * scale * 10) / 10, c: Math.round(food.c100 * scale * 10) / 10, f: Math.round(food.f100 * scale * 10) / 10 }, foodDayKey());
   closeSheet();
   paint();
   toast(t('toast.added', { name, kcal }));
@@ -6265,6 +6470,225 @@ function photosCard() {
       <p class="caption">${t('photos.help')}</p>
     </section>`;
 }
+
+/* ==========================================================================
+   Macros, past days, recent foods, weekly check-in and fasting
+   ========================================================================== */
+const foodDayKey = () => ui.day || today();
+const foodOn = key => state.food[key] || [];
+const MAX_DAYS_BACK = 60;
+
+/* --- Past days ------------------------------------------------------------- */
+function dayNav() {
+  const key = foodDayKey();
+  const isToday = key === today();
+  const logged = foodOn(key).reduce((sum, item) => sum + item.kcal, 0);
+  return html`
+    <div class="row day-nav">
+      <button class="icon-btn" data-action="day-prev" aria-label="${t('day.prev')}" ${attributes({ disabled: key <= addDays(today(), -MAX_DAYS_BACK) })}>${icon('back')}</button>
+      <div class="grow stack-tight center">
+        <strong>${isToday ? t('day.today') : longDate(key)}</strong>
+        <span class="caption num">${t('day.total', { n: formatInt(logged) })}</span>
+      </div>
+      <button class="icon-btn" data-action="day-next" aria-label="${t('day.next')}" ${attributes({ disabled: isToday })}>${icon('next')}</button>
+    </div>
+    ${isToday ? '' : html`<button class="btn btn-tonal" data-action="day-today">${t('day.backToToday')}</button>`}`;
+}
+
+/* --- Macros ---------------------------------------------------------------- */
+const sumMacros = items => items.reduce((sum, item) => ({
+  p: sum.p + (item.p || 0), c: sum.c + (item.c || 0), f: sum.f + (item.f || 0),
+  counted: sum.counted + (item.p || item.c || item.f ? 1 : 0),
+}), { p: 0, c: 0, f: 0, counted: 0 });
+
+// Protein follows the goal weight; fat takes 28% of the calories and carbs fill the rest.
+function macroTargets() {
+  const kcal = calorieTarget();
+  const protein = clamp(Math.round(1.6 * Math.min(currentWeightKg(), state.profile.goalKg)), 60, 220);
+  const fat = Math.round((kcal * 0.28) / 9);
+  const carbs = Math.max(0, Math.round((kcal - protein * 4 - fat * 9) / 4));
+  return { p: protein, c: carbs, f: fat };
+}
+
+function macroBars() {
+  const eaten = sumMacros(foodToday());
+  if (!eaten.counted) return '';
+  const goal = macroTargets();
+  return html`
+    <div class="stack-tight">
+      ${[['protein', 'p'], ['carbs', 'c'], ['fat', 'f']].map(([name, key]) => html`
+        <div class="stack-tight">
+          <div class="row"><span class="grow">${t(`macro.${name}`)}</span><span class="caption num">${t('macro.of', { n: formatInt(eaten[key]), goal: goal[key] })}</span></div>
+          ${progressBar(t(`macro.${name}`), `macro-${key}`, eaten[key], goal[key])}
+        </div>`)}
+      <p class="caption">${t('macro.note')}</p>
+    </div>`;
+}
+
+const macroInputs = () => html`
+  <details class="more">
+    <summary>${t('food.macros')}</summary>
+    <div class="grid-3">
+      ${[['p', 'food.protein'], ['c', 'food.carbs'], ['f', 'food.fat']].map(([key, label]) => html`
+        <div class="field"><label for="food-${key}">${t(label)}</label><input class="input" id="food-${key}" type="number" inputmode="decimal" min="0" max="500"></div>`)}
+    </div>
+  </details>`;
+
+const readMacros = read => {
+  const grams = id => {
+    const value = Number(read(id));
+    return value > 0 ? Math.round(clamp(value, 0, 500) * 10) / 10 : 0;
+  };
+  return { p: grams('food-p'), c: grams('food-c'), f: grams('food-f') };
+};
+
+/* --- Recent foods ---------------------------------------------------------- */
+function recentFoods() {
+  const seen = new Set();
+  const found = [];
+  for (let back = 0; back < 14 && found.length < 8; back++) {
+    for (const item of [...foodOn(addDays(today(), -back))].reverse()) {
+      const id = item.name.toLowerCase();
+      if (seen.has(id)) continue;
+      seen.add(id);
+      found.push(item);
+      if (found.length >= 8) break;
+    }
+  }
+  return found;
+}
+
+/* --- Weekly check-in ------------------------------------------------------- */
+function weekStats() {
+  const days = Array.from({ length: 14 }, (_, i) => addDays(today(), -i));
+  const first = days[13];
+  const totals = days.map(key => foodOn(key).reduce((sum, item) => sum + item.kcal, 0)).filter(kcal => kcal >= 800);
+  const intake = totals.length ? totals.reduce((a, b) => a + b, 0) / totals.length : 0;
+
+  const spot = key => (parseKey(key) - parseKey(first)) / 86400000;
+  const points = Object.keys(state.weights).filter(key => key >= first).sort().map(key => [spot(key), state.weights[key]]);
+  const span = points.length > 1 ? points[points.length - 1][0] - points[0][0] : 0;
+  let slope = 0;
+  if (span > 0) {
+    const mx = points.reduce((s, p) => s + p[0], 0) / points.length;
+    const my = points.reduce((s, p) => s + p[1], 0) / points.length;
+    slope = points.reduce((s, p) => s + (p[0] - mx) * (p[1] - my), 0) / points.reduce((s, p) => s + (p[0] - mx) ** 2, 0);
+  }
+
+  const week = days.slice(0, 7);
+  const weekTotals = week.map(key => foodOn(key).reduce((sum, item) => sum + item.kcal, 0)).filter(kcal => kcal > 0);
+  const weekWeights = Object.keys(state.weights).filter(key => key >= week[6]).sort();
+  const change = weekWeights.length > 1 ? state.weights[weekWeights[weekWeights.length - 1]] - state.weights[weekWeights[0]] : null;
+
+  const ready = totals.length >= 7 && span >= 6;
+  const maintenance = ready ? clamp(Math.round(intake - slope * KCAL_PER_KG_FAT), 1200, 5000) : 0;
+  const plan = planCalories({ ...state.profile, maintenanceOverride: 0 }, currentWeightKg(), state.profile.pace);
+  const wanted = maintenance - (state.profile.pace * KCAL_PER_KG_FAT) / 7;
+  return {
+    ready, foodDays: totals.length, span: Math.floor(span), weighIns: points.length, intake, slope,
+    maintenance, formula: plan.maintenance, suggested: Math.max(plan.floor, Math.round(wanted / 10) * 10),
+    weekDays: weekTotals.length, weekAvg: weekTotals.length ? weekTotals.reduce((a, b) => a + b, 0) / weekTotals.length : 0, change,
+  };
+}
+
+function checkinCard() {
+  const stats = weekStats();
+  const using = Boolean(state.profile.maintenanceOverride);
+  return html`
+    <section class="card" aria-labelledby="checkin-title">
+      <h2 id="checkin-title">${t('checkin.title')}</h2>
+      <div class="list">
+        ${statRow(t('checkin.logged'), t('common.ofTotal', { n: stats.weekDays, total: 7 }))}
+        ${statRow(t('checkin.avg'), stats.weekAvg ? `${formatInt(stats.weekAvg)} kcal` : '-')}
+        ${statRow(t('checkin.change'), stats.change === null ? '-' : `${stats.change > 0 ? '+' : ''}${formatDecimal(mass.fromKg(stats.change))} ${mass.unit()}`)}
+      </div>
+      ${stats.ready
+        ? html`<p class="caption measure">${t('checkin.result', { intake: formatInt(stats.intake), rate: `${stats.slope > 0 ? '+' : ''}${formatDecimal(mass.fromKg(stats.slope * 7), 2)} ${mass.unit()}`, m: formatInt(stats.maintenance), f: formatInt(stats.formula) })}</p>
+               ${using
+                 ? html`<p class="note" role="status">${t('checkin.using')}</p><button class="btn btn-tonal" data-action="reset-target">${t('checkin.reset')}</button>`
+                 : html`<button class="btn" data-action="apply-target">${t('checkin.apply', { n: formatInt(stats.suggested) })}</button>`}`
+        : html`<p class="caption measure">${t('checkin.locked', { days: stats.foodDays, weighs: stats.weighIns, span: stats.span })}</p>
+               ${using ? html`<button class="btn btn-tonal" data-action="reset-target">${t('checkin.reset')}</button>` : ''}`}
+    </section>`;
+}
+
+/* --- Fasting --------------------------------------------------------------- */
+const FAST_PRESETS = [12, 14, 16, 18, 20];
+const HOUR = 3600000;
+
+const fastClock = ms => {
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const pad = n => String(n).padStart(2, '0');
+  return `${pad(Math.floor(total / 3600))}:${pad(Math.floor((total % 3600) / 60))}:${pad(total % 60)}`;
+};
+const clockTime = ms => new Date(ms).toLocaleTimeString(locale(), { hour: 'numeric', minute: '2-digit' });
+
+function fastPanel() {
+  const active = state.fast;
+  const history = (state.fasts || []).slice(-5).reverse();
+  const reached = (state.fasts || []).filter(item => (item.end - item.start) / HOUR >= item.goal);
+  const longest = Math.max(0, ...(state.fasts || []).map(item => (item.end - item.start) / HOUR));
+
+  const current = active ? (() => {
+    const elapsed = Date.now() - active.start;
+    const goal = active.hours * HOUR;
+    return html`
+      <section class="card" aria-labelledby="fast-title">
+        <h2 id="fast-title">${t('fast.title')}</h2>
+        <p class="fast-clock num" data-fast-clock role="timer" aria-label="${t('fast.title')}">${fastClock(elapsed)}</p>
+        <p class="caption">${t('fast.since', { time: clockTime(active.start) })}. ${elapsed >= goal ? t('fast.done') : t('fast.goalAt', { hours: active.hours, time: clockTime(active.start + goal) })}</p>
+        ${progressBar(t('fast.progress'), 'fast', Math.min(elapsed, goal), goal)}
+        <button class="btn btn-large" data-action="end-fast">${t('fast.end')}</button>
+      </section>`;
+  })() : html`
+      <section class="card" aria-labelledby="fast-title">
+        <h2 id="fast-title">${t('fast.title')}</h2>
+        ${segmented({ id: 'fast-hours', label: t('fast.pick'), action: 'set-fast-hours', field: 'hours', value: ui.fastHours,
+          options: FAST_PRESETS.map(hours => [hours, t('fast.hours', { n: hours })]) })}
+        <button class="btn btn-large" data-action="start-fast">${icon('clock')}${t('fast.start')}</button>
+        <p class="caption measure">${t('fast.help')}</p>
+      </section>`;
+
+  return html`
+    ${current}
+    <section class="stack-tight" aria-label="${t('fast.history')}">
+      <div class="list">
+        ${statRow(t('fast.completed'), reached.length)}
+        ${statRow(t('fast.longest'), longest ? t('fast.hours', { n: formatDecimal(longest) }) : '-')}
+      </div>
+      ${history.length
+        ? html`<div class="list">${history.map(item => html`
+            <div class="list-row">
+              <span class="grow">${shortDate(dateKey(new Date(item.start)))}</span>
+              <span class="num">${t('fast.entry', { hours: formatDecimal((item.end - item.start) / HOUR), goal: item.goal })}</span>
+              ${(item.end - item.start) / HOUR >= item.goal ? html`<span class="pill is-tonal">${icon('check')}${t('fast.reached')}</span>` : ''}
+            </div>`)}</div>`
+        : html`<p class="caption center">${t('fast.empty')}</p>`}
+    </section>`;
+}
+
+function startFast() {
+  state.fast = { start: Date.now(), hours: ui.fastHours };
+  saveState();
+  paint();
+}
+
+function endFast() {
+  const { start, hours } = state.fast;
+  const end = Date.now();
+  state.fasts = [...(state.fasts || []), { start, end, goal: hours }].slice(-30);
+  state.fast = null;
+  if ((end - start) / HOUR >= hours) grantDailyBonus('fast', 10);
+  saveState();
+  paint();
+  toast(t('fast.toastEnd', { hours: formatDecimal((end - start) / HOUR) }));
+}
+
+// Only the clock text changes each second, so nothing repaints.
+setInterval(() => {
+  const clock = $('[data-fast-clock]');
+  if (clock && state.fast) clock.textContent = fastClock(Date.now() - state.fast.start);
+}, 1000);
 
 /* ==========================================================================
    Accounts and sync
@@ -6853,12 +7277,13 @@ function leaveLesson() {
 /* ==========================================================================
    Actions (one handler per data-action)
    ========================================================================== */
-function logFood(name, kcal, meal) {
-  const list = state.food[today()] || (state.food[today()] = []);
+function logFood(name, kcal, meal, macros = {}, day = today()) {
+  const list = state.food[day] || (state.food[day] = []);
   const entry = { id: makeId(), name, kcal, meal };
+  for (const key of ['p', 'c', 'f']) if (macros[key] > 0) entry[key] = macros[key];
   list.push(entry);
   ui.newId = entry.id;
-  grantDailyBonus('food', 5);
+  if (day === today()) grantDailyBonus('food', 5);
   saveState();
 }
 
@@ -7000,7 +7425,7 @@ function focusFirstInvalid() {
 }
 
 const actions = {
-  'go-tab': el => { if (el.dataset.tab !== ui.tab || ui.profileView !== 'main') goTo(el.dataset.tab); },
+  'go-tab': el => { ui.day = null; if (el.dataset.tab !== ui.tab || ui.profileView !== 'main') goTo(el.dataset.tab); },
   'go-panel': el => { ui.trackPanel = el.dataset.panel; ui.errors = {}; paint(); },
 
   'open-lesson': el => openSheet(lessonSheet(el.dataset.id)),
@@ -7065,11 +7490,31 @@ const actions = {
   'quick-food': el => {
     const food = QUICK_FOODS[Number(el.dataset.index)];
     const name = t(`food.${food.key}`);
-    logFood(name, food.kcal, mealForNow());
+    logFood(name, food.kcal, mealForNow(), food, foodDayKey());
     toast(t('toast.added', { name, kcal: food.kcal }));
     paint();
   },
-  'remove-food': el => { state.food[today()] = foodToday().filter(item => item.id !== el.dataset.id); saveState(); paint(); },
+  'remove-food': el => { state.food[foodDayKey()] = foodOn(foodDayKey()).filter(item => item.id !== el.dataset.id); saveState(); paint(); },
+  'recent-food': el => {
+    const food = recentFoods()[Number(el.dataset.index)];
+    if (!food) return;
+    logFood(food.name, food.kcal, mealForNow(), food, foodDayKey());
+    toast(t('toast.added', { name: food.name, kcal: food.kcal }));
+    paint();
+  },
+  'day-prev': () => { ui.day = addDays(foodDayKey(), -1); paint(); },
+  'day-next': () => { const next = addDays(foodDayKey(), 1); ui.day = next >= today() ? null : next; paint(); },
+  'day-today': () => { ui.day = null; paint(); },
+  'set-fast-hours': el => { ui.fastHours = Number(el.dataset.value); paint(); },
+  'start-fast': () => startFast(),
+  'end-fast': () => endFast(),
+  'apply-target': () => {
+    state.profile.maintenanceOverride = weekStats().maintenance;
+    saveState();
+    paint();
+    toast(t('toast.targetUpdated'));
+  },
+  'reset-target': () => { delete state.profile.maintenanceOverride; saveState(); paint(); toast(t('toast.targetReset')); },
   'remove-move': el => { state.moves[today()] = movesToday().filter(item => item.id !== el.dataset.id); saveState(); paint(); },
   'remove-weight': el => { delete state.weights[el.dataset.id]; saveState(); paint(); },
   'set-water': el => {
@@ -7207,7 +7652,7 @@ const forms = {
     const name = read('food-name').trim();
     const kcal = Math.round(Number(read('food-kcal')));
     if (!name || !(kcal >= 1 && kcal <= 5000)) return t('error.food');
-    logFood(name, kcal, read('food-meal'));
+    logFood(name, kcal, read('food-meal'), readMacros(read), foodDayKey());
     toast(t('toast.added', { name, kcal }));
     return null;
   },
@@ -7255,6 +7700,7 @@ document.addEventListener('input', event => {
   if (target.matches('[data-scrub]')) {
     cancelAnimationFrame(figure.frame);
     drawFigure(Number(target.value) / 100);
+    $('[data-scrub-label]')?.replaceChildren(scrubLabel(Number(target.value) / 100));
     return;
   }
   // Keep the recipe assistant's form in sync, so a repaint does not lose what was typed.
@@ -7338,6 +7784,7 @@ document.addEventListener('change', event => {
   const slider = event.target;
   setTimeout(() => {
     slider.value = Math.round(figure.target * 100);
+    $('[data-scrub-label]')?.replaceChildren(scrubLabel(figure.target));
     tweenFigure(figure.target, 900);
   }, 700);
 });
