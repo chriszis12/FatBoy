@@ -129,6 +129,7 @@ function checkinCard() {
         ${statRow(t('checkin.avg'), stats.weekAvg ? `${formatInt(stats.weekAvg)} kcal` : '-')}
         ${statRow(t('checkin.change'), stats.change === null ? '-' : `${stats.change > 0 ? '+' : ''}${formatDecimal(mass.fromKg(stats.change))} ${mass.unit()}`)}
       </div>
+      <button class="btn btn-tonal" data-action="show-recap">${icon('trophy')}${t('recap.open')}</button>
       ${stats.ready
         ? html`<p class="caption measure">${t('checkin.result', { intake: formatInt(stats.intake), rate: `${stats.slope > 0 ? '+' : ''}${formatDecimal(mass.fromKg(stats.slope * 7), 2)} ${mass.unit()}`, m: formatInt(stats.maintenance), f: formatInt(stats.formula) })}</p>
                ${using
@@ -190,7 +191,7 @@ function fastPanel() {
               <span class="num">${t('fast.entry', { hours: formatDecimal((item.end - item.start) / HOUR), goal: item.goal })}</span>
               ${(item.end - item.start) / HOUR >= item.goal ? html`<span class="pill is-tonal">${icon('check')}${t('fast.reached')}</span>` : ''}
             </div>`)}</div>`
-        : html`<p class="caption center">${t('fast.empty')}</p>`}
+        : emptyState(t('fast.empty'))}
     </section>`;
 }
 

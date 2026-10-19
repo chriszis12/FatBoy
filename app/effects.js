@@ -19,10 +19,21 @@ const motionOn = () => {
   return motion === 'full' || (motion === 'auto' && !systemReduced.matches);
 };
 
+// Refraction uses an SVG filter inside backdrop-filter, which only Chromium-based engines draw.
+// Elsewhere the glass keeps its blur and rim light and skips the bending.
+const canRefract = (() => {
+  try {
+    const ua = navigator.userAgent || '';
+    return /Chrome\/\d+/.test(ua) && !/Edg\/|OPR\//.test(ua) && CSS.supports('backdrop-filter', 'url(#fb-lens-bar)');
+  } catch (error) { return false; }
+})();
+
 function applySettings() {
   const root = document.documentElement;
   root.dataset.theme = resolvedTheme();
-  root.dataset.plan = state.plus ? 'plus' : 'free';
+  root.dataset.accent = ACCENTS.includes(state.settings.accent) ? state.settings.accent : 'blue';
+  if (canRefract) root.dataset.lens = 'on';
+  root.dataset.glass = state.settings.glass === 'solid' ? 'solid' : 'clear';
   root.dataset.motion = motionOn() ? 'full' : 'reduced';
   root.lang = state.settings.language;
 }

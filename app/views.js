@@ -58,11 +58,11 @@ function toolbar() {
   return html`
     <header class="toolbar glass">
       <div class="container toolbar-inner">
-        <div class="brand">${logo(44, 14)}<span class="brand-name">FatBoy</span>${state.plus ? html`<span class="pill plus-pill">${t('plus.badge')}</span>` : ''}</div>
+        <div class="brand">${logo(44, 14)}<span class="brand-name">FatBoy</span></div>
         <div class="stats">
           <button class="stat stat-streak ${streak > 0 ? 'is-lit' : ''}" data-action="show-streak" aria-label="${t('toolbar.streak', { n: streak })}">${icon('flame', { solid: true })}${countText('streak', streak)}</button>
           <button class="stat stat-gems" data-action="show-shop" aria-label="${t('toolbar.gems', { n: state.gems })}">${icon('gem')}${countText('gems', state.gems)}</button>
-          <button class="stat stat-hearts" data-action="show-shop" aria-label="${state.plus ? t('plus.unlimitedHearts') : t('toolbar.hearts', { n: state.hearts, max: HEART_MAX })}">${icon('heart', { solid: true })}${state.plus ? html`<span class="num">∞</span>` : countText('hearts', state.hearts)}</button>
+          <button class="stat stat-hearts" data-action="show-shop" aria-label="${t('toolbar.hearts', { n: state.hearts, max: HEART_MAX })}">${icon('heart', { solid: true })}${countText('hearts', state.hearts)}</button>
         </div>
       </div>
     </header>`;
@@ -89,32 +89,17 @@ const tabBar = () => html`
 /* ==========================================================================
    Learn
    ========================================================================== */
-function miniRing(value) {
+function miniRing(value, big = false) {
   const radius = 28;
   const length = 2 * Math.PI * radius;
   return html`
-    <span class="mini-ring">
+    <span class="mini-ring${big ? ' is-big' : ''}">
       <svg viewBox="0 0 64 64" aria-hidden="true">
         <circle class="ring-track" cx="32" cy="32" r="${radius}"/>
         <circle class="ring-fill" cx="32" cy="32" r="${radius}" stroke="currentColor" data-tween="daily" style="--v:${fraction(value)};--len:${length.toFixed(1)}"/>
       </svg>
       ${icon('bolt', { solid: true })}
     </span>`;
-}
-
-function dailyGoalCard() {
-  const xp = xpToday();
-  const goal = dailyGoal();
-  return html`
-    <section class="card" aria-labelledby="goal-title">
-      <div class="row">
-        ${miniRing(xp / goal)}
-        <div class="grow">
-          <h2 id="goal-title">${t('learn.dailyGoal')}</h2>
-          <p class="caption num">${xp >= goal ? t('learn.goalReached') : t('learn.goalProgress', { xp, goal })}</p>
-        </div>
-      </div>
-    </section>`;
 }
 
 function lessonStep(lesson, unitIndex, lessonIndex, openIndex) {
@@ -166,10 +151,10 @@ function greeting() {
 function tipCard() {
   return html`
     <section class="mascot-tip" aria-labelledby="tip-title">
-      <button class="mascot" data-action="next-tip" aria-label="${t('learn.nextTip')}">${logo(56, 18)}</button>
+      <button class="mascot mood-${mascotMood()}" data-action="next-tip" aria-label="${t('learn.nextTip')}">${logo(56, 18)}</button>
       <div class="bubble">
         <h2 id="tip-title" class="bubble-title">${t('learn.tip')}</h2>
-        <p class="measure" aria-live="polite">${t(`tip.${(hashText(today()) + ui.tipShift) % TIP_COUNT}`)}</p>
+        <p class="measure" aria-live="polite">${ui.tipShift === 0 ? moodLine() : t(`tip.${(hashText(today()) + ui.tipShift) % TIP_COUNT}`)}</p>
       </div>
     </section>`;
 }
@@ -181,7 +166,7 @@ function learnScreen() {
       <h1>${greeting()}</h1>
       <p class="caption num">${t('learn.complete', { n: lessonsDone(), total: TOTAL_LESSONS })}</p>
     </div>
-    ${dailyGoalCard()}
+    ${homeCard()}
     ${tipCard()}
     ${units().map((unit, i) => unitCard(unit, i, openIndex))}`;
 }
@@ -280,14 +265,14 @@ function foodPanel() {
           <section class="stack-tight" aria-label="${t(`meal.${meal}`)}">
             <p class="caption">${t('food.mealTotal', { meal: t(`meal.${meal}`), n: formatInt(items.reduce((sum, item) => sum + item.kcal, 0)) })}</p>
             <div class="list">${items.map(item => html`
-              <div class="list-row ${item.id === ui.newId ? 'is-new' : ''}">
+              <div class="list-row ${item.id === ui.newId ? 'is-new' : ''}" data-swipe>
                 <span class="grow">${item.name}</span>
                 <span class="caption num">${formatInt(item.kcal)} kcal</span>
                 <button class="icon-btn" data-action="remove-food" data-id="${item.id}" aria-label="${t('common.remove', { name: item.name })}">${icon('trash')}</button>
               </div>`)}
             </div>
           </section>`)
-      : html`<div class="card center"><p class="caption">${t('food.empty')}</p></div>`}`;
+      : html`<div class="card">${emptyState(t('food.empty'))}</div>`}`;
 }
 
 function waterPanel() {
@@ -328,12 +313,12 @@ function movePanel() {
     </form>
     ${movesToday().length ? html`
       <div class="list">${movesToday().map(item => html`
-        <div class="list-row ${item.id === ui.newId ? 'is-new' : ''}">
+        <div class="list-row ${item.id === ui.newId ? 'is-new' : ''}" data-swipe>
           <span class="grow">${t(`workout.${item.type}`)}, ${item.min} ${t('unit.min')}</span>
           <span class="caption num">${formatInt(item.kcal)} kcal</span>
           <button class="icon-btn" data-action="remove-move" data-id="${item.id}" aria-label="${t('common.remove', { name: `${t(`workout.${item.type}`)}, ${item.min} ${t('unit.min')}` })}">${icon('trash')}</button>
         </div>`)}
-      </div>` : ''}`;
+      </div>` : html`<div class="card">${emptyState(t('move.empty'))}</div>`}`;
 }
 
 function weightChart() {
@@ -362,6 +347,9 @@ function weightChart() {
         ${ticks.map(tick => html`
           <line class="grid" x1="${pad.left}" x2="${width - pad.right}" y1="${f(y(tick))}" y2="${f(y(tick))}"/>
           <text x="${pad.left - 8}" y="${f(y(tick) + 4)}" text-anchor="end">${formatDecimal(tick)}</text>`)}
+        ${milestoneList().filter(m => m.key !== 'goal' && m.kg > low && m.kg < high && Math.abs(y(m.kg) - y(goal)) > 14).map(m => html`
+          <line class="milestone-line" x1="${pad.left}" x2="${width - pad.right}" y1="${f(y(m.kg))}" y2="${f(y(m.kg))}"/>
+          <text class="milestone-tag" x="${width - pad.right}" y="${f(y(m.kg) - 5)}" text-anchor="end">${t(`ms.${m.key}`)}</text>`)}
         <line class="goal" x1="${pad.left}" x2="${width - pad.right}" y1="${f(y(goal))}" y2="${f(y(goal))}"/>
         <text x="${width - pad.right}" y="${f(y(goal) - 8)}" text-anchor="end" style="fill:var(--sky)">${t('weight.goal')}</text>
         <polyline class="line" pathLength="1" points="${points.map(p => `${f(p[0])},${f(p[1])}`).join(' ')}"/>
@@ -410,6 +398,7 @@ function weightPanel() {
         <div><p class="caption">${t('weight.goal')}</p><p class="num"><strong>${mass.format(profile.goalKg)}</strong></p></div>
       </div>
       ${weightChart()}
+      ${milestoneStrip()}
       ${goalNote()}
     </section>
     <form class="card" data-form="weight" novalidate>
@@ -423,7 +412,7 @@ function weightPanel() {
       <p class="caption">${t('weight.help')}</p>
     </form>
     <div class="list">${recent.map(date => html`
-      <div class="list-row">
+      <div class="list-row" ${attributes({ 'data-swipe': date === profile.start ? null : '' })}>
         <span class="grow">${shortDate(date)}</span>
         <span class="num"><strong>${mass.format(state.weights[date])}</strong></span>
         ${date === profile.start
@@ -660,7 +649,6 @@ function profileScreen() {
     </section>
     ${checkinCard()}
     ${photosCard()}
-    ${plusCard()}
     <button class="card nav-card" data-action="open-settings">
       <span class="glyph">${icon('settings')}</span>
       <span class="grow"><h2>${t('settings.title')}</h2><span class="caption">${t('settings.summary')}</span></span>
@@ -678,6 +666,20 @@ function settingsScreen() {
       <h2 id="appearance-title">${t('settings.appearance')}</h2>
       ${segmented({ id: 'set-theme', label: t('settings.theme'), action: 'set-setting', field: 'theme', value: settings.theme,
         options: [['system', t('settings.system')], ['light', t('settings.light')], ['dark', t('settings.dark')]] })}
+      ${segmented({ id: 'set-glass', label: t('settings.glass'), action: 'set-setting', field: 'glass', value: settings.glass,
+        options: [['clear', t('settings.glassClear')], ['solid', t('settings.glassSolid')]] })}
+      <p class="caption">${t('settings.glassHelp')}</p>
+      <div class="field">
+        <span class="field-label" id="set-accent-label">${t('settings.colour')}</span>
+        <div class="swatches" role="radiogroup" aria-labelledby="set-accent-label">
+          ${ACCENTS.map(name => html`
+            <button type="button" class="swatch" role="radio" data-accent-option="${name}" data-action="set-setting" data-field="accent" data-value="${name}" aria-checked="${String(settings.accent === name)}">
+              <span class="swatch-dot" aria-hidden="true">${settings.accent === name ? icon('check') : ''}</span>
+              <span class="swatch-label">${t(`settings.colour.${name}`)}</span>
+            </button>`)}
+        </div>
+        <p class="caption">${t('settings.colourHelp')}</p>
+      </div>
       <div class="field">
         <span class="field-label" id="set-motion-label">${t('settings.animations')}</span>
         <div class="segmented" role="radiogroup" aria-labelledby="set-motion-label">
@@ -947,19 +949,14 @@ function shopSheet() {
       <div class="list">
         <div class="list-row">
           <span class="stat-hearts">${icon('heart', { solid: true })}</span>
-          <div class="grow"><h3>${t('shop.refill')}</h3><p class="caption">${state.plus ? t('plus.unlimitedHearts') : html`${t('shop.heartsOf', { n: state.hearts, max: HEART_MAX })}${state.hearts < HEART_MAX ? ` ${t('shop.nextHeart', { n: minutes })}` : ''}`}</p></div>
-          <button class="btn btn-tonal btn-small" data-action="buy-hearts" aria-label="${t('shop.buyHearts', { n: REFILL_COST })}" ${attributes({ disabled: state.plus || state.hearts >= HEART_MAX || state.gems < REFILL_COST })}>${icon('gem')}${REFILL_COST}</button>
+          <div class="grow"><h3>${t('shop.refill')}</h3><p class="caption">${t('shop.heartsOf', { n: state.hearts, max: HEART_MAX })}${state.hearts < HEART_MAX ? ` ${t('shop.nextHeart', { n: minutes })}` : ''}</p></div>
+          <button class="btn btn-tonal btn-small" data-action="buy-hearts" aria-label="${t('shop.buyHearts', { n: REFILL_COST })}" ${attributes({ disabled: state.hearts >= HEART_MAX || state.gems < REFILL_COST })}>${icon('gem')}${REFILL_COST}</button>
         </div>
         <div class="list-row">
           <span class="stat-streak">${icon('snow')}</span>
           <div class="grow"><h3>${t('shop.freeze')}</h3><p class="caption">${t('shop.freezeHelp', { n: state.freezes, max: FREEZE_MAX })}</p></div>
           <button class="btn btn-tonal btn-small" data-action="buy-freeze" aria-label="${t('shop.buyFreeze', { n: FREEZE_COST })}" ${attributes({ disabled: state.freezes >= FREEZE_MAX || state.gems < FREEZE_COST })}>${icon('gem')}${FREEZE_COST}</button>
         </div>
-        ${state.plus ? '' : html`<div class="list-row">
-          <span class="plus-mark">${icon('sparkle')}</span>
-          <div class="grow"><h3>${t('plus.name')}</h3><p class="caption">${t('plus.shopHelp')}</p></div>
-          <button class="btn btn-tonal btn-small" data-action="show-plus">${t('plus.see')}</button>
-        </div>`}
       </div>`,
   };
 }
@@ -968,41 +965,10 @@ const legalSheet = kind => ({
   label: t(`legal.${kind}Title`),
   body: html`
     ${sheetHeader(t(`legal.${kind}Title`))}
-    <ul class="plus-list">
+    <ul class="check-list">
       ${(kind === 'privacy' ? [1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5]).map(n => html`<li>${icon('check')}<span>${t(`legal.${kind}.${n}`)}</span></li>`)}
     </ul>`,
 });
-
-function plusSheet() {
-  const features = ['recipes', 'hearts', 'theme'];
-  return {
-    label: t('plus.name'),
-    body: html`
-      ${sheetHeader(t('plus.name'), t('plus.tagline'))}
-      <p class="plus-price"><strong class="num">${t('plus.price')}</strong></p>
-      <ul class="plus-list">
-        ${features.map(key => html`<li>${icon('check')}<span><strong>${t(`plus.feat.${key}`)}</strong><br><span class="caption">${t(`plus.feat.${key}Help`)}</span></span></li>`)}
-      </ul>
-      ${state.plus
-        ? html`<p class="note" role="status">${t('plus.activeHelp')}</p>
-               <button class="btn btn-plain" data-action="cancel-plus">${t('plus.turnOff')}</button>`
-        : html`<p class="note">${t('plus.testNote')}</p>
-               <button class="btn btn-large" data-action="unlock-plus">${t('plus.unlock')}</button>`}`,
-  };
-}
-
-function plusCard() {
-  return html`
-    <section class="card plus-card" aria-labelledby="plus-heading">
-      <div class="row">
-        <span class="plus-mark">${icon('sparkle')}</span>
-        <div class="grow"><h2 id="plus-heading">${state.plus ? t('plus.active') : t('plus.name')}</h2><p class="caption">${state.plus ? t('plus.activeShort') : t('plus.price')}</p></div>
-      </div>
-      ${state.plus
-        ? html`<button class="btn btn-tonal" data-action="show-plus">${t('plus.manage')}</button>`
-        : html`<p class="caption">${t('plus.tagline')}</p><button class="btn" data-action="show-plus">${t('plus.see')}</button>`}
-    </section>`;
-}
 
 function lessonSheet(id) {
   const [unitIndex, lessonIndex] = id.split('.').map(Number);

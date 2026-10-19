@@ -93,10 +93,8 @@ function assistantCard() {
       </div>
       ${errorLine('ai-error', aiState.error)}
       ${loading
-        ? html`<div class="row row-wrap"><span class="grow caption" role="status">${t('recipes.ai.writing')}</span><button class="btn btn-tonal" data-action="ai-stop">${t('recipes.ai.stop')}</button></div>`
-        : !state.plus && aiLeftToday() === 0
-          ? html`<p class="note">${t('plus.aiLimit', { n: FREE_AI_PER_DAY })}</p><button class="btn btn-large" data-action="show-plus">${icon('sparkle')}${t('plus.get')}</button>`
-          : html`${state.plus ? '' : html`<p class="caption">${t('plus.aiLeft', { n: aiLeftToday(), total: FREE_AI_PER_DAY })}</p>`}<button class="btn btn-large" data-action="ai-create">${icon('sparkle')}${t('recipes.ai.create')}</button>`}
+        ? html`<div class="row row-wrap"><span class="grow caption" role="status">${t('recipes.ai.writing')}</span><button class="btn btn-tonal" data-action="ai-stop">${t('recipes.ai.stop')}</button></div>${skeletonRows(2)}`
+        : html`<button class="btn btn-large" data-action="ai-create">${icon('sparkle')}${t('recipes.ai.create')}</button>`}
       ${aiState.recipe ? html`
         <div class="stack-tight">
           <p class="field-label">${t('recipes.ai.latest')}</p>
@@ -227,10 +225,6 @@ const AI_ERRORS = {
 };
 
 async function createRecipe() {
-  if (!state.plus && aiLeftToday() === 0) {
-    openSheet(plusSheet());
-    return;
-  }
   const fridge = cleanText(aiDraft.fridge, 200);
   const kcal = cleanNumber(aiDraft.kcal || suggestedKcal(), 100, 1500);
   if (!fridge) {
@@ -258,8 +252,6 @@ async function createRecipe() {
     if (!recipe) throw { code: 'invalid_json' };
     aiState.recipe = recipe;
     aiState.status = 'idle';
-    state.aiUsed[today()] = (state.aiUsed[today()] || 0) + 1;
-    saveState();
     paint();
     if (ui.tab === 'recipes' && !roots.sheet.innerHTML) openSheet(recipeSheet(recipe.id));
   } catch (error) {

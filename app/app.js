@@ -11,6 +11,7 @@ const roots = {
   sheet: $('#overlay'),
   lesson: $('#lesson'),
   toast: $('#toast'),
+  fab: $('#fab'),
 };
 
 // Replace a root's contents while keeping meters and counters animating from their old values.
@@ -56,6 +57,7 @@ function paintChrome() {
   if (state.profile) render(roots.toolbar, toolbar());
   else roots.toolbar.innerHTML = '';
   paintTabbar();
+  render(roots.fab, fabButton());
 }
 
 // Screen content slides up one block at a time when the screen changes.
@@ -121,11 +123,11 @@ function closeSheet() {
 }
 
 let toastTimer = 0;
-function toast(message) {
-  roots.toast.textContent = message;
+function toast(message, { undo = false } = {}) {
+  roots.toast.innerHTML = html`<span>${message}</span>${undo ? html`<button class="toast-btn" data-action="undo">${t('toast.undo')}</button>` : ''}`.value;
   roots.toast.hidden = false;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { roots.toast.hidden = true; }, 2600);
+  toastTimer = setTimeout(() => { roots.toast.hidden = true; }, undo ? 5200 : 2600);
 }
 
 /* ==========================================================================
@@ -189,7 +191,7 @@ function lessonBar() {
     <div class="lesson-bar">
       <button class="icon-btn" data-action="quit-lesson" aria-label="${t('lesson.quit')}">${icon('close')}</button>
       <div class="grow">${progressBar(t('lesson.progress'), 'lesson', session.solved, session.total)}</div>
-      <span class="row row-tight stat-hearts" role="img" aria-label="${state.plus ? t('plus.unlimitedHearts') : t('lesson.heartsLeft', { n: state.hearts })}">${icon('heart', { solid: true })}<strong class="num">${state.plus ? '∞' : state.hearts}</strong></span>
+      <span class="row row-tight stat-hearts" role="img" aria-label="${t('lesson.heartsLeft', { n: state.hearts })}">${icon('heart', { solid: true })}<strong class="num">${state.hearts}</strong></span>
     </div>`;
 }
 
@@ -477,6 +479,8 @@ function logFood(name, kcal, meal, macros = {}, day = today()) {
   for (const key of ['p', 'c', 'f']) if (macros[key] > 0) entry[key] = macros[key];
   list.push(entry);
   ui.newId = entry.id;
+  floaty(`+${formatInt(kcal)} kcal`);
+  buzz(12);
   if (day === today()) grantDailyBonus('food', 5);
   saveState();
 }
@@ -534,11 +538,16 @@ function saveGoal() {
 
 function recordWeight(kg) {
   if (!(kg >= 30 && kg <= 300)) return false;
+  const before = currentWeightKg();
   state.weights[today()] = kg;
   state.flags.weighed = true;
   grantDailyBonus('weigh', 10);
   saveState();
+  const diff = kg - before;
+  if (Math.abs(diff) >= 0.05) floaty(`${diff > 0 ? '+' : '-'}${formatDecimal(Math.abs(mass.fromKg(diff)))} ${mass.unit()}`);
+  buzz(12);
   toast(t('toast.logged', { weight: mass.format(kg) }));
+  checkMilestones();
   return true;
 }
 
@@ -619,8 +628,8 @@ function focusFirstInvalid() {
 }
 
 const actions = {
-  'go-tab': el => { ui.day = null; if (el.dataset.tab !== ui.tab || ui.profileView !== 'main') goTo(el.dataset.tab); },
-  'go-panel': el => { ui.trackPanel = el.dataset.panel; ui.errors = {}; paint(); },
+  'go-tab': el => { buzz(6); ui.day = null; if (el.dataset.tab !== ui.tab || ui.profileView !== 'main') goTo(el.dataset.tab); },
+  'go-panel': el => { buzz(6); ui.trackPanel = el.dataset.panel; ui.errors = {}; paint(); },
 
   'open-lesson': el => openSheet(lessonSheet(el.dataset.id)),
   'locked-lesson': () => toast(t('toast.locked')),
@@ -628,8 +637,35 @@ const actions = {
 
   'show-streak': () => openSheet(streakSheet()),
   'show-shop': () => openSheet(shopSheet()),
-  'show-plus': () => openSheet(plusSheet()),
-  'next-tip': () => { ui.tipShift++; paint(); },
+  'next-tip': () => {
+    ui.tipShift++;
+    buzz(6);
+    // Poke the mascot enough times and it loses patience.
+    const now = Date.now();
+    ui.pokes = (ui.pokes || []).filter(time => now - time < 4000).concat(now);
+    paint();
+    if (ui.pokes.length >= 7) {
+      ui.pokes = [];
+      toast(t('egg.mascot'));
+      burst(innerWidth / 2, innerHeight * 0.3, { count: 40, spread: 220 });
+      buzz([20, 30, 20]);
+    }
+  },
+  'quick-add': () => openSheet(quickAddSheet()),
+  'quick-go': el => {
+    const panel = el.dataset.panel;
+    closeSheet();
+    goTo('track', panel);
+    afterMotion(() => $(QUICK_FIELD[panel])?.focus(), 240);
+  },
+  'quick-water': () => {
+    closeSheet();
+    if (glassesToday() >= 8) { toast(t('quick.waterFull')); return; }
+    actions['set-water']({ dataset: { index: String(glassesToday()) } });
+    toast(t('quick.waterAdded', { n: glassesToday() }));
+  },
+  'show-recap': () => openSheet(recapSheet()),
+  'undo': () => undoRemove(),
   'open-food-search': () => openSheet(foodSearchSheet()),
   'find-foods': () => searchFoods(),
   'lookup-barcode': () => lookupBarcode(),
@@ -652,8 +688,6 @@ const actions = {
   'show-privacy': () => openSheet(legalSheet('privacy')),
   'toggle-agree': () => { ui.draft.agree = !ui.draft.agree; delete ui.errors.agree; paint(); $('#ob-agree')?.focus({ preventScroll: true }); },
   'add-reminder': () => addReminder(),
-  'unlock-plus': () => setPlus(true),
-  'cancel-plus': () => setPlus(false),
   'show-badge': el => openSheet(badgeSheet(el.dataset.id)),
   'close-sheet': () => closeSheet(),
   'dismiss-sheet': (el, event) => { if (event.target === el) closeSheet(); },
@@ -688,7 +722,7 @@ const actions = {
     toast(t('toast.added', { name, kcal: food.kcal }));
     paint();
   },
-  'remove-food': el => { state.food[foodDayKey()] = foodOn(foodDayKey()).filter(item => item.id !== el.dataset.id); saveState(); paint(); },
+  'remove-food': el => removeEntry('food', el.dataset.id),
   'recent-food': el => {
     const food = recentFoods()[Number(el.dataset.index)];
     if (!food) return;
@@ -709,15 +743,17 @@ const actions = {
     toast(t('toast.targetUpdated'));
   },
   'reset-target': () => { delete state.profile.maintenanceOverride; saveState(); paint(); toast(t('toast.targetReset')); },
-  'remove-move': el => { state.moves[today()] = movesToday().filter(item => item.id !== el.dataset.id); saveState(); paint(); },
-  'remove-weight': el => { delete state.weights[el.dataset.id]; saveState(); paint(); },
+  'remove-move': el => removeEntry('move', el.dataset.id),
+  'remove-weight': el => removeEntry('weight', el.dataset.id),
   'set-water': el => {
+    const before = glassesToday();
     const tapped = Number(el.dataset.index) + 1;
     const glasses = tapped === glassesToday() ? tapped - 1 : tapped;
     state.water[today()] = glasses;
     if (glasses >= 8) state.flags.hydrated = true;
     if (glasses > 0) grantDailyBonus('water', 5);
     ui.newCup = glasses === tapped ? tapped - 1 : null;
+    if (glasses > before) floaty(t('quick.plusGlass'));
     buzz(8);
     saveState();
     paint();
@@ -801,7 +837,7 @@ const actions = {
     const { field, value } = el.dataset;
     state.settings[field] = field === 'dailyGoal' ? Number(value) : value;
     saveState();
-    if (field === 'theme') applyThemeChange();
+    if (field === 'theme' || field === 'accent') applyThemeChange();
     else applySettings();
     paint();
   },
@@ -859,6 +895,8 @@ const forms = {
     list.push(entry);
     ui.newId = entry.id;
     grantDailyBonus('move', 10);
+    floaty(`+${min} ${t('unit.min')}`);
+    buzz(12);
     saveState();
     toast(t('toast.addedMove', { name: t(`workout.${type}`), min }));
     return null;
@@ -928,16 +966,6 @@ async function addReminder() {
   } catch (error) {
     if (error.code !== 'declined') toast(t('toast.exportUnavailable'));
   }
-}
-
-function setPlus(on) {
-  state.plus = on;
-  saveState();
-  applyThemeChange();
-  applySettings();
-  closeSheet();
-  paint();
-  toast(t(on ? 'plus.toastOn' : 'plus.toastOff'));
 }
 
 function importBackup(file) {

@@ -27,7 +27,7 @@ function paintFindResults() {
 }
 
 function findResults() {
-  if (foodFind.status === 'loading') return html`<p class="caption" role="status">${t('food.find.loading')}</p>`;
+  if (foodFind.status === 'loading') return html`<p class="caption" role="status">${t('food.find.loading')}</p>${skeletonRows(3)}`;
   if (foodFind.message) return html`<p class="caption" role="status">${foodFind.message}</p>`;
   if (!foodFind.results.length) return '';
   return html`

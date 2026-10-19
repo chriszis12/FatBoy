@@ -56,6 +56,7 @@ const ICON_PATHS = {
   scale: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10a4 4 0 0 1 8 0M12 10l2-2"/>',
   trophy: '<path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v2a3 3 0 0 0 4 3M16 6h4v2a3 3 0 0 1-4 3M12 13v4M8 21h8M10 17h4"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
+  flag: '<path d="M6 21V4M6 5h11l-2 4 2 4H6"/>',
   trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
   food: '<path d="M7 3v8M4 3v5a3 3 0 0 0 6 0V3M7 11v10M17 3c-2.5 2-3 6-1 9h1v9"/>',
   alert: '<circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/>',
@@ -133,9 +134,13 @@ const defaultSettings = () => ({
   theme: 'system',      // system | light | dark
   language: detectLanguage(),
   motion: 'auto',       // auto | full | reduced
+  accent: 'blue',       // blue | yellow | green | purple | pink
+  glass: 'clear',       // clear | solid
   dailyGoal: 30,        // XP
   reminder: '19:00',    // time of the daily calendar reminder
 });
+
+const ACCENTS = ['blue', 'yellow', 'green', 'purple', 'pink'];
 
 const createState = settings => ({
   settings: settings || defaultSettings(),
@@ -162,8 +167,6 @@ const createState = settings => ({
   cooked: {},           // date -> recipes logged
   fast: null,           // { start, hours } while a fast is running
   fasts: [],            // finished fasts, { start, end, goal }
-  plus: false,          // FatBoy Plus
-  aiUsed: {},           // date -> Claude recipes written
   claimed: {},          // quest and chest claims
   checks: {},           // self-reported quests, "date:id" -> 1
   revealed: {},         // quest cards turned face up, "date:id" -> 1
@@ -174,7 +177,12 @@ function loadState() {
   const fresh = createState();
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (saved) return { ...fresh, ...saved, settings: { ...fresh.settings, ...saved.settings } };
+    if (saved) {
+      const settings = { ...fresh.settings, ...saved.settings };
+      if (saved.plus && !(saved.settings && saved.settings.accent)) settings.accent = 'yellow'; // old Plus look lives on as a theme
+      delete saved.plus;
+      return { ...fresh, ...saved, settings };
+    }
   } catch (error) { /* storage can be blocked; fall back to a fresh state */ }
   return fresh;
 }
@@ -294,12 +302,7 @@ function regenerateHearts() {
   saveState();
 }
 
-const PLUS_PRICE = 3.99;
-const FREE_AI_PER_DAY = 2;
-const aiLeftToday = () => Math.max(0, FREE_AI_PER_DAY - (state.aiUsed[today()] || 0));
-
 function loseHeart() {
-  if (state.plus) return;
   if (state.hearts === HEART_MAX) state.heartsAt = Date.now();
   state.hearts = Math.max(0, state.hearts - 1);
   saveState();

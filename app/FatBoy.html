@@ -55,6 +55,14 @@
   --scrim: rgba(0, 0, 0, 0.55);
   --lift: 0 4px 12px rgba(0, 0, 0, 0.32);
 
+  /* Liquid glass: rim light, floating shadow, chips and thumbs that sit on glass */
+  --spec: rgba(255, 255, 255, 0.55);
+  --rim: rgba(255, 255, 255, 0.2);
+  --lite: rgba(255, 255, 255, 0.07);
+  --thumb: rgba(255, 255, 255, 0.14);
+  --float: 0 14px 34px rgba(0, 0, 0, 0.34), 0 2px 6px rgba(0, 0, 0, 0.2);
+  --hairline: rgba(255, 255, 255, 0.14);
+
   /* Raised pieces (Learn and Quests): a flat face plus a solid edge below it */
   --shine: rgba(255, 255, 255, 0.2);
   --edge-surface: #2a2e38;
@@ -123,6 +131,12 @@
   --glass-highlight: rgba(255, 255, 255, 0.95);
   --scrim: rgba(11, 12, 15, 0.4);
   --lift: 0 4px 12px rgba(11, 12, 15, 0.08);
+  --spec: #ffffff;
+  --rim: rgba(255, 255, 255, 0.9);
+  --lite: rgba(255, 255, 255, 0.7);
+  --thumb: #ffffff;
+  --float: 0 14px 34px rgba(20, 30, 60, 0.16), 0 2px 6px rgba(20, 30, 60, 0.08);
+  --hairline: rgba(20, 30, 70, 0.09);
   --shine: rgba(255, 255, 255, 0.55);
   --edge-surface: #c6cddb;
   --edge-primary: #06358a;
@@ -970,34 +984,36 @@ label.btn:has(+ .sr-only:focus-visible) { outline: 3px solid var(--accent); outl
 .is-3d .note { box-shadow: 0 6px 0 var(--edge-tonal); }
 
 /* ==========================================================================
-   FatBoy Plus: gold and black replaces blue and black
+   Accent colours: blue is the base; the others only swap the colour roles
+   (yellow also warms the neutral surfaces). Dark and light are tuned separately.
    ========================================================================== */
-:root[data-plan="plus"]:not([data-theme="light"]) {
-  --bg: #0c0c0a; --surface-1: #151512; --surface-2: #1e1e1a; --surface-3: #282822; --outline: #2f2f28;
-  --on-surface-2: #aaa89c;
-  --primary: #f5c400; --primary-hover: #e0b300; --primary-press: #c99f00; --on-primary: #14110a;
-  --accent: #ffd43b; --on-accent: #14110a;
-  --tonal: #33290a; --tonal-hover: #3f330c; --tonal-press: #4b3d10; --on-tonal: #ffdf80;
-  --sky: #ffb340;
-  --glass: rgba(30, 30, 26, 0.62); --glass-active: rgba(255, 214, 0, 0.14);
-  --edge-primary: #9a7500; --edge-tonal: #1f1805; --edge-accent: #b38a00; --edge-surface: #2d2d26;
-}
-:root[data-theme="light"][data-plan="plus"] {
-  --bg: #faf8ee; --surface-2: #f1eedd; --surface-3: #e6e2cc; --outline: #ddd8bf;
-  --on-surface-2: #5c5a4c;
-  --primary: #ffc800; --primary-hover: #e6b400; --primary-press: #cc9f00; --on-primary: #14110a;
-  --accent: #7a5600; --on-accent: #ffffff;
-  --tonal: #fff0b3; --tonal-hover: #ffe88f; --tonal-press: #ffe070; --on-tonal: #4d3800;
-  --sky: #8a5a00;
-  --glass-active: rgba(255, 200, 0, 0.2);
-  --edge-primary: #b38600; --edge-tonal: #e0cd80; --edge-accent: #4d3800; --edge-surface: #d9d4bc;
-}
-.plus-pill { background: var(--primary); color: var(--on-primary); font-weight: 700; }
-.plus-mark { display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: var(--r-md, 12px); background: var(--tonal); color: var(--on-tonal); flex: none; }
-.plus-price { margin: 0; font-size: 32px; line-height: 1.2; }
-.plus-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-2); }
-.plus-list li { display: flex; gap: var(--sp-2); align-items: flex-start; }
-.plus-list .icon { flex: none; margin-top: 2px; color: var(--accent); }
+:root[data-accent="yellow"]:not([data-theme="light"]) { --bg: #0c0c0a; --surface-1: #151512; --surface-2: #1e1e1a; --surface-3: #282822; --outline: #2f2f28; --on-surface-2: #aaa89c; --primary: #f5c400; --primary-hover: #e0b300; --primary-press: #c99f00; --on-primary: #14110a; --accent: #ffd43b; --on-accent: #14110a; --tonal: #33290a; --tonal-hover: #3f330c; --tonal-press: #4b3d10; --on-tonal: #ffdf80; --sky: #ffb340; --glass: rgba(30, 30, 26, 0.62); --glass-active: rgba(255, 214, 0, 0.14); --edge-primary: #9a7500; --edge-tonal: #1f1805; --edge-accent: #b38a00; --edge-surface: #2d2d26; }
+:root[data-theme="light"][data-accent="yellow"] { --bg: #faf8ee; --surface-2: #f1eedd; --surface-3: #e6e2cc; --outline: #ddd8bf; --on-surface-2: #5c5a4c; --primary: #ffc800; --primary-hover: #e6b400; --primary-press: #cc9f00; --on-primary: #14110a; --accent: #7a5600; --on-accent: #ffffff; --tonal: #fff0b3; --tonal-hover: #ffe88f; --tonal-press: #ffe070; --on-tonal: #4d3800; --sky: #8a5a00; --glass-active: rgba(255, 200, 0, 0.2); --edge-primary: #b38600; --edge-tonal: #e0cd80; --edge-accent: #4d3800; --edge-surface: #d9d4bc; }
+:root[data-accent="green"]:not([data-theme="light"]) { --primary: #34c76d; --primary-hover: #2ab25f; --primary-press: #229c52; --on-primary: #04210f; --accent: #5ee08f; --on-accent: #04210f; --tonal: #0f3320; --tonal-hover: #144029; --tonal-press: #194d31; --on-tonal: #b5f0cb; --sky: #7ae0c3; --glass-active: rgba(52, 199, 109, 0.16); --edge-primary: #1a7a43; --edge-tonal: #08180f; --edge-accent: #1f8f50; }
+:root[data-theme="light"][data-accent="green"] { --primary: #13783b; --primary-hover: #0f6632; --primary-press: #0c5629; --on-primary: #ffffff; --accent: #0f6a33; --on-accent: #ffffff; --tonal: #d8f5e3; --tonal-hover: #c8efd7; --tonal-press: #b4e8c8; --on-tonal: #0a4a24; --sky: #0b7a62; --glass-active: rgba(19, 120, 59, 0.12); --edge-primary: #0a4d25; --edge-tonal: #a5d9ba; --edge-accent: #0a4d25; }
+:root[data-accent="purple"]:not([data-theme="light"]) { --primary: #9b7bff; --primary-hover: #8a67f5; --primary-press: #7a56e6; --on-primary: #120a2e; --accent: #b9a3ff; --on-accent: #120a2e; --tonal: #2a1c57; --tonal-hover: #33236b; --tonal-press: #3c2a80; --on-tonal: #d9ccff; --sky: #a5b4fc; --glass-active: rgba(155, 123, 255, 0.18); --edge-primary: #5b3fc0; --edge-tonal: #140c2c; --edge-accent: #6d4fd6; }
+:root[data-theme="light"][data-accent="purple"] { --primary: #6a3fe0; --primary-hover: #5b32c9; --primary-press: #4e29ae; --on-primary: #ffffff; --accent: #5b32c9; --on-accent: #ffffff; --tonal: #e9e1ff; --tonal-hover: #dccfff; --tonal-press: #cdbbff; --on-tonal: #33198a; --sky: #6d4fd6; --glass-active: rgba(106, 63, 224, 0.12); --edge-primary: #3d1f99; --edge-tonal: #c3b0f5; --edge-accent: #3d1f99; }
+:root[data-accent="pink"]:not([data-theme="light"]) { --primary: #ff5fa2; --primary-hover: #f04a92; --primary-press: #d93a82; --on-primary: #2e0516; --accent: #ff8cbd; --on-accent: #2e0516; --tonal: #4a1330; --tonal-hover: #58183b; --tonal-press: #661d45; --on-tonal: #ffd0e4; --sky: #ffa6d1; --glass-active: rgba(255, 95, 162, 0.16); --edge-primary: #a62d66; --edge-tonal: #240a17; --edge-accent: #b8387a; }
+:root[data-theme="light"][data-accent="pink"] { --primary: #c2185b; --primary-hover: #a8144f; --primary-press: #8f1043; --on-primary: #ffffff; --accent: #b0134f; --on-accent: #ffffff; --tonal: #ffe0ec; --tonal-hover: #ffd0e1; --tonal-press: #ffbcd5; --on-tonal: #7a0e37; --sky: #b0366f; --glass-active: rgba(194, 24, 91, 0.12); --edge-primary: #7a0e37; --edge-tonal: #f0b3cb; --edge-accent: #7a0e37; }
+
+.check-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-2); }
+.check-list li { display: flex; gap: var(--sp-2); align-items: flex-start; }
+.check-list .icon { flex: none; margin-top: 2px; color: var(--accent); }
+
+/* Colour picker in Settings: a dot plus a text label, so the choice never rests on colour alone */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: var(--sp-2); }
+.swatch { display: flex; align-items: center; gap: var(--sp-2); min-height: 48px; padding: 0 var(--sp-3); border: 0; border-radius: var(--r-md, 12px); background: var(--surface-2); color: var(--on-surface); font: inherit; font-weight: 600; cursor: pointer; transition: background-color 150ms, box-shadow 150ms; }
+.swatch:hover { background: var(--surface-3); }
+.swatch[aria-checked="true"] { box-shadow: inset 0 0 0 2px var(--accent); }
+.swatch:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.swatch-dot { display: inline-grid; place-items: center; width: 24px; height: 24px; flex: none; border-radius: 50%; background: var(--dot); color: #fff; }
+.swatch-dot .icon { width: 16px; height: 16px; }
+.swatch[data-accent-option="blue"] { --dot: #0f6bfa; }
+.swatch[data-accent-option="yellow"] { --dot: #f5c400; color: var(--on-surface); }
+.swatch[data-accent-option="yellow"] .swatch-dot { color: #14110a; }
+.swatch[data-accent-option="green"] { --dot: #178a45; }
+.swatch[data-accent-option="purple"] { --dot: #7a56e6; }
+.swatch[data-accent-option="pink"] { --dot: #d93a82; }
 
 .check-box { display: inline-grid; place-items: center; width: 24px; height: 24px; flex: none; border-radius: 6px; box-shadow: inset 0 0 0 2px var(--on-surface-2); }
 .choice[aria-checked="true"] .check-box { background: var(--accent); color: var(--on-accent); box-shadow: none; }
@@ -1041,12 +1057,153 @@ label.btn:has(+ .sr-only:focus-visible) { outline: 3px solid var(--accent); outl
 .fast-clock { margin: 0; font-size: var(--fs-display); line-height: 1.1; font-weight: 700; font-variant-numeric: tabular-nums; text-align: center; }
 .segmented[role="tablist"] button { min-width: 0; padding-inline: var(--sp-1); font-size: var(--fs-small); }
 
+
+/* ==========================================================================
+   Liquid glass. One material for floating chrome: a clear-ish tint, a bright rim on the
+   lit edge (top left), a fainter one opposite, and on Chromium the backdrop bends near the
+   edges (the SVG lens filters in the page head). Chips and thumbs borrow the rim light only.
+   ========================================================================== */
+.glass {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(14px) saturate(175%) brightness(1.05);
+  backdrop-filter: blur(14px) saturate(175%) brightness(1.05);
+  box-shadow:
+    inset 1.5px 1.5px 1px -1px var(--spec),
+    inset -1px -1px 1px -1px var(--rim),
+    inset 0 0 0 1px var(--hairline),
+    inset 0 0 20px rgba(255, 255, 255, 0.05),
+    var(--float);
+}
+.toolbar.glass { box-shadow: inset 0 -1px 0 var(--hairline); }
+.sheet.glass { background: var(--glass-strong); background: color-mix(in srgb, var(--glass-strong) 80%, transparent); }
+.tabbar.glass { background: var(--glass-strong); background: color-mix(in srgb, var(--glass-strong) 70%, transparent); }
+.scrim { -webkit-backdrop-filter: none; backdrop-filter: none; }
+
+:root[data-lens] .tabbar.glass,
+:root[data-lens] .dock.glass {
+  -webkit-backdrop-filter: blur(5px) url(#fb-lens-bar) saturate(175%);
+  backdrop-filter: blur(5px) url(#fb-lens-bar) saturate(175%);
+}
+:root[data-lens] .sheet.glass {
+  -webkit-backdrop-filter: blur(8px) url(#fb-lens-sheet) saturate(165%);
+  backdrop-filter: blur(8px) url(#fb-lens-sheet) saturate(165%);
+}
+:root[data-lens] .toast.glass {
+  -webkit-backdrop-filter: blur(4px) url(#fb-lens-pill) saturate(175%);
+  backdrop-filter: blur(4px) url(#fb-lens-pill) saturate(175%);
+}
+
+/* Smaller pieces that sit on glass or on a card */
+.stats { gap: 2px; }
+.stat { background: var(--lite); box-shadow: inset 1px 1px 1px -0.5px var(--spec), inset 0 0 0 1px var(--hairline); }
+.stat:hover { background: var(--glass-active); }
+.tab-pill { box-shadow: inset 1.5px 1.5px 1px -1px var(--spec), inset -1px -1px 1px -1px var(--rim), inset 0 0 0 1px var(--hairline), 0 4px 12px rgba(0, 0, 0, 0.18); }
+.segmented { box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.22), inset 0 0 0 1px var(--hairline); }
+.segmented button[aria-selected="true"],
+.segmented button[aria-checked="true"] {
+  background: var(--thumb);
+  box-shadow: inset 1.5px 1.5px 1px -1px var(--spec), inset -1px -1px 1px -1px var(--rim), 0 2px 8px rgba(0, 0, 0, 0.22);
+}
+.bubble { box-shadow: inset 1.5px 1.5px 1px -1px var(--spec), inset 0 0 0 1px var(--hairline), 0 8px 20px rgba(0, 0, 0, 0.16); }
+.swatch[aria-checked="true"] { background: var(--thumb); }
+
+/* The lesson dock takes on the answer: a tint of green or red behind the explanation */
+.dock.glass:has(.feedback.is-right) { background: var(--success-container); background: color-mix(in srgb, var(--success-container) 72%, transparent); }
+.dock.glass:has(.feedback.is-wrong) { background: var(--error-container); background: color-mix(in srgb, var(--error-container) 72%, transparent); }
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass, :root[data-lens] .glass { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--glass-strong); }
+}
+
+
+/* ==========================================================================
+   Personality and interaction
+   ========================================================================== */
+.mini-ring.is-big { width: 88px; height: 88px; }
+.mini-ring.is-big .ring-track, .mini-ring.is-big .ring-fill { stroke-width: 5; }
+.mini-ring.is-big .icon { width: 28px; height: 28px; }
+
+/* The mascot's mood shows in how it moves */
+.mascot { position: relative; }
+.mascot.mood-sleepy::after { content: "z"; content: "z" / ""; position: absolute; top: -6px; right: -2px; font-size: var(--fs-small); font-weight: 800; color: var(--on-surface-2); }
+:root[data-motion="full"] .mascot.mood-proud .logo { animation: hop 2.4s ease-in-out infinite; }
+:root[data-motion="full"] .mascot.mood-hype .logo { animation: bob 1.4s ease-in-out infinite; }
+:root[data-motion="full"] .mascot.mood-sleepy .logo { animation: sway 5s ease-in-out infinite; transform-origin: 50% 100%; }
+@keyframes hop { 0%, 55%, 100% { transform: translateY(0); } 12% { transform: translateY(-9px) rotate(-4deg); } 24% { transform: translateY(0); } 34% { transform: translateY(-5px) rotate(3deg); } 44% { transform: translateY(0); } }
+@keyframes sway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+
+/* Empty states */
+.mascot-static { flex: none; display: inline-block; }
+.mascot-tip.empty { align-items: center; }
+.empty .bubble { padding: var(--sp-4) var(--sp-6); }
+
+/* Numbers that float up from a tap */
+.floaty { position: absolute; padding: 4px 12px; border-radius: var(--r-pill); background: var(--glass-strong); color: var(--accent); font-weight: 800; font-size: var(--fs-body); white-space: nowrap; box-shadow: inset 0 0 0 1px var(--hairline), var(--lift); }
+
+/* Loading placeholders */
+.skeleton { position: relative; display: block; height: 14px; overflow: hidden; border-radius: 7px; background: var(--surface-3); }
+.skeleton.line-long { flex: 1; }
+.skeleton.line-short { width: 64px; }
+:root[data-motion="full"] .skeleton::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, var(--lite), transparent); transform: translateX(-100%); animation: sheen 1.3s ease-in-out infinite; }
+@keyframes sheen { to { transform: translateX(100%); } }
+
+/* Swipe a row left to remove it; the trash button stays for everyone else */
+.list-row[data-swipe] { position: relative; background: var(--surface-1); touch-action: pan-y; transition: transform 180ms var(--ease-out), opacity 160ms; }
+.list-row[data-swipe]::after { content: ""; position: absolute; top: 0; bottom: 0; left: 100%; width: 100vw; background: var(--error-container) url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23ffd0cc%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M4%207h16M9%207V4h6v3M6%207l1%2013h10l1-13%22/%3E%3C/svg%3E") no-repeat 28px center / 24px; }
+:root[data-theme="light"] .list-row[data-swipe]::after { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%237a1610%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M4%207h16M9%207V4h6v3M6%207l1%2013h10l1-13%22/%3E%3C/svg%3E"); }
+.list-row.is-swiping { transition: none; }
+.list-row.is-armed::after { box-shadow: inset 0 0 0 2px var(--error); }
+.list-row.is-leaving { opacity: 0; }
+
+/* Quick add */
+.fab { position: fixed; right: 16px; bottom: calc(104px + var(--sa-bottom)); z-index: 5; display: grid; place-items: center; width: 56px; height: 56px; padding: 0; border: 0; border-radius: 50%; background: var(--primary); color: var(--on-primary); box-shadow: inset 1.5px 1.5px 1px -1px rgba(255, 255, 255, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.16), var(--float); transition: transform 120ms var(--ease-out), background-color 120ms; }
+.fab:hover { background: var(--primary-hover); }
+.fab:active { transform: scale(0.94); background: var(--primary-press); }
+.fab:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.fab .icon { width: 28px; height: 28px; }
+.quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+.quick-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sp-2); min-height: 104px; padding: var(--sp-3); border: 0; border-radius: var(--r-lg); background: var(--surface-2); color: var(--on-surface); font: inherit; font-weight: 700; box-shadow: inset 1px 1px 1px -0.5px var(--spec), inset 0 0 0 1px var(--hairline); transition: transform 120ms var(--ease-out), background-color 120ms; }
+.quick-tile:hover { background: var(--surface-3); }
+.quick-tile:active { transform: scale(0.97); }
+.quick-tile:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.quick-icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--tonal); color: var(--on-tonal); }
+
+/* Undo toast */
+.toast { display: flex; align-items: center; justify-content: center; gap: var(--sp-3); }
+.toast[hidden] { display: none; }
+.toast-btn { min-height: 44px; margin: calc(var(--sp-2) * -1) calc(var(--sp-4) * -1) calc(var(--sp-2) * -1) 0; padding: 0 var(--sp-4); border: 0; border-radius: var(--r-pill); background: var(--thumb); color: var(--accent); font: inherit; font-weight: 800; }
+.toast-btn:active { transform: scale(0.96); }
+.toast-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Milestones */
+.milestones { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-2); }
+.milestone { display: flex; align-items: center; gap: var(--sp-2); min-height: 56px; padding: var(--sp-2) var(--sp-3); border-radius: var(--r-md); background: var(--surface-2); }
+.milestone-mark { display: grid; place-items: center; width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--surface-3); color: var(--on-surface-2); }
+.milestone-mark .icon { width: 18px; height: 18px; }
+.milestone.is-done .milestone-mark { background: var(--primary); color: var(--on-primary); }
+.milestone-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.milestone-line { stroke: var(--on-surface-2); stroke-dasharray: 2 4; opacity: 0.55; }
+.milestone-tag { fill: var(--on-surface-2); font-size: 10px; }
+
+/* Weekly recap */
+.recap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+.recap-tile { padding: var(--sp-4); border-radius: var(--r-md); background: var(--surface-2); }
+.recap-value { margin-top: var(--sp-1); font-size: var(--fs-h2); line-height: 1.2; font-weight: 800; }
+
+/* Small pieces feel pressed */
+.stat, .icon-btn, .swatch { transition: transform 120ms var(--ease-out), background-color 120ms, box-shadow 150ms; }
+.stat:active, .icon-btn:active, .swatch:active { transform: scale(0.96); }
+
+/* Settings: solid surfaces instead of see-through glass */
+:root[data-glass="solid"] .glass { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background: var(--surface-1) !important; }
+
 </style>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><path id="fb-figure" vector-effect="non-scaling-stroke"/><path id="fb-figure-soft" vector-effect="non-scaling-stroke"/></defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><path id="fb-figure" vector-effect="non-scaling-stroke"/><path id="fb-figure-soft" vector-effect="non-scaling-stroke"/><filter id="fb-lens-bar" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22x%22%20x1%3D%220%22%20x2%3D%221%22%20y1%3D%220%22%20y2%3D%220%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22rgb%28255%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%225%25%22%20stop-color%3D%22rgb%28128%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%2295%25%22%20stop-color%3D%22rgb%28128%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22rgb%280%2C255%2C255%29%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22y%22%20x1%3D%220%22%20x2%3D%220%22%20y1%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22rgb%28255%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%2230%25%22%20stop-color%3D%22rgb%28255%2C128%2C255%29%22/%3E%3Cstop%20offset%3D%2270%25%22%20stop-color%3D%22rgb%28255%2C128%2C255%29%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22rgb%28255%2C0%2C255%29%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23fff%22/%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22url%28%23x%29%22/%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22url%28%23y%29%22%20style%3D%22mix-blend-mode%3Amultiply%22/%3E%3C/svg%3E" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="map"/><feDisplacementMap in="SourceGraphic" in2="map" scale="26" xChannelSelector="R" yChannelSelector="G"/></filter><filter id="fb-lens-pill" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22x%22%20x1%3D%220%22%20x2%3D%221%22%20y1%3D%220%22%20y2%3D%220%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22rgb%28255%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%2214%25%22%20stop-color%3D%22rgb%28128%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%2286%25%22%20stop-color%3D%22rgb%28128%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22rgb%280%2C255%2C255%29%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22y%22%20x1%3D%220%22%20x2%3D%220%22%20y1%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22rgb%28255%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%2238%25%22%20stop-color%3D%22rgb%28255%2C128%2C255%29%22/%3E%3Cstop%20offset%3D%2262%25%22%20stop-color%3D%22rgb%28255%2C128%2C255%29%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22rgb%28255%2C0%2C255%29%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23fff%22/%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22url%28%23x%29%22/%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22url%28%23y%29%22%20style%3D%22mix-blend-mode%3Amultiply%22/%3E%3C/svg%3E" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="map"/><feDisplacementMap in="SourceGraphic" in2="map" scale="18" xChannelSelector="R" yChannelSelector="G"/></filter><filter id="fb-lens-sheet" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22x%22%20x1%3D%220%22%20x2%3D%221%22%20y1%3D%220%22%20y2%3D%220%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22rgb%28255%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%224%25%22%20stop-color%3D%22rgb%28128%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%2296%25%22%20stop-color%3D%22rgb%28128%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22rgb%280%2C255%2C255%29%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22y%22%20x1%3D%220%22%20x2%3D%220%22%20y1%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22rgb%28255%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%225%25%22%20stop-color%3D%22rgb%28255%2C128%2C255%29%22/%3E%3Cstop%20offset%3D%2295%25%22%20stop-color%3D%22rgb%28255%2C128%2C255%29%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22rgb%28255%2C0%2C255%29%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23fff%22/%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22url%28%23x%29%22/%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22url%28%23y%29%22%20style%3D%22mix-blend-mode%3Amultiply%22/%3E%3C/svg%3E" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="map"/><feDisplacementMap in="SourceGraphic" in2="map" scale="28" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>
 <div id="app">
   <div id="toolbar"></div>
   <main id="screen"></main>
   <div id="tabbar"></div>
+  <div id="fab"></div>
 </div>
 <div id="overlay"></div>
 <div id="lesson"></div>
@@ -1219,7 +1376,7 @@ STRINGS.en = {
   'learn.title': 'Learn',
   'learn.complete': '{n} of {total} lessons complete',
   'learn.dailyGoal': 'Daily goal',
-  'learn.goalReached': 'Goal hit for today.',
+  'learn.goalReached': 'Daily goal done. Go put your feet up.',
   'learn.goalProgress': '{xp} of {goal} XP. A lesson or logging your day gets you there.',
   'learn.replay': 'Completed. Replay for 5 XP',
   'learn.locked': 'Locked',
@@ -1296,7 +1453,7 @@ STRINGS.en = {
   'food.addButton': 'Add food',
   'food.quick': 'Quick add',
   'food.mealTotal': '{meal}, {n} kcal',
-  'food.empty': 'Nothing logged yet. Add your first food above.',
+  'food.empty': 'Empty plate so far. Log your first food above.',
   'food.apple': 'Apple',
   'food.banana': 'Banana',
   'food.egg': 'Egg',
@@ -1512,39 +1669,14 @@ STRINGS.en = {
   // Toasts
   'toast.reward': '+{gems} gems and +{xp} XP',
   'toast.gems': '+{gems} gems',
-  'toast.heartsRefilled': 'Hearts refilled.',
-  'toast.freezeAdded': 'Streak freeze added.',
+  'toast.heartsRefilled': 'Hearts refilled. Go again.',
+  'toast.freezeAdded': 'Freeze added. Your streak has a safety net.',
   'toast.goalUpdated': 'Goal updated.',
-  'toast.welcome': 'Welcome, {name}. Your first lesson is ready.',
-  'toast.locked': 'Finish the previous lesson to unlock this one.',
+  'toast.welcome': 'Hey {name}, good to meet you. Lesson one is ready.',
+  'toast.locked': 'One at a time. Finish the one before it first.',
   'toast.added': 'Added {name}, {kcal} kcal',
   'toast.addedMove': 'Added {name}, {min} min',
   'toast.logged': 'Logged {weight}',
-  'plus.name': 'FatBoy Plus',
-  'plus.badge': 'Plus',
-  'plus.price': '$3.99 / month',
-  'plus.tagline': 'Unlimited AI recipes, endless hearts and a gold look.',
-  'plus.shopHelp': 'Endless hearts and unlimited AI recipes.',
-  'plus.feat.recipes': 'Unlimited AI recipes',
-  'plus.feat.recipesHelp': 'Free plans get 2 a day.',
-  'plus.feat.hearts': 'Endless hearts',
-  'plus.feat.heartsHelp': 'Mistakes never stop a lesson.',
-  'plus.feat.theme': 'Gold and black look',
-  'plus.feat.themeHelp': 'The whole app switches from blue to gold.',
-  'plus.unlock': 'Unlock Plus free (testing)',
-  'plus.testNote': 'Payments are not connected yet. While the app is in testing, Plus unlocks for free.',
-  'plus.active': 'Plus is on',
-  'plus.activeShort': 'All Plus perks are active.',
-  'plus.activeHelp': 'Plus is on. Every perk is active.',
-  'plus.turnOff': 'Turn off Plus',
-  'plus.see': 'See Plus',
-  'plus.manage': 'Manage Plus',
-  'plus.get': 'Get Plus for more recipes',
-  'plus.toastOn': 'Plus is on',
-  'plus.toastOff': 'Plus is off',
-  'plus.unlimitedHearts': 'Unlimited hearts',
-  'plus.aiLeft': '{n} of {total} free recipes left today.',
-  'plus.aiLimit': 'That\'s your {n} free recipes for today. Plus has no limit.',
   'setup.agree': 'I am 18 or older and I understand FatBoy is not medical advice.',
   'error.agree': 'Confirm this to continue.',
   'legal.healthTitle': 'Health notice',
@@ -1606,7 +1738,7 @@ STRINGS.en = {
   'photos.title': 'Progress photos',
   'photos.help': 'Photos stay on this phone. They are not part of backups or sync.',
   'photos.add': 'Add photo',
-  'photos.empty': 'Take a photo now and compare it with later ones.',
+  'photos.empty': 'No photos yet. Take one today and future you will say thanks.',
   'photos.open': 'Photo from {date}',
   'photos.delete': 'Delete photo',
   'photos.first': 'First',
@@ -1667,11 +1799,75 @@ STRINGS.en = {
   'fast.history': 'Recent fasts',
   'fast.completed': 'Goals reached',
   'fast.longest': 'Longest fast',
-  'fast.empty': 'No fasts yet. Pick a window and start.',
+  'fast.empty': 'No fasts yet. Pick a window when you feel like it.',
   'fast.entry': '{hours} h of {goal} h',
   'fast.reached': 'Reached',
   'fast.toastEnd': 'Fast ended after {hours} h',
   'fast.help': 'A fasting window is just a stretch of time without eating. It is optional and not for everyone, so skip it if you have a medical condition, are pregnant or have had an eating disorder.',
+  'settings.colour': 'Colour',
+  'settings.colourHelp': 'Pick the colour the app uses for buttons and highlights.',
+  'settings.colour.blue': 'Blue',
+  'settings.colour.yellow': 'Yellow',
+  'settings.colour.green': 'Green',
+  'settings.colour.purple': 'Purple',
+  'settings.colour.pink': 'Pink',
+  'mood.proud.0': 'Goal hit. I am not saying I am proud, but I am a little proud.',
+  'mood.proud.1': 'Today is sorted. Go enjoy it, {name}.',
+  'mood.proud.2': 'Daily goal done. Your future self just nodded.',
+  'mood.sleepy.0': 'It is late, {name}. One small win, then bed.',
+  'mood.sleepy.1': 'Sleep is part of the plan. Really.',
+  'mood.sleepy.2': 'Water first, then sleep. I will be here tomorrow.',
+  'mood.hype.0': '{n} days in a row. I am running out of ways to be impressed.',
+  'mood.hype.1': 'That streak is getting serious, {name}.',
+  'mood.hype.2': '{n} days. Do not break it now.',
+  'mood.back.0': 'Hey {name}, good to see you. One lesson and we are back on.',
+  'mood.back.1': 'No guilt. Streaks restart, and so do you.',
+  'mood.back.2': 'You showed up. That is the hard part.',
+  'mood.calm.0': 'Ready when you are, {name}.',
+  'mood.calm.1': 'One small win today and we are good.',
+  'mood.calm.2': 'Start with the easy one. I will wait.',
+  'home.lesson': 'Continue: {title}',
+  'home.food': 'Log a meal',
+  'home.water': 'Drink a glass ({n} to go)',
+  'home.weigh': 'Weigh in',
+  'home.done': 'Everything is done for today. Nice one.',
+  'ms.title': 'Milestones',
+  'ms.first': 'First step',
+  'ms.five': 'Solid progress',
+  'ms.half': 'Halfway',
+  'ms.goal': 'Goal',
+  'ms.reached': 'Reached',
+  'ms.ahead': 'Still ahead',
+  'ms.next': '{left} to go until {name}.',
+  'ms.all': 'Every milestone reached.',
+  'ms.toast': 'Milestone: {name}. Well done.',
+  'move.empty': 'No movement logged today. Even a walk around the block counts.',
+  'toast.removed': '{name} removed',
+  'toast.undo': 'Undo',
+  'quick.title': 'Quick add',
+  'quick.subtitle': 'What do you want to log?',
+  'quick.food': 'Food',
+  'quick.water': 'Water',
+  'quick.move': 'Movement',
+  'quick.weight': 'Weight',
+  'quick.waterFull': 'You are already at 8 glasses.',
+  'quick.plusGlass': '+1 glass',
+  'quick.waterAdded': '{n} of 8 glasses',
+  'recap.open': 'Weekly recap',
+  'recap.title': 'Your week',
+  'recap.subtitle': 'The last 7 days at a glance.',
+  'recap.great': 'Nearly every day logged. This is how it gets done.',
+  'recap.okay': 'A decent week. A few more logged days and the picture gets sharper.',
+  'recap.fresh': 'A quiet week. Fresh start tomorrow, no guilt.',
+  'recap.logged': 'Days logged',
+  'recap.xp': 'XP earned',
+  'recap.avg': 'Average intake',
+  'recap.change': 'Weight change',
+  'egg.mascot': 'Okay okay, I am awake.',
+  'settings.glass': 'Glass',
+  'settings.glassClear': 'Clear',
+  'settings.glassSolid': 'Solid',
+  'settings.glassHelp': 'Solid turns the see-through bars and sheets into plain surfaces. Easier to read on some screens.',
 };
 
 'use strict';
@@ -1811,7 +2007,7 @@ STRINGS.el = {
   'learn.title': 'Μάθηση',
   'learn.complete': '{n} από {total} μαθήματα ολοκληρώθηκαν',
   'learn.dailyGoal': 'Ημερήσιος στόχος',
-  'learn.goalReached': 'Ο στόχος της ημέρας έγινε.',
+  'learn.goalReached': 'Ο ημερήσιος στόχος ολοκληρώθηκε. Πήγαινε να ξεκουραστείς.',
   'learn.goalProgress': '{xp} από {goal} XP. Ένα μάθημα ή η καταγραφή της ημέρας σε φτάνει εκεί.',
   'learn.replay': 'Ολοκληρώθηκε. Επανάληψη για 5 XP',
   'learn.locked': 'Κλειδωμένο',
@@ -1888,7 +2084,7 @@ STRINGS.el = {
   'food.addButton': 'Προσθήκη φαγητού',
   'food.quick': 'Γρήγορη προσθήκη',
   'food.mealTotal': '{meal}, {n} kcal',
-  'food.empty': 'Δεν έχει καταγραφεί τίποτα ακόμα. Πρόσθεσε το πρώτο σου φαγητό παραπάνω.',
+  'food.empty': 'Άδειο πιάτο προς το παρόν. Κατέγραψε το πρώτο φαγητό παραπάνω.',
   'food.apple': 'Μήλο',
   'food.banana': 'Μπανάνα',
   'food.egg': 'Αυγό',
@@ -2104,39 +2300,14 @@ STRINGS.el = {
   // Toasts
   'toast.reward': '+{gems} πετράδια και +{xp} XP',
   'toast.gems': '+{gems} πετράδια',
-  'toast.heartsRefilled': 'Οι καρδιές γέμισαν.',
-  'toast.freezeAdded': 'Προστέθηκε πάγωμα σερί.',
+  'toast.heartsRefilled': 'Οι καρδιές γέμισαν. Πάμε ξανά.',
+  'toast.freezeAdded': 'Προστέθηκε πάγωμα. Το σερί σου έχει δίχτυ ασφαλείας.',
   'toast.goalUpdated': 'Ο στόχος ενημερώθηκε.',
-  'toast.welcome': 'Καλώς ήρθες, {name}. Το πρώτο σου μάθημα είναι έτοιμο.',
-  'toast.locked': 'Ολοκλήρωσε το προηγούμενο μάθημα για να ξεκλειδώσεις αυτό.',
+  'toast.welcome': 'Γεια σου {name}, χάρηκα. Το πρώτο μάθημα είναι έτοιμο.',
+  'toast.locked': 'Ένα-ένα. Τελείωσε πρώτα το προηγούμενο μάθημα.',
   'toast.added': 'Προστέθηκε: {name}, {kcal} kcal',
   'toast.addedMove': 'Προστέθηκε: {name}, {min} λεπτά',
   'toast.logged': 'Καταγράφηκε {weight}',
-  'plus.name': 'FatBoy Plus',
-  'plus.badge': 'Plus',
-  'plus.price': '3,99 $ / μήνα',
-  'plus.tagline': 'Απεριόριστες συνταγές AI, άπειρες καρδιές και χρυσή εμφάνιση.',
-  'plus.shopHelp': 'Άπειρες καρδιές και απεριόριστες συνταγές AI.',
-  'plus.feat.recipes': 'Απεριόριστες συνταγές AI',
-  'plus.feat.recipesHelp': 'Το δωρεάν πλάνο έχει 2 την ημέρα.',
-  'plus.feat.hearts': 'Άπειρες καρδιές',
-  'plus.feat.heartsHelp': 'Τα λάθη δεν σταματούν ποτέ ένα μάθημα.',
-  'plus.feat.theme': 'Χρυσή και μαύρη εμφάνιση',
-  'plus.feat.themeHelp': 'Όλη η εφαρμογή αλλάζει από μπλε σε χρυσό.',
-  'plus.unlock': 'Ξεκλείδωμα Plus δωρεάν (δοκιμή)',
-  'plus.testNote': 'Οι πληρωμές δεν έχουν συνδεθεί ακόμη. Όσο η εφαρμογή είναι σε δοκιμή, το Plus ξεκλειδώνει δωρεάν.',
-  'plus.active': 'Το Plus είναι ενεργό',
-  'plus.activeShort': 'Όλα τα προνόμια Plus είναι ενεργά.',
-  'plus.activeHelp': 'Το Plus είναι ενεργό. Όλα τα προνόμια ισχύουν.',
-  'plus.turnOff': 'Απενεργοποίηση Plus',
-  'plus.see': 'Δες το Plus',
-  'plus.manage': 'Διαχείριση Plus',
-  'plus.get': 'Πάρε Plus για περισσότερες συνταγές',
-  'plus.toastOn': 'Το Plus είναι ενεργό',
-  'plus.toastOff': 'Το Plus είναι ανενεργό',
-  'plus.unlimitedHearts': 'Άπειρες καρδιές',
-  'plus.aiLeft': 'Απομένουν {n} από {total} δωρεάν συνταγές σήμερα.',
-  'plus.aiLimit': 'Αυτές ήταν οι {n} δωρεάν συνταγές σου για σήμερα. Το Plus δεν έχει όριο.',
   'setup.agree': 'Είμαι 18 ετών ή μεγαλύτερος/η και καταλαβαίνω ότι το FatBoy δεν αποτελεί ιατρική συμβουλή.',
   'error.agree': 'Επιβεβαίωσε για να συνεχίσεις.',
   'legal.healthTitle': 'Ενημέρωση υγείας',
@@ -2198,7 +2369,7 @@ STRINGS.el = {
   'photos.title': 'Φωτογραφίες προόδου',
   'photos.help': 'Οι φωτογραφίες μένουν σε αυτό το κινητό. Δεν περιλαμβάνονται σε αντίγραφα ή συγχρονισμό.',
   'photos.add': 'Προσθήκη φωτογραφίας',
-  'photos.empty': 'Τράβηξε μια φωτογραφία τώρα και σύγκρινέ τη με επόμενες.',
+  'photos.empty': 'Δεν υπάρχουν φωτογραφίες ακόμα. Βγάλε μία σήμερα και ο εαυτός σου του μέλλοντος θα σε ευχαριστήσει.',
   'photos.open': 'Φωτογραφία από {date}',
   'photos.delete': 'Διαγραφή φωτογραφίας',
   'photos.first': 'Πρώτη',
@@ -2259,11 +2430,75 @@ STRINGS.el = {
   'fast.history': 'Πρόσφατες νηστείες',
   'fast.completed': 'Στόχοι που επιτεύχθηκαν',
   'fast.longest': 'Μεγαλύτερη νηστεία',
-  'fast.empty': 'Καμία νηστεία ακόμα. Διάλεξε παράθυρο και ξεκίνα.',
+  'fast.empty': 'Καμία νηστεία ακόμα. Διάλεξε παράθυρο όταν έχεις διάθεση.',
   'fast.entry': '{hours} ώρ. από {goal} ώρ.',
   'fast.reached': 'Επιτεύχθηκε',
   'fast.toastEnd': 'Η νηστεία τελείωσε μετά από {hours} ώρ.',
   'fast.help': 'Το παράθυρο νηστείας είναι απλώς ένα διάστημα χωρίς φαγητό. Είναι προαιρετικό και δεν ταιριάζει σε όλους, οπότε παράλειψέ το αν έχεις ιατρική πάθηση, είσαι έγκυος ή έχεις ιστορικό διατροφικής διαταραχής.',
+  'settings.colour': 'Χρώμα',
+  'settings.colourHelp': 'Διάλεξε το χρώμα για τα κουμπιά και τις επισημάνσεις.',
+  'settings.colour.blue': 'Μπλε',
+  'settings.colour.yellow': 'Κίτρινο',
+  'settings.colour.green': 'Πράσινο',
+  'settings.colour.purple': 'Μωβ',
+  'settings.colour.pink': 'Ροζ',
+  'mood.proud.0': 'Ο στόχος έγινε. Δεν λέω ότι είμαι περήφανος, αλλά λίγο είμαι.',
+  'mood.proud.1': 'Η σημερινή μέρα τακτοποιήθηκε. Απόλαυσέ την, {name}.',
+  'mood.proud.2': 'Ο ημερήσιος στόχος ολοκληρώθηκε. Ο μελλοντικός σου εαυτός μόλις έγνεψε.',
+  'mood.sleepy.0': 'Είναι αργά, {name}. Μία μικρή νίκη και ύπνος.',
+  'mood.sleepy.1': 'Ο ύπνος είναι μέρος του πλάνου. Στα σοβαρά.',
+  'mood.sleepy.2': 'Πρώτα νερό, μετά ύπνος. Θα είμαι εδώ και αύριο.',
+  'mood.hype.0': '{n} μέρες στη σειρά. Έχω μείνει από τρόπους να εντυπωσιαστώ.',
+  'mood.hype.1': 'Το σερί σου αρχίζει να γίνεται σοβαρό, {name}.',
+  'mood.hype.2': '{n} μέρες. Μην το σπάσεις τώρα.',
+  'mood.back.0': 'Γεια σου {name}, χαίρομαι που σε βλέπω. Ένα μάθημα και είμαστε πάλι μέσα.',
+  'mood.back.1': 'Χωρίς ενοχές. Τα σερί ξαναρχίζουν, κι εσύ μαζί τους.',
+  'mood.back.2': 'Εμφανίστηκες. Αυτό είναι το δύσκολο κομμάτι.',
+  'mood.calm.0': 'Έτοιμος όποτε είσαι, {name}.',
+  'mood.calm.1': 'Μία μικρή νίκη σήμερα και είμαστε εντάξει.',
+  'mood.calm.2': 'Ξεκίνα με το εύκολο. Θα περιμένω.',
+  'home.lesson': 'Συνέχεια: {title}',
+  'home.food': 'Κατάγραψε ένα γεύμα',
+  'home.water': 'Πιες ένα ποτήρι (έμειναν {n})',
+  'home.weigh': 'Ζύγισμα',
+  'home.done': 'Όλα έτοιμα για σήμερα. Μπράβο.',
+  'ms.title': 'Ορόσημα',
+  'ms.first': 'Πρώτο βήμα',
+  'ms.five': 'Καλή πρόοδος',
+  'ms.half': 'Στα μισά',
+  'ms.goal': 'Στόχος',
+  'ms.reached': 'Επιτεύχθηκε',
+  'ms.ahead': 'Μπροστά σου',
+  'ms.next': 'Απομένουν {left} μέχρι: {name}.',
+  'ms.all': 'Όλα τα ορόσημα επιτεύχθηκαν.',
+  'ms.toast': 'Ορόσημο: {name}. Μπράβο.',
+  'move.empty': 'Δεν έχει καταγραφεί κίνηση σήμερα. Ακόμα και μια βόλτα μετράει.',
+  'toast.removed': 'Αφαιρέθηκε: {name}',
+  'toast.undo': 'Αναίρεση',
+  'quick.title': 'Γρήγορη προσθήκη',
+  'quick.subtitle': 'Τι θέλεις να καταγράψεις;',
+  'quick.food': 'Φαγητό',
+  'quick.water': 'Νερό',
+  'quick.move': 'Κίνηση',
+  'quick.weight': 'Βάρος',
+  'quick.waterFull': 'Έχεις ήδη 8 ποτήρια.',
+  'quick.plusGlass': '+1 ποτήρι',
+  'quick.waterAdded': '{n} από 8 ποτήρια',
+  'recap.open': 'Εβδομαδιαία σύνοψη',
+  'recap.title': 'Η εβδομάδα σου',
+  'recap.subtitle': 'Οι τελευταίες 7 μέρες με μια ματιά.',
+  'recap.great': 'Σχεδόν κάθε μέρα καταγεγραμμένη. Έτσι γίνεται η δουλειά.',
+  'recap.okay': 'Μια αξιοπρεπής εβδομάδα. Λίγες ακόμα μέρες καταγραφής και η εικόνα καθαρίζει.',
+  'recap.fresh': 'Μια ήσυχη εβδομάδα. Νέα αρχή αύριο, χωρίς ενοχές.',
+  'recap.logged': 'Μέρες καταγραφής',
+  'recap.xp': 'XP',
+  'recap.avg': 'Μέσος όρος πρόσληψης',
+  'recap.change': 'Αλλαγή βάρους',
+  'egg.mascot': 'Εντάξει, εντάξει, ξύπνησα.',
+  'settings.glass': 'Γυαλί',
+  'settings.glassClear': 'Διάφανο',
+  'settings.glassSolid': 'Συμπαγές',
+  'settings.glassHelp': 'Το συμπαγές κάνει τις διάφανες μπάρες και τα φύλλα απλές επιφάνειες. Πιο ευανάγνωστο σε κάποιες οθόνες.',
 };
 
 'use strict';
@@ -2403,7 +2638,7 @@ STRINGS.es = {
   'learn.title': 'Aprender',
   'learn.complete': '{n} de {total} lecciones completadas',
   'learn.dailyGoal': 'Objetivo diario',
-  'learn.goalReached': 'Meta de hoy cumplida.',
+  'learn.goalReached': 'Meta diaria cumplida. Ve a poner los pies en alto.',
   'learn.goalProgress': '{xp} de {goal} XP. Una lección o registrar tu día te lleva hasta ahí.',
   'learn.replay': 'Completada. Repítela por 5 XP',
   'learn.locked': 'Bloqueado',
@@ -2480,7 +2715,7 @@ STRINGS.es = {
   'food.addButton': 'Añadir comida',
   'food.quick': 'Añadir rápido',
   'food.mealTotal': '{meal}, {n} kcal',
-  'food.empty': 'Aún no has registrado nada. Añade tu primera comida arriba.',
+  'food.empty': 'Plato vacío por ahora. Registra tu primera comida arriba.',
   'food.apple': 'Manzana',
   'food.banana': 'Plátano',
   'food.egg': 'Huevo',
@@ -2696,39 +2931,14 @@ STRINGS.es = {
   // Toasts
   'toast.reward': '+{gems} gemas y +{xp} XP',
   'toast.gems': '+{gems} gemas',
-  'toast.heartsRefilled': 'Corazones recargados.',
-  'toast.freezeAdded': 'Congelación de racha añadida.',
+  'toast.heartsRefilled': 'Corazones recargados. Otra vez.',
+  'toast.freezeAdded': 'Congelación añadida. Tu racha tiene red de seguridad.',
   'toast.goalUpdated': 'Meta actualizada.',
-  'toast.welcome': 'Te damos la bienvenida, {name}. Tu primera lección está lista.',
-  'toast.locked': 'Termina la lección anterior para desbloquear esta.',
+  'toast.welcome': 'Hola, {name}, encantado. La primera lección ya está lista.',
+  'toast.locked': 'De una en una. Termina primero la lección anterior.',
   'toast.added': 'Añadido: {name}, {kcal} kcal',
   'toast.addedMove': 'Añadido: {name}, {min} min',
   'toast.logged': 'Registrado {weight}',
-  'plus.name': 'FatBoy Plus',
-  'plus.badge': 'Plus',
-  'plus.price': '3,99 $ / mes',
-  'plus.tagline': 'Recetas con IA ilimitadas, corazones sin fin y un aspecto dorado.',
-  'plus.shopHelp': 'Corazones sin fin y recetas con IA ilimitadas.',
-  'plus.feat.recipes': 'Recetas con IA ilimitadas',
-  'plus.feat.recipesHelp': 'El plan gratis tiene 2 al día.',
-  'plus.feat.hearts': 'Corazones sin fin',
-  'plus.feat.heartsHelp': 'Los errores nunca detienen una lección.',
-  'plus.feat.theme': 'Aspecto dorado y negro',
-  'plus.feat.themeHelp': 'Toda la app cambia de azul a dorado.',
-  'plus.unlock': 'Desbloquear Plus gratis (prueba)',
-  'plus.testNote': 'Los pagos aún no están conectados. Mientras la app esté en pruebas, Plus se desbloquea gratis.',
-  'plus.active': 'Plus está activo',
-  'plus.activeShort': 'Todas las ventajas de Plus están activas.',
-  'plus.activeHelp': 'Plus está activo. Todas las ventajas funcionan.',
-  'plus.turnOff': 'Desactivar Plus',
-  'plus.see': 'Ver Plus',
-  'plus.manage': 'Gestionar Plus',
-  'plus.get': 'Consigue Plus para más recetas',
-  'plus.toastOn': 'Plus está activo',
-  'plus.toastOff': 'Plus está desactivado',
-  'plus.unlimitedHearts': 'Corazones ilimitados',
-  'plus.aiLeft': 'Te quedan {n} de {total} recetas gratis hoy.',
-  'plus.aiLimit': 'Esas fueron tus {n} recetas gratis de hoy. Plus no tiene límite.',
   'setup.agree': 'Tengo 18 años o más y entiendo que FatBoy no es consejo médico.',
   'error.agree': 'Confirma esto para continuar.',
   'legal.healthTitle': 'Aviso de salud',
@@ -2790,7 +3000,7 @@ STRINGS.es = {
   'photos.title': 'Fotos de progreso',
   'photos.help': 'Las fotos se quedan en este teléfono. No forman parte de copias ni de la sincronización.',
   'photos.add': 'Añadir foto',
-  'photos.empty': 'Haz una foto ahora y compárala con las siguientes.',
+  'photos.empty': 'Aún no hay fotos. Haz una hoy y tu yo del futuro te lo agradecerá.',
   'photos.open': 'Foto del {date}',
   'photos.delete': 'Eliminar foto',
   'photos.first': 'Primera',
@@ -2851,11 +3061,75 @@ STRINGS.es = {
   'fast.history': 'Ayunos recientes',
   'fast.completed': 'Metas cumplidas',
   'fast.longest': 'Ayuno más largo',
-  'fast.empty': 'Aún no hay ayunos. Elige una ventana y empieza.',
+  'fast.empty': 'Aún no hay ayunos. Elige una ventana cuando te apetezca.',
   'fast.entry': '{hours} h de {goal} h',
   'fast.reached': 'Cumplida',
   'fast.toastEnd': 'Ayuno terminado tras {hours} h',
   'fast.help': 'Una ventana de ayuno es solo un rato sin comer. Es opcional y no es para todos, así que sáltatela si tienes una condición médica, estás embarazada o has tenido un trastorno alimentario.',
+  'settings.colour': 'Color',
+  'settings.colourHelp': 'Elige el color de los botones y los resaltados.',
+  'settings.colour.blue': 'Azul',
+  'settings.colour.yellow': 'Amarillo',
+  'settings.colour.green': 'Verde',
+  'settings.colour.purple': 'Morado',
+  'settings.colour.pink': 'Rosa',
+  'mood.proud.0': 'Meta cumplida. No digo que esté orgulloso, pero un poquito sí.',
+  'mood.proud.1': 'El día de hoy está resuelto. Disfrútalo, {name}.',
+  'mood.proud.2': 'Meta diaria cumplida. Tu yo del futuro acaba de asentir.',
+  'mood.sleepy.0': 'Ya es tarde, {name}. Una pequeña victoria y a la cama.',
+  'mood.sleepy.1': 'Dormir también es parte del plan. En serio.',
+  'mood.sleepy.2': 'Primero agua, luego a dormir. Mañana sigo aquí.',
+  'mood.hype.0': '{n} días seguidos. Se me acaban las formas de impresionarme.',
+  'mood.hype.1': 'Esa racha ya se está poniendo seria, {name}.',
+  'mood.hype.2': '{n} días. No la rompas ahora.',
+  'mood.back.0': 'Hola {name}, qué bueno verte. Una lección y volvemos.',
+  'mood.back.1': 'Sin culpa. Las rachas se reinician, y tú con ellas.',
+  'mood.back.2': 'Has aparecido. Esa es la parte difícil.',
+  'mood.calm.0': 'Listo cuando tú lo estés, {name}.',
+  'mood.calm.1': 'Una pequeña victoria hoy y vamos bien.',
+  'mood.calm.2': 'Empieza por lo fácil. Yo espero.',
+  'home.lesson': 'Continuar: {title}',
+  'home.food': 'Registrar una comida',
+  'home.water': 'Beber un vaso (faltan {n})',
+  'home.weigh': 'Pesarte',
+  'home.done': 'Todo hecho por hoy. Bien hecho.',
+  'ms.title': 'Hitos',
+  'ms.first': 'Primer paso',
+  'ms.five': 'Buen avance',
+  'ms.half': 'A la mitad',
+  'ms.goal': 'Meta',
+  'ms.reached': 'Logrado',
+  'ms.ahead': 'Por delante',
+  'ms.next': 'Faltan {left} para: {name}.',
+  'ms.all': 'Todos los hitos logrados.',
+  'ms.toast': 'Hito: {name}. Bien hecho.',
+  'move.empty': 'Hoy no has registrado movimiento. Hasta un paseo cuenta.',
+  'toast.removed': 'Eliminado: {name}',
+  'toast.undo': 'Deshacer',
+  'quick.title': 'Añadir rápido',
+  'quick.subtitle': '¿Qué quieres registrar?',
+  'quick.food': 'Comida',
+  'quick.water': 'Agua',
+  'quick.move': 'Movimiento',
+  'quick.weight': 'Peso',
+  'quick.waterFull': 'Ya llevas 8 vasos.',
+  'quick.plusGlass': '+1 vaso',
+  'quick.waterAdded': '{n} de 8 vasos',
+  'recap.open': 'Resumen semanal',
+  'recap.title': 'Tu semana',
+  'recap.subtitle': 'Los últimos 7 días de un vistazo.',
+  'recap.great': 'Casi todos los días registrados. Así se consigue.',
+  'recap.okay': 'Una semana correcta. Unos días más registrados y la imagen se aclara.',
+  'recap.fresh': 'Una semana tranquila. Mañana empezamos de nuevo, sin culpa.',
+  'recap.logged': 'Días registrados',
+  'recap.xp': 'XP',
+  'recap.avg': 'Ingesta media',
+  'recap.change': 'Cambio de peso',
+  'egg.mascot': 'Vale, vale, ya estoy despierto.',
+  'settings.glass': 'Cristal',
+  'settings.glassClear': 'Transparente',
+  'settings.glassSolid': 'Sólido',
+  'settings.glassHelp': 'Sólido convierte las barras y hojas transparentes en superficies lisas. Se lee mejor en algunas pantallas.',
 };
 
 'use strict';
@@ -4021,6 +4295,7 @@ const ICON_PATHS = {
   scale: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10a4 4 0 0 1 8 0M12 10l2-2"/>',
   trophy: '<path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v2a3 3 0 0 0 4 3M16 6h4v2a3 3 0 0 1-4 3M12 13v4M8 21h8M10 17h4"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
+  flag: '<path d="M6 21V4M6 5h11l-2 4 2 4H6"/>',
   trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
   food: '<path d="M7 3v8M4 3v5a3 3 0 0 0 6 0V3M7 11v10M17 3c-2.5 2-3 6-1 9h1v9"/>',
   alert: '<circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/>',
@@ -4098,9 +4373,13 @@ const defaultSettings = () => ({
   theme: 'system',      // system | light | dark
   language: detectLanguage(),
   motion: 'auto',       // auto | full | reduced
+  accent: 'blue',       // blue | yellow | green | purple | pink
+  glass: 'clear',       // clear | solid
   dailyGoal: 30,        // XP
   reminder: '19:00',    // time of the daily calendar reminder
 });
+
+const ACCENTS = ['blue', 'yellow', 'green', 'purple', 'pink'];
 
 const createState = settings => ({
   settings: settings || defaultSettings(),
@@ -4127,8 +4406,6 @@ const createState = settings => ({
   cooked: {},           // date -> recipes logged
   fast: null,           // { start, hours } while a fast is running
   fasts: [],            // finished fasts, { start, end, goal }
-  plus: false,          // FatBoy Plus
-  aiUsed: {},           // date -> Claude recipes written
   claimed: {},          // quest and chest claims
   checks: {},           // self-reported quests, "date:id" -> 1
   revealed: {},         // quest cards turned face up, "date:id" -> 1
@@ -4139,7 +4416,12 @@ function loadState() {
   const fresh = createState();
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (saved) return { ...fresh, ...saved, settings: { ...fresh.settings, ...saved.settings } };
+    if (saved) {
+      const settings = { ...fresh.settings, ...saved.settings };
+      if (saved.plus && !(saved.settings && saved.settings.accent)) settings.accent = 'yellow'; // old Plus look lives on as a theme
+      delete saved.plus;
+      return { ...fresh, ...saved, settings };
+    }
   } catch (error) { /* storage can be blocked; fall back to a fresh state */ }
   return fresh;
 }
@@ -4259,12 +4541,7 @@ function regenerateHearts() {
   saveState();
 }
 
-const PLUS_PRICE = 3.99;
-const FREE_AI_PER_DAY = 2;
-const aiLeftToday = () => Math.max(0, FREE_AI_PER_DAY - (state.aiUsed[today()] || 0));
-
 function loseHeart() {
-  if (state.plus) return;
   if (state.hearts === HEART_MAX) state.heartsAt = Date.now();
   state.hearts = Math.max(0, state.hearts - 1);
   saveState();
@@ -4645,10 +4922,21 @@ const motionOn = () => {
   return motion === 'full' || (motion === 'auto' && !systemReduced.matches);
 };
 
+// Refraction uses an SVG filter inside backdrop-filter, which only Chromium-based engines draw.
+// Elsewhere the glass keeps its blur and rim light and skips the bending.
+const canRefract = (() => {
+  try {
+    const ua = navigator.userAgent || '';
+    return /Chrome\/\d+/.test(ua) && !/Edg\/|OPR\//.test(ua) && CSS.supports('backdrop-filter', 'url(#fb-lens-bar)');
+  } catch (error) { return false; }
+})();
+
 function applySettings() {
   const root = document.documentElement;
   root.dataset.theme = resolvedTheme();
-  root.dataset.plan = state.plus ? 'plus' : 'free';
+  root.dataset.accent = ACCENTS.includes(state.settings.accent) ? state.settings.accent : 'blue';
+  if (canRefract) root.dataset.lens = 'on';
+  root.dataset.glass = state.settings.glass === 'solid' ? 'solid' : 'clear';
   root.dataset.motion = motionOn() ? 'full' : 'reduced';
   root.lang = state.settings.language;
 }
@@ -4885,11 +5173,11 @@ function toolbar() {
   return html`
     <header class="toolbar glass">
       <div class="container toolbar-inner">
-        <div class="brand">${logo(44, 14)}<span class="brand-name">FatBoy</span>${state.plus ? html`<span class="pill plus-pill">${t('plus.badge')}</span>` : ''}</div>
+        <div class="brand">${logo(44, 14)}<span class="brand-name">FatBoy</span></div>
         <div class="stats">
           <button class="stat stat-streak ${streak > 0 ? 'is-lit' : ''}" data-action="show-streak" aria-label="${t('toolbar.streak', { n: streak })}">${icon('flame', { solid: true })}${countText('streak', streak)}</button>
           <button class="stat stat-gems" data-action="show-shop" aria-label="${t('toolbar.gems', { n: state.gems })}">${icon('gem')}${countText('gems', state.gems)}</button>
-          <button class="stat stat-hearts" data-action="show-shop" aria-label="${state.plus ? t('plus.unlimitedHearts') : t('toolbar.hearts', { n: state.hearts, max: HEART_MAX })}">${icon('heart', { solid: true })}${state.plus ? html`<span class="num">∞</span>` : countText('hearts', state.hearts)}</button>
+          <button class="stat stat-hearts" data-action="show-shop" aria-label="${t('toolbar.hearts', { n: state.hearts, max: HEART_MAX })}">${icon('heart', { solid: true })}${countText('hearts', state.hearts)}</button>
         </div>
       </div>
     </header>`;
@@ -4916,32 +5204,17 @@ const tabBar = () => html`
 /* ==========================================================================
    Learn
    ========================================================================== */
-function miniRing(value) {
+function miniRing(value, big = false) {
   const radius = 28;
   const length = 2 * Math.PI * radius;
   return html`
-    <span class="mini-ring">
+    <span class="mini-ring${big ? ' is-big' : ''}">
       <svg viewBox="0 0 64 64" aria-hidden="true">
         <circle class="ring-track" cx="32" cy="32" r="${radius}"/>
         <circle class="ring-fill" cx="32" cy="32" r="${radius}" stroke="currentColor" data-tween="daily" style="--v:${fraction(value)};--len:${length.toFixed(1)}"/>
       </svg>
       ${icon('bolt', { solid: true })}
     </span>`;
-}
-
-function dailyGoalCard() {
-  const xp = xpToday();
-  const goal = dailyGoal();
-  return html`
-    <section class="card" aria-labelledby="goal-title">
-      <div class="row">
-        ${miniRing(xp / goal)}
-        <div class="grow">
-          <h2 id="goal-title">${t('learn.dailyGoal')}</h2>
-          <p class="caption num">${xp >= goal ? t('learn.goalReached') : t('learn.goalProgress', { xp, goal })}</p>
-        </div>
-      </div>
-    </section>`;
 }
 
 function lessonStep(lesson, unitIndex, lessonIndex, openIndex) {
@@ -4993,10 +5266,10 @@ function greeting() {
 function tipCard() {
   return html`
     <section class="mascot-tip" aria-labelledby="tip-title">
-      <button class="mascot" data-action="next-tip" aria-label="${t('learn.nextTip')}">${logo(56, 18)}</button>
+      <button class="mascot mood-${mascotMood()}" data-action="next-tip" aria-label="${t('learn.nextTip')}">${logo(56, 18)}</button>
       <div class="bubble">
         <h2 id="tip-title" class="bubble-title">${t('learn.tip')}</h2>
-        <p class="measure" aria-live="polite">${t(`tip.${(hashText(today()) + ui.tipShift) % TIP_COUNT}`)}</p>
+        <p class="measure" aria-live="polite">${ui.tipShift === 0 ? moodLine() : t(`tip.${(hashText(today()) + ui.tipShift) % TIP_COUNT}`)}</p>
       </div>
     </section>`;
 }
@@ -5008,7 +5281,7 @@ function learnScreen() {
       <h1>${greeting()}</h1>
       <p class="caption num">${t('learn.complete', { n: lessonsDone(), total: TOTAL_LESSONS })}</p>
     </div>
-    ${dailyGoalCard()}
+    ${homeCard()}
     ${tipCard()}
     ${units().map((unit, i) => unitCard(unit, i, openIndex))}`;
 }
@@ -5107,14 +5380,14 @@ function foodPanel() {
           <section class="stack-tight" aria-label="${t(`meal.${meal}`)}">
             <p class="caption">${t('food.mealTotal', { meal: t(`meal.${meal}`), n: formatInt(items.reduce((sum, item) => sum + item.kcal, 0)) })}</p>
             <div class="list">${items.map(item => html`
-              <div class="list-row ${item.id === ui.newId ? 'is-new' : ''}">
+              <div class="list-row ${item.id === ui.newId ? 'is-new' : ''}" data-swipe>
                 <span class="grow">${item.name}</span>
                 <span class="caption num">${formatInt(item.kcal)} kcal</span>
                 <button class="icon-btn" data-action="remove-food" data-id="${item.id}" aria-label="${t('common.remove', { name: item.name })}">${icon('trash')}</button>
               </div>`)}
             </div>
           </section>`)
-      : html`<div class="card center"><p class="caption">${t('food.empty')}</p></div>`}`;
+      : html`<div class="card">${emptyState(t('food.empty'))}</div>`}`;
 }
 
 function waterPanel() {
@@ -5155,12 +5428,12 @@ function movePanel() {
     </form>
     ${movesToday().length ? html`
       <div class="list">${movesToday().map(item => html`
-        <div class="list-row ${item.id === ui.newId ? 'is-new' : ''}">
+        <div class="list-row ${item.id === ui.newId ? 'is-new' : ''}" data-swipe>
           <span class="grow">${t(`workout.${item.type}`)}, ${item.min} ${t('unit.min')}</span>
           <span class="caption num">${formatInt(item.kcal)} kcal</span>
           <button class="icon-btn" data-action="remove-move" data-id="${item.id}" aria-label="${t('common.remove', { name: `${t(`workout.${item.type}`)}, ${item.min} ${t('unit.min')}` })}">${icon('trash')}</button>
         </div>`)}
-      </div>` : ''}`;
+      </div>` : html`<div class="card">${emptyState(t('move.empty'))}</div>`}`;
 }
 
 function weightChart() {
@@ -5189,6 +5462,9 @@ function weightChart() {
         ${ticks.map(tick => html`
           <line class="grid" x1="${pad.left}" x2="${width - pad.right}" y1="${f(y(tick))}" y2="${f(y(tick))}"/>
           <text x="${pad.left - 8}" y="${f(y(tick) + 4)}" text-anchor="end">${formatDecimal(tick)}</text>`)}
+        ${milestoneList().filter(m => m.key !== 'goal' && m.kg > low && m.kg < high && Math.abs(y(m.kg) - y(goal)) > 14).map(m => html`
+          <line class="milestone-line" x1="${pad.left}" x2="${width - pad.right}" y1="${f(y(m.kg))}" y2="${f(y(m.kg))}"/>
+          <text class="milestone-tag" x="${width - pad.right}" y="${f(y(m.kg) - 5)}" text-anchor="end">${t(`ms.${m.key}`)}</text>`)}
         <line class="goal" x1="${pad.left}" x2="${width - pad.right}" y1="${f(y(goal))}" y2="${f(y(goal))}"/>
         <text x="${width - pad.right}" y="${f(y(goal) - 8)}" text-anchor="end" style="fill:var(--sky)">${t('weight.goal')}</text>
         <polyline class="line" pathLength="1" points="${points.map(p => `${f(p[0])},${f(p[1])}`).join(' ')}"/>
@@ -5237,6 +5513,7 @@ function weightPanel() {
         <div><p class="caption">${t('weight.goal')}</p><p class="num"><strong>${mass.format(profile.goalKg)}</strong></p></div>
       </div>
       ${weightChart()}
+      ${milestoneStrip()}
       ${goalNote()}
     </section>
     <form class="card" data-form="weight" novalidate>
@@ -5250,7 +5527,7 @@ function weightPanel() {
       <p class="caption">${t('weight.help')}</p>
     </form>
     <div class="list">${recent.map(date => html`
-      <div class="list-row">
+      <div class="list-row" ${attributes({ 'data-swipe': date === profile.start ? null : '' })}>
         <span class="grow">${shortDate(date)}</span>
         <span class="num"><strong>${mass.format(state.weights[date])}</strong></span>
         ${date === profile.start
@@ -5487,7 +5764,6 @@ function profileScreen() {
     </section>
     ${checkinCard()}
     ${photosCard()}
-    ${plusCard()}
     <button class="card nav-card" data-action="open-settings">
       <span class="glyph">${icon('settings')}</span>
       <span class="grow"><h2>${t('settings.title')}</h2><span class="caption">${t('settings.summary')}</span></span>
@@ -5505,6 +5781,20 @@ function settingsScreen() {
       <h2 id="appearance-title">${t('settings.appearance')}</h2>
       ${segmented({ id: 'set-theme', label: t('settings.theme'), action: 'set-setting', field: 'theme', value: settings.theme,
         options: [['system', t('settings.system')], ['light', t('settings.light')], ['dark', t('settings.dark')]] })}
+      ${segmented({ id: 'set-glass', label: t('settings.glass'), action: 'set-setting', field: 'glass', value: settings.glass,
+        options: [['clear', t('settings.glassClear')], ['solid', t('settings.glassSolid')]] })}
+      <p class="caption">${t('settings.glassHelp')}</p>
+      <div class="field">
+        <span class="field-label" id="set-accent-label">${t('settings.colour')}</span>
+        <div class="swatches" role="radiogroup" aria-labelledby="set-accent-label">
+          ${ACCENTS.map(name => html`
+            <button type="button" class="swatch" role="radio" data-accent-option="${name}" data-action="set-setting" data-field="accent" data-value="${name}" aria-checked="${String(settings.accent === name)}">
+              <span class="swatch-dot" aria-hidden="true">${settings.accent === name ? icon('check') : ''}</span>
+              <span class="swatch-label">${t(`settings.colour.${name}`)}</span>
+            </button>`)}
+        </div>
+        <p class="caption">${t('settings.colourHelp')}</p>
+      </div>
       <div class="field">
         <span class="field-label" id="set-motion-label">${t('settings.animations')}</span>
         <div class="segmented" role="radiogroup" aria-labelledby="set-motion-label">
@@ -5774,19 +6064,14 @@ function shopSheet() {
       <div class="list">
         <div class="list-row">
           <span class="stat-hearts">${icon('heart', { solid: true })}</span>
-          <div class="grow"><h3>${t('shop.refill')}</h3><p class="caption">${state.plus ? t('plus.unlimitedHearts') : html`${t('shop.heartsOf', { n: state.hearts, max: HEART_MAX })}${state.hearts < HEART_MAX ? ` ${t('shop.nextHeart', { n: minutes })}` : ''}`}</p></div>
-          <button class="btn btn-tonal btn-small" data-action="buy-hearts" aria-label="${t('shop.buyHearts', { n: REFILL_COST })}" ${attributes({ disabled: state.plus || state.hearts >= HEART_MAX || state.gems < REFILL_COST })}>${icon('gem')}${REFILL_COST}</button>
+          <div class="grow"><h3>${t('shop.refill')}</h3><p class="caption">${t('shop.heartsOf', { n: state.hearts, max: HEART_MAX })}${state.hearts < HEART_MAX ? ` ${t('shop.nextHeart', { n: minutes })}` : ''}</p></div>
+          <button class="btn btn-tonal btn-small" data-action="buy-hearts" aria-label="${t('shop.buyHearts', { n: REFILL_COST })}" ${attributes({ disabled: state.hearts >= HEART_MAX || state.gems < REFILL_COST })}>${icon('gem')}${REFILL_COST}</button>
         </div>
         <div class="list-row">
           <span class="stat-streak">${icon('snow')}</span>
           <div class="grow"><h3>${t('shop.freeze')}</h3><p class="caption">${t('shop.freezeHelp', { n: state.freezes, max: FREEZE_MAX })}</p></div>
           <button class="btn btn-tonal btn-small" data-action="buy-freeze" aria-label="${t('shop.buyFreeze', { n: FREEZE_COST })}" ${attributes({ disabled: state.freezes >= FREEZE_MAX || state.gems < FREEZE_COST })}>${icon('gem')}${FREEZE_COST}</button>
         </div>
-        ${state.plus ? '' : html`<div class="list-row">
-          <span class="plus-mark">${icon('sparkle')}</span>
-          <div class="grow"><h3>${t('plus.name')}</h3><p class="caption">${t('plus.shopHelp')}</p></div>
-          <button class="btn btn-tonal btn-small" data-action="show-plus">${t('plus.see')}</button>
-        </div>`}
       </div>`,
   };
 }
@@ -5795,41 +6080,10 @@ const legalSheet = kind => ({
   label: t(`legal.${kind}Title`),
   body: html`
     ${sheetHeader(t(`legal.${kind}Title`))}
-    <ul class="plus-list">
+    <ul class="check-list">
       ${(kind === 'privacy' ? [1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5]).map(n => html`<li>${icon('check')}<span>${t(`legal.${kind}.${n}`)}</span></li>`)}
     </ul>`,
 });
-
-function plusSheet() {
-  const features = ['recipes', 'hearts', 'theme'];
-  return {
-    label: t('plus.name'),
-    body: html`
-      ${sheetHeader(t('plus.name'), t('plus.tagline'))}
-      <p class="plus-price"><strong class="num">${t('plus.price')}</strong></p>
-      <ul class="plus-list">
-        ${features.map(key => html`<li>${icon('check')}<span><strong>${t(`plus.feat.${key}`)}</strong><br><span class="caption">${t(`plus.feat.${key}Help`)}</span></span></li>`)}
-      </ul>
-      ${state.plus
-        ? html`<p class="note" role="status">${t('plus.activeHelp')}</p>
-               <button class="btn btn-plain" data-action="cancel-plus">${t('plus.turnOff')}</button>`
-        : html`<p class="note">${t('plus.testNote')}</p>
-               <button class="btn btn-large" data-action="unlock-plus">${t('plus.unlock')}</button>`}`,
-  };
-}
-
-function plusCard() {
-  return html`
-    <section class="card plus-card" aria-labelledby="plus-heading">
-      <div class="row">
-        <span class="plus-mark">${icon('sparkle')}</span>
-        <div class="grow"><h2 id="plus-heading">${state.plus ? t('plus.active') : t('plus.name')}</h2><p class="caption">${state.plus ? t('plus.activeShort') : t('plus.price')}</p></div>
-      </div>
-      ${state.plus
-        ? html`<button class="btn btn-tonal" data-action="show-plus">${t('plus.manage')}</button>`
-        : html`<p class="caption">${t('plus.tagline')}</p><button class="btn" data-action="show-plus">${t('plus.see')}</button>`}
-    </section>`;
-}
 
 function lessonSheet(id) {
   const [unitIndex, lessonIndex] = id.split('.').map(Number);
@@ -6033,10 +6287,8 @@ function assistantCard() {
       </div>
       ${errorLine('ai-error', aiState.error)}
       ${loading
-        ? html`<div class="row row-wrap"><span class="grow caption" role="status">${t('recipes.ai.writing')}</span><button class="btn btn-tonal" data-action="ai-stop">${t('recipes.ai.stop')}</button></div>`
-        : !state.plus && aiLeftToday() === 0
-          ? html`<p class="note">${t('plus.aiLimit', { n: FREE_AI_PER_DAY })}</p><button class="btn btn-large" data-action="show-plus">${icon('sparkle')}${t('plus.get')}</button>`
-          : html`${state.plus ? '' : html`<p class="caption">${t('plus.aiLeft', { n: aiLeftToday(), total: FREE_AI_PER_DAY })}</p>`}<button class="btn btn-large" data-action="ai-create">${icon('sparkle')}${t('recipes.ai.create')}</button>`}
+        ? html`<div class="row row-wrap"><span class="grow caption" role="status">${t('recipes.ai.writing')}</span><button class="btn btn-tonal" data-action="ai-stop">${t('recipes.ai.stop')}</button></div>${skeletonRows(2)}`
+        : html`<button class="btn btn-large" data-action="ai-create">${icon('sparkle')}${t('recipes.ai.create')}</button>`}
       ${aiState.recipe ? html`
         <div class="stack-tight">
           <p class="field-label">${t('recipes.ai.latest')}</p>
@@ -6167,10 +6419,6 @@ const AI_ERRORS = {
 };
 
 async function createRecipe() {
-  if (!state.plus && aiLeftToday() === 0) {
-    openSheet(plusSheet());
-    return;
-  }
   const fridge = cleanText(aiDraft.fridge, 200);
   const kcal = cleanNumber(aiDraft.kcal || suggestedKcal(), 100, 1500);
   if (!fridge) {
@@ -6198,8 +6446,6 @@ async function createRecipe() {
     if (!recipe) throw { code: 'invalid_json' };
     aiState.recipe = recipe;
     aiState.status = 'idle';
-    state.aiUsed[today()] = (state.aiUsed[today()] || 0) + 1;
-    saveState();
     paint();
     if (ui.tab === 'recipes' && !roots.sheet.innerHTML) openSheet(recipeSheet(recipe.id));
   } catch (error) {
@@ -6247,7 +6493,7 @@ function paintFindResults() {
 }
 
 function findResults() {
-  if (foodFind.status === 'loading') return html`<p class="caption" role="status">${t('food.find.loading')}</p>`;
+  if (foodFind.status === 'loading') return html`<p class="caption" role="status">${t('food.find.loading')}</p>${skeletonRows(3)}`;
   if (foodFind.message) return html`<p class="caption" role="status">${foodFind.message}</p>`;
   if (!foodFind.results.length) return '';
   return html`
@@ -6472,7 +6718,7 @@ function photosCard() {
             <button class="photo-thumb" data-action="open-photo" data-id="${item.id}" aria-label="${t('photos.open', { date: shortDate(item.date) })}">
               <img src="${item.picture}" alt="" loading="lazy">
             </button>`)}</div>`
-        : html`<p class="caption measure">${t('photos.empty')}</p>`}
+        : emptyState(t('photos.empty'))}
       <label class="btn btn-tonal" for="photo-file">${icon('camera')}${t('photos.add')}</label>
       <input class="sr-only" id="photo-file" type="file" accept="image/*" data-photo>
       <p class="caption">${t('photos.help')}</p>
@@ -6610,6 +6856,7 @@ function checkinCard() {
         ${statRow(t('checkin.avg'), stats.weekAvg ? `${formatInt(stats.weekAvg)} kcal` : '-')}
         ${statRow(t('checkin.change'), stats.change === null ? '-' : `${stats.change > 0 ? '+' : ''}${formatDecimal(mass.fromKg(stats.change))} ${mass.unit()}`)}
       </div>
+      <button class="btn btn-tonal" data-action="show-recap">${icon('trophy')}${t('recap.open')}</button>
       ${stats.ready
         ? html`<p class="caption measure">${t('checkin.result', { intake: formatInt(stats.intake), rate: `${stats.slope > 0 ? '+' : ''}${formatDecimal(mass.fromKg(stats.slope * 7), 2)} ${mass.unit()}`, m: formatInt(stats.maintenance), f: formatInt(stats.formula) })}</p>
                ${using
@@ -6671,7 +6918,7 @@ function fastPanel() {
               <span class="num">${t('fast.entry', { hours: formatDecimal((item.end - item.start) / HOUR), goal: item.goal })}</span>
               ${(item.end - item.start) / HOUR >= item.goal ? html`<span class="pill is-tonal">${icon('check')}${t('fast.reached')}</span>` : ''}
             </div>`)}</div>`
-        : html`<p class="caption center">${t('fast.empty')}</p>`}
+        : emptyState(t('fast.empty'))}
     </section>`;
 }
 
@@ -6697,6 +6944,290 @@ setInterval(() => {
   const clock = $('[data-fast-clock]');
   if (clock && state.fast) clock.textContent = fastClock(Date.now() - state.fast.start);
 }, 1000);
+
+'use strict';
+
+/* ==========================================================================
+   Delight: the mascot's moods, empty states, floating numbers, undo, swipe to
+   remove, quick add, the weekly recap, weight milestones and the home card.
+   ========================================================================== */
+
+/* --- Mascot moods ------------------------------------------------------------- */
+const MOOD_LINES = 3;
+
+function mascotMood() {
+  const hour = new Date().getHours();
+  if (xpToday() >= dailyGoal()) return 'proud';
+  if (hour >= 22 || hour < 5) return 'sleepy';
+  if (currentStreak() >= 7) return 'hype';
+  const quiet = !isActiveDay(today()) && !isActiveDay(addDays(today(), -1));
+  if (quiet && currentStreak() === 0 && Object.keys(state.days).length) return 'back';
+  return 'calm';
+}
+
+const moodLine = () =>
+  t(`mood.${mascotMood()}.${(hashText(today()) + ui.tipShift) % MOOD_LINES}`, { n: currentStreak(), name: state.profile.name });
+
+/* --- Empty states: the mascot says it instead of a grey line ------------------------ */
+const emptyState = text => html`
+  <div class="mascot-tip empty">
+    <span class="mascot-static">${logo(48, 16)}</span>
+    <div class="bubble"><p class="measure">${text}</p></div>
+  </div>`;
+
+/* --- Loading placeholders ---------------------------------------------------------- */
+const skeletonRows = (count = 3) => html`
+  <div class="list skeleton-list" aria-hidden="true">${Array.from({ length: count }, () => html`
+    <div class="list-row"><span class="skeleton line-long"></span><span class="skeleton line-short"></span></div>`)}
+  </div>`;
+
+/* --- Numbers that float up from where you tapped ------------------------------------- */
+const lastTap = { x: innerWidth / 2, y: innerHeight * 0.6 };
+document.addEventListener('pointerdown', event => { lastTap.x = event.clientX; lastTap.y = event.clientY; }, true);
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Enter' || !document.activeElement || document.activeElement === document.body) return;
+  const box = document.activeElement.getBoundingClientRect();
+  lastTap.x = box.left + box.width / 2;
+  lastTap.y = box.top;
+}, true);
+
+function floaty(text) {
+  if (!motionOn()) return;
+  const piece = document.createElement('span');
+  piece.className = 'floaty';
+  piece.textContent = text;
+  piece.style.left = `${clamp(lastTap.x, 70, innerWidth - 70)}px`;
+  piece.style.top = `${lastTap.y}px`;
+  $('#fx').append(piece);
+  const flight = piece.animate([
+    { transform: 'translate(-50%, 0) scale(0.85)', opacity: 0 },
+    { transform: 'translate(-50%, -20px) scale(1)', opacity: 1, offset: 0.25 },
+    { transform: 'translate(-50%, -68px) scale(1)', opacity: 0 },
+  ], { duration: 950, easing: 'cubic-bezier(0.2, 0, 0, 1)' });
+  flight.finished.then(() => piece.remove(), () => piece.remove());
+}
+
+/* --- Remove with undo ---------------------------------------------------------------- */
+function removeEntry(kind, id) {
+  let name = '';
+  let restore = null;
+  if (kind === 'food') {
+    const day = foodDayKey();
+    const list = foodOn(day);
+    const index = list.findIndex(item => item.id === id);
+    if (index < 0) return;
+    const item = list[index];
+    name = item.name;
+    state.food[day] = list.filter(entry => entry.id !== id);
+    restore = () => { const now = foodOn(day).slice(); now.splice(index, 0, item); state.food[day] = now; };
+  } else if (kind === 'move') {
+    const list = movesToday();
+    const index = list.findIndex(item => item.id === id);
+    if (index < 0) return;
+    const item = list[index];
+    name = `${t(`workout.${item.type}`)}, ${item.min} ${t('unit.min')}`;
+    state.moves[today()] = list.filter(entry => entry.id !== id);
+    restore = () => { const now = movesToday().slice(); now.splice(index, 0, item); state.moves[today()] = now; };
+  } else {
+    const kg = state.weights[id];
+    if (kg === undefined) return;
+    name = `${shortDate(id)}, ${mass.format(kg)}`;
+    delete state.weights[id];
+    restore = () => { state.weights[id] = kg; };
+  }
+  ui.undo = restore;
+  saveState();
+  paint();
+  buzz(10);
+  toast(t('toast.removed', { name }), { undo: true });
+}
+
+function undoRemove() {
+  if (!ui.undo) return;
+  ui.undo();
+  ui.undo = null;
+  roots.toast.hidden = true;
+  saveState();
+  paint();
+  buzz(8);
+}
+
+/* --- Swipe a row left to remove it ------------------------------------------------------ */
+let swipe = null;
+const SWIPE_AT = 96;
+
+document.addEventListener('pointerdown', event => {
+  const row = event.target.closest?.('[data-swipe]');
+  if (!row || event.target.closest('button, a, input, select, label')) return;
+  swipe = { row, x: event.clientX, y: event.clientY, dx: 0, live: false };
+});
+
+document.addEventListener('pointermove', event => {
+  if (!swipe) return;
+  const dx = event.clientX - swipe.x;
+  const dy = event.clientY - swipe.y;
+  if (!swipe.live) {
+    if (Math.abs(dy) > 12 && Math.abs(dy) > Math.abs(dx)) { swipe = null; return; }
+    if (Math.abs(dx) < 10 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
+    swipe.live = true;
+    swipe.row.setPointerCapture?.(event.pointerId);
+    swipe.row.classList.add('is-swiping');
+  }
+  swipe.dx = Math.min(0, dx);
+  swipe.row.style.transform = `translateX(${swipe.dx}px)`;
+  swipe.row.classList.toggle('is-armed', swipe.dx <= -SWIPE_AT);
+});
+
+function endSwipe() {
+  if (!swipe) return;
+  const { row, dx, live } = swipe;
+  swipe = null;
+  if (!live) return;
+  row.classList.remove('is-swiping');
+  if (dx <= -SWIPE_AT) {
+    row.classList.add('is-leaving');
+    row.style.transform = 'translateX(-110%)';
+    afterMotion(() => row.querySelector('[data-action^="remove-"]')?.click(), 160);
+  } else {
+    row.classList.remove('is-armed');
+    row.style.transform = '';
+  }
+}
+document.addEventListener('pointerup', endSwipe);
+document.addEventListener('pointercancel', endSwipe);
+
+/* --- Quick add ---------------------------------------------------------------------------- */
+const QUICK_TILES = [
+  ['food', 'food', 'quick.food'],
+  ['water', 'drop', 'quick.water'],
+  ['move', 'pulse', 'quick.move'],
+  ['weight', 'scale', 'quick.weight'],
+];
+const QUICK_FIELD = { food: '#food-name', move: '#move-min', weight: '#weight-value' };
+
+const fabButton = () => state.profile && ui.tab === 'track'
+  ? html`<button class="fab" data-action="quick-add" aria-label="${t('quick.title')}">${icon('plus')}</button>`
+  : html``;
+
+const quickAddSheet = () => ({
+  label: t('quick.title'),
+  body: html`
+    ${sheetHeader(t('quick.title'), t('quick.subtitle'))}
+    <div class="quick-grid">${QUICK_TILES.map(([id, glyph, key]) => html`
+      <button class="quick-tile" data-action="${id === 'water' ? 'quick-water' : 'quick-go'}" data-panel="${id}">
+        <span class="quick-icon">${icon(glyph)}</span><span>${t(key)}</span>
+      </button>`)}
+    </div>`,
+});
+
+/* --- Weight milestones ------------------------------------------------------------------------ */
+function milestoneList() {
+  const { weightKg: start, goalKg: goal } = state.profile;
+  const total = start - goal;
+  if (!(total > 0)) return [];
+  const items = [{ key: 'goal', kg: goal }];
+  if (total >= 2) items.push({ key: 'first', kg: start - 1 });
+  if (total >= 7) items.push({ key: 'five', kg: start - 5 });
+  if (total >= 4) items.push({ key: 'half', kg: start - total / 2 });
+  const lowest = Math.min(...Object.values(state.weights), start);
+  return items
+    .sort((a, b) => b.kg - a.kg)
+    .map(item => ({ ...item, done: lowest <= item.kg + 1e-6 }));
+}
+
+function milestoneStrip() {
+  const items = milestoneList();
+  if (!items.length) return '';
+  const next = items.find(item => !item.done);
+  const left = next ? currentWeightKg() - next.kg : 0;
+  return html`
+    <div class="stack-tight">
+      <p class="field-label">${t('ms.title')}</p>
+      <ul class="milestones">${items.map(item => html`
+        <li class="milestone ${item.done ? 'is-done' : ''}">
+          <span class="milestone-mark">${item.done ? icon('check') : icon('flag')}</span>
+          <span class="milestone-text"><strong>${t(`ms.${item.key}`)}</strong><span class="caption num">${mass.format(item.kg)}</span></span>
+          <span class="sr-only">${item.done ? t('ms.reached') : t('ms.ahead')}</span>
+        </li>`)}
+      </ul>
+      <p class="caption num">${next ? t('ms.next', { name: t(`ms.${next.key}`), left: mass.format(Math.max(0, left)) }) : t('ms.all')}</p>
+    </div>`;
+}
+
+// After a weigh-in: celebrate the first time a milestone is reached.
+function checkMilestones() {
+  if (!state.profile) return;
+  const seen = state.flags.milestones || (state.flags.milestones = {});
+  const fresh = milestoneList().filter(item => item.done && !seen[item.key + state.profile.goalKg + state.profile.weightKg]);
+  for (const item of fresh) seen[item.key + state.profile.goalKg + state.profile.weightKg] = 1;
+  if (!fresh.length) return;
+  const top = fresh[fresh.length - 1];
+  toast(t('ms.toast', { name: t(`ms.${top.key}`) }));
+  buzz([20, 40, 30]);
+  afterMotion(() => burst(innerWidth / 2, innerHeight * 0.35, { count: top.key === 'goal' ? 70 : 36, spread: 240 }), 200);
+}
+
+/* --- Home card: today's goal and the single next thing to do -------------------------------------- */
+function nextAction() {
+  const open = firstOpenLesson();
+  const reached = xpToday() >= dailyGoal();
+  if (!reached && open < TOTAL_LESSONS) {
+    const unit = Math.floor(open / LESSONS_PER_UNIT);
+    const index = open % LESSONS_PER_UNIT;
+    return { action: 'open-lesson', id: lessonId(unit, index), icon: 'play', label: t('home.lesson', { title: units()[unit].lessons[index].title }) };
+  }
+  if (!foodOn(today()).length) return { action: 'quick-go', panel: 'food', icon: 'food', label: t('home.food') };
+  if (glassesToday() < 8) return { action: 'quick-water', icon: 'drop', label: t('home.water', { n: 8 - glassesToday() }) };
+  const lastWeigh = Object.keys(state.weights).sort().pop();
+  if (!lastWeigh || lastWeigh < addDays(today(), -6)) return { action: 'quick-go', panel: 'weight', icon: 'scale', label: t('home.weigh') };
+  return null;
+}
+
+function homeCard() {
+  const xp = xpToday();
+  const goal = dailyGoal();
+  const next = nextAction();
+  return html`
+    <section class="card home-card" aria-labelledby="goal-title">
+      <div class="row">
+        ${miniRing(xp / goal, true)}
+        <div class="grow">
+          <h2 id="goal-title">${t('learn.dailyGoal')}</h2>
+          <p class="caption num">${xp >= goal ? t('learn.goalReached') : t('learn.goalProgress', { xp, goal })}</p>
+        </div>
+      </div>
+      ${next
+        ? html`<button class="btn btn-large" data-action="${next.action}" ${attributes({ 'data-id': next.id, 'data-panel': next.panel })}>${icon(next.icon)}${next.label}</button>`
+        : html`<p class="note" role="status">${t('home.done')}</p>`}
+    </section>`;
+}
+
+/* --- Weekly recap --------------------------------------------------------------------------------- */
+const weekXp = () => Array.from({ length: 7 }, (_, i) => state.days[addDays(today(), -i)] || 0).reduce((a, b) => a + b, 0);
+
+function recapSheet() {
+  const stats = weekStats();
+  const tone = stats.weekDays >= 6 ? 'great' : stats.weekDays >= 3 ? 'okay' : 'fresh';
+  const change = stats.change === null ? '-' : `${stats.change > 0 ? '+' : ''}${formatDecimal(mass.fromKg(stats.change))} ${mass.unit()}`;
+  const tiles = [
+    [t('recap.logged'), t('common.ofTotal', { n: stats.weekDays, total: 7 })],
+    [t('recap.xp'), formatInt(weekXp())],
+    [t('recap.avg'), stats.weekAvg ? `${formatInt(stats.weekAvg)} kcal` : '-'],
+    [t('recap.change'), change],
+  ];
+  return {
+    label: t('recap.title'),
+    body: html`
+      ${sheetHeader(t('recap.title'), t('recap.subtitle'))}
+      <div class="mascot-tip">
+        <span class="mascot-static">${logo(48, 16)}</span>
+        <div class="bubble"><p class="measure">${t(`recap.${tone}`)}</p></div>
+      </div>
+      <div class="recap-grid">${tiles.map(([label, value]) => html`
+        <div class="recap-tile"><p class="caption">${label}</p><p class="recap-value num">${value}</p></div>`)}
+      </div>`,
+  };
+}
 
 /* ==========================================================================
    Accounts and sync
@@ -6825,6 +7356,7 @@ const roots = {
   sheet: $('#overlay'),
   lesson: $('#lesson'),
   toast: $('#toast'),
+  fab: $('#fab'),
 };
 
 // Replace a root's contents while keeping meters and counters animating from their old values.
@@ -6870,6 +7402,7 @@ function paintChrome() {
   if (state.profile) render(roots.toolbar, toolbar());
   else roots.toolbar.innerHTML = '';
   paintTabbar();
+  render(roots.fab, fabButton());
 }
 
 // Screen content slides up one block at a time when the screen changes.
@@ -6935,11 +7468,11 @@ function closeSheet() {
 }
 
 let toastTimer = 0;
-function toast(message) {
-  roots.toast.textContent = message;
+function toast(message, { undo = false } = {}) {
+  roots.toast.innerHTML = html`<span>${message}</span>${undo ? html`<button class="toast-btn" data-action="undo">${t('toast.undo')}</button>` : ''}`.value;
   roots.toast.hidden = false;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { roots.toast.hidden = true; }, 2600);
+  toastTimer = setTimeout(() => { roots.toast.hidden = true; }, undo ? 5200 : 2600);
 }
 
 /* ==========================================================================
@@ -7003,7 +7536,7 @@ function lessonBar() {
     <div class="lesson-bar">
       <button class="icon-btn" data-action="quit-lesson" aria-label="${t('lesson.quit')}">${icon('close')}</button>
       <div class="grow">${progressBar(t('lesson.progress'), 'lesson', session.solved, session.total)}</div>
-      <span class="row row-tight stat-hearts" role="img" aria-label="${state.plus ? t('plus.unlimitedHearts') : t('lesson.heartsLeft', { n: state.hearts })}">${icon('heart', { solid: true })}<strong class="num">${state.plus ? '∞' : state.hearts}</strong></span>
+      <span class="row row-tight stat-hearts" role="img" aria-label="${t('lesson.heartsLeft', { n: state.hearts })}">${icon('heart', { solid: true })}<strong class="num">${state.hearts}</strong></span>
     </div>`;
 }
 
@@ -7291,6 +7824,8 @@ function logFood(name, kcal, meal, macros = {}, day = today()) {
   for (const key of ['p', 'c', 'f']) if (macros[key] > 0) entry[key] = macros[key];
   list.push(entry);
   ui.newId = entry.id;
+  floaty(`+${formatInt(kcal)} kcal`);
+  buzz(12);
   if (day === today()) grantDailyBonus('food', 5);
   saveState();
 }
@@ -7348,11 +7883,16 @@ function saveGoal() {
 
 function recordWeight(kg) {
   if (!(kg >= 30 && kg <= 300)) return false;
+  const before = currentWeightKg();
   state.weights[today()] = kg;
   state.flags.weighed = true;
   grantDailyBonus('weigh', 10);
   saveState();
+  const diff = kg - before;
+  if (Math.abs(diff) >= 0.05) floaty(`${diff > 0 ? '+' : '-'}${formatDecimal(Math.abs(mass.fromKg(diff)))} ${mass.unit()}`);
+  buzz(12);
   toast(t('toast.logged', { weight: mass.format(kg) }));
+  checkMilestones();
   return true;
 }
 
@@ -7433,8 +7973,8 @@ function focusFirstInvalid() {
 }
 
 const actions = {
-  'go-tab': el => { ui.day = null; if (el.dataset.tab !== ui.tab || ui.profileView !== 'main') goTo(el.dataset.tab); },
-  'go-panel': el => { ui.trackPanel = el.dataset.panel; ui.errors = {}; paint(); },
+  'go-tab': el => { buzz(6); ui.day = null; if (el.dataset.tab !== ui.tab || ui.profileView !== 'main') goTo(el.dataset.tab); },
+  'go-panel': el => { buzz(6); ui.trackPanel = el.dataset.panel; ui.errors = {}; paint(); },
 
   'open-lesson': el => openSheet(lessonSheet(el.dataset.id)),
   'locked-lesson': () => toast(t('toast.locked')),
@@ -7442,8 +7982,35 @@ const actions = {
 
   'show-streak': () => openSheet(streakSheet()),
   'show-shop': () => openSheet(shopSheet()),
-  'show-plus': () => openSheet(plusSheet()),
-  'next-tip': () => { ui.tipShift++; paint(); },
+  'next-tip': () => {
+    ui.tipShift++;
+    buzz(6);
+    // Poke the mascot enough times and it loses patience.
+    const now = Date.now();
+    ui.pokes = (ui.pokes || []).filter(time => now - time < 4000).concat(now);
+    paint();
+    if (ui.pokes.length >= 7) {
+      ui.pokes = [];
+      toast(t('egg.mascot'));
+      burst(innerWidth / 2, innerHeight * 0.3, { count: 40, spread: 220 });
+      buzz([20, 30, 20]);
+    }
+  },
+  'quick-add': () => openSheet(quickAddSheet()),
+  'quick-go': el => {
+    const panel = el.dataset.panel;
+    closeSheet();
+    goTo('track', panel);
+    afterMotion(() => $(QUICK_FIELD[panel])?.focus(), 240);
+  },
+  'quick-water': () => {
+    closeSheet();
+    if (glassesToday() >= 8) { toast(t('quick.waterFull')); return; }
+    actions['set-water']({ dataset: { index: String(glassesToday()) } });
+    toast(t('quick.waterAdded', { n: glassesToday() }));
+  },
+  'show-recap': () => openSheet(recapSheet()),
+  'undo': () => undoRemove(),
   'open-food-search': () => openSheet(foodSearchSheet()),
   'find-foods': () => searchFoods(),
   'lookup-barcode': () => lookupBarcode(),
@@ -7466,8 +8033,6 @@ const actions = {
   'show-privacy': () => openSheet(legalSheet('privacy')),
   'toggle-agree': () => { ui.draft.agree = !ui.draft.agree; delete ui.errors.agree; paint(); $('#ob-agree')?.focus({ preventScroll: true }); },
   'add-reminder': () => addReminder(),
-  'unlock-plus': () => setPlus(true),
-  'cancel-plus': () => setPlus(false),
   'show-badge': el => openSheet(badgeSheet(el.dataset.id)),
   'close-sheet': () => closeSheet(),
   'dismiss-sheet': (el, event) => { if (event.target === el) closeSheet(); },
@@ -7502,7 +8067,7 @@ const actions = {
     toast(t('toast.added', { name, kcal: food.kcal }));
     paint();
   },
-  'remove-food': el => { state.food[foodDayKey()] = foodOn(foodDayKey()).filter(item => item.id !== el.dataset.id); saveState(); paint(); },
+  'remove-food': el => removeEntry('food', el.dataset.id),
   'recent-food': el => {
     const food = recentFoods()[Number(el.dataset.index)];
     if (!food) return;
@@ -7523,15 +8088,17 @@ const actions = {
     toast(t('toast.targetUpdated'));
   },
   'reset-target': () => { delete state.profile.maintenanceOverride; saveState(); paint(); toast(t('toast.targetReset')); },
-  'remove-move': el => { state.moves[today()] = movesToday().filter(item => item.id !== el.dataset.id); saveState(); paint(); },
-  'remove-weight': el => { delete state.weights[el.dataset.id]; saveState(); paint(); },
+  'remove-move': el => removeEntry('move', el.dataset.id),
+  'remove-weight': el => removeEntry('weight', el.dataset.id),
   'set-water': el => {
+    const before = glassesToday();
     const tapped = Number(el.dataset.index) + 1;
     const glasses = tapped === glassesToday() ? tapped - 1 : tapped;
     state.water[today()] = glasses;
     if (glasses >= 8) state.flags.hydrated = true;
     if (glasses > 0) grantDailyBonus('water', 5);
     ui.newCup = glasses === tapped ? tapped - 1 : null;
+    if (glasses > before) floaty(t('quick.plusGlass'));
     buzz(8);
     saveState();
     paint();
@@ -7615,7 +8182,7 @@ const actions = {
     const { field, value } = el.dataset;
     state.settings[field] = field === 'dailyGoal' ? Number(value) : value;
     saveState();
-    if (field === 'theme') applyThemeChange();
+    if (field === 'theme' || field === 'accent') applyThemeChange();
     else applySettings();
     paint();
   },
@@ -7673,6 +8240,8 @@ const forms = {
     list.push(entry);
     ui.newId = entry.id;
     grantDailyBonus('move', 10);
+    floaty(`+${min} ${t('unit.min')}`);
+    buzz(12);
     saveState();
     toast(t('toast.addedMove', { name: t(`workout.${type}`), min }));
     return null;
@@ -7742,16 +8311,6 @@ async function addReminder() {
   } catch (error) {
     if (error.code !== 'declined') toast(t('toast.exportUnavailable'));
   }
-}
-
-function setPlus(on) {
-  state.plus = on;
-  saveState();
-  applyThemeChange();
-  applySettings();
-  closeSheet();
-  paint();
-  toast(t(on ? 'plus.toastOn' : 'plus.toastOff'));
 }
 
 function importBackup(file) {

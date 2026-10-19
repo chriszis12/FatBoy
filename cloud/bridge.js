@@ -8,8 +8,12 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import { BarcodeFormat, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 
-const URL_ = __SUPABASE_URL__;
-const KEY = __SUPABASE_ANON_KEY__;
+// Accept whatever was pasted (e.g. .../rest/v1/) and keep only the project origin.
+const URL_ = (() => {
+  const raw = String(__SUPABASE_URL__ || '').trim();
+  try { return raw ? new URL(raw.startsWith('http') ? raw : `https://${raw}`).origin : ''; } catch { return ''; }
+})();
+const KEY = String(__SUPABASE_ANON_KEY__ || '').trim();
 const SCHEME = 'com.fatboy.app://auth';
 
 const failure = (code, message) => Object.assign(new Error(message || code), { code });

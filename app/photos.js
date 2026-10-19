@@ -119,7 +119,7 @@ function photosCard() {
             <button class="photo-thumb" data-action="open-photo" data-id="${item.id}" aria-label="${t('photos.open', { date: shortDate(item.date) })}">
               <img src="${item.picture}" alt="" loading="lazy">
             </button>`)}</div>`
-        : html`<p class="caption measure">${t('photos.empty')}</p>`}
+        : emptyState(t('photos.empty'))}
       <label class="btn btn-tonal" for="photo-file">${icon('camera')}${t('photos.add')}</label>
       <input class="sr-only" id="photo-file" type="file" accept="image/*" data-photo>
       <p class="caption">${t('photos.help')}</p>
