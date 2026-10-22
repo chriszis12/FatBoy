@@ -95,6 +95,7 @@ function assistantCard() {
       ${loading
         ? html`<div class="row row-wrap"><span class="grow caption" role="status">${t('recipes.ai.writing')}</span><button class="btn btn-tonal" data-action="ai-stop">${t('recipes.ai.stop')}</button></div>${skeletonRows(2)}`
         : html`<button class="btn btn-large" data-action="ai-create">${icon('sparkle')}${t('recipes.ai.create')}</button>`}
+      <button class="btn btn-plain" data-action="ask-community" data-title="${t('recipes.askTitle')}">${icon('chat')}${t('food.askCommunity')}</button>
       ${aiState.recipe ? html`
         <div class="stack-tight">
           <p class="field-label">${t('recipes.ai.latest')}</p>

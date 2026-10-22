@@ -73,6 +73,7 @@ const TABS = [
   { id: 'track', icon: 'track' },
   { id: 'quests', icon: 'quest' },
   { id: 'recipes', icon: 'chef' },
+  { id: 'forum', icon: 'chat' },
   { id: 'profile', icon: 'user' },
 ];
 
@@ -247,6 +248,7 @@ function foodPanel() {
       ${errorLine('food-error', error)}
       <button class="btn btn-large" type="submit">${icon('plus')}${t('food.addButton')}</button>
       <button type="button" class="btn btn-tonal" data-action="open-food-search">${icon('search')}${t('food.search')}</button>
+      ${savedMealsBlock()}
       ${recentFoods().length ? html`<div class="stack-tight">
         <p class="field-label">${t('food.recent')}</p>
         <div class="row row-wrap row-tight">${recentFoods().map((food, i) => html`
@@ -268,6 +270,7 @@ function foodPanel() {
               <div class="list-row ${item.id === ui.newId ? 'is-new' : ''}" data-swipe>
                 <span class="grow">${item.name}</span>
                 <span class="caption num">${formatInt(item.kcal)} kcal</span>
+                <button class="icon-btn" data-action="save-meal" data-id="${item.id}" aria-label="${t('food.saveMealNamed', { name: item.name })}">${icon('star')}</button>
                 <button class="icon-btn" data-action="remove-food" data-id="${item.id}" aria-label="${t('common.remove', { name: item.name })}">${icon('trash')}</button>
               </div>`)}
             </div>
@@ -411,6 +414,7 @@ function weightPanel() {
       <button class="btn btn-large" type="submit">${icon('scale')}${t('weight.log')}</button>
       <p class="caption">${t('weight.help')}</p>
     </form>
+    ${measuresCard()}
     <div class="list">${recent.map(date => html`
       <div class="list-row" ${attributes({ 'data-swipe': date === profile.start ? null : '' })}>
         <span class="grow">${shortDate(date)}</span>
@@ -647,6 +651,7 @@ function profileScreen() {
       ${plan.limited ? html`<p class="caption">${t('profile.limited', { n: formatInt(plan.floor) })}</p>` : ''}
       <button class="btn btn-tonal" data-action="edit-goal">${t('profile.editGoal')}</button>
     </section>
+    ${weekRing()}
     ${checkinCard()}
     ${photosCard()}
     <button class="card nav-card" data-action="open-settings">
@@ -689,6 +694,7 @@ function settingsScreen() {
         <p class="caption">${t('settings.motionHelp')}</p>
       </div>
     </section>
+    ${polishSettings()}
 
     <section class="card" aria-labelledby="language-title">
       <h2 id="language-title">${t('settings.language')}</h2>
@@ -1072,7 +1078,7 @@ function badgeSheet(id) {
 function screenView() {
   if (!state.profile) return onboardingScreen();
   if (ui.tab === 'profile' && ui.profileView === 'settings') return html`<div class="container"><div class="page">${settingsScreen()}</div></div>`;
-  const screens = { learn: learnScreen, track: trackScreen, quests: questsScreen, recipes: recipesScreen, profile: profileScreen };
+  const screens = { learn: learnScreen, track: trackScreen, quests: questsScreen, recipes: recipesScreen, forum: forumScreen, profile: profileScreen };
   const raised = ui.tab === 'learn' || ui.tab === 'quests';
   return html`<div class="container"><div class="page ${raised ? 'is-3d' : ''}">${screens[ui.tab]()}</div></div>`;
 }

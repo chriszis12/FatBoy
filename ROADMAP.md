@@ -21,3 +21,11 @@
 ## Status (v22)
 Done: home card with one next action, milestone markers, haptics + floating numbers on every log, mascot moods and empty states, solid/clear glass setting, splash + themed icon, swipe to remove with undo, skeleton loading, quick-add button, weekly recap, text-size pass.
 Not done: home screen widget (needs native Android code), Health Connect step sync, real payments.
+
+Done since: cross-device sync of everything incl. settings (auto-refresh), forum with usernames, posts, comments, likes, reports, blocks.
+Still local to each phone: progress photos.
+
+## Social + polish update
+- Done: Social tab (feed, search, polls, reactions, @mentions, photo posts), friends/DMs, groups, challenges, duels, leagues, notifications, tips, age gate, mute words, saved meals, scan history, measurements, weekly goal ring, sounds, on-device reminders, share cards.
+- Not possible in this build: home-screen widget, step counter / Health Connect, server push notifications, custom avatar photos (emoji avatars instead).
+- Needs a real-device check: Supabase social.sql on the live project, Google login return, local notifications, share sheet.

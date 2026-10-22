@@ -7,7 +7,7 @@ here = Path(__file__).parent
 SCRIPTS = (
     "i18n.js", "strings-en.js", "strings-el.js", "strings-es.js",
     "content.js", "content-en.js", "content-el.js", "content-es.js", "recipes-data.js",
-    "core.js", "figure-data.js", "figure.js", "quests.js", "effects.js", "views.js", "recipes.js", "foods.js", "photos.js", "insights.js", "delight.js", "account.js", "app.js",
+    "core.js", "figure-data.js", "figure.js", "quests.js", "effects.js", "views.js", "recipes.js", "foods.js", "photos.js", "insights.js", "delight.js", "account.js", "social.js", "community.js", "polish.js", "app.js",
 )
 read = lambda name: (here / name).read_text()
 script = "\n".join(read(name) for name in SCRIPTS)

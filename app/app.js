@@ -483,6 +483,9 @@ function logFood(name, kcal, meal, macros = {}, day = today()) {
   buzz(12);
   if (day === today()) grantDailyBonus('food', 5);
   saveState();
+  sfx('log');
+  checkWeekGoal();
+  syncReminders();
 }
 
 const mealForNow = () => {
@@ -628,7 +631,9 @@ function focusFirstInvalid() {
 }
 
 const actions = {
-  'go-tab': el => { buzz(6); ui.day = null; if (el.dataset.tab !== ui.tab || ui.profileView !== 'main') goTo(el.dataset.tab); },
+  ...communityActions,
+  ...polishActions,
+  'go-tab': el => { buzz(6); ui.day = null; if (el.dataset.tab !== ui.tab || ui.profileView !== 'main') goTo(el.dataset.tab); if (el.dataset.tab === 'forum') forumEnter(); },
   'go-panel': el => { buzz(6); ui.trackPanel = el.dataset.panel; ui.errors = {}; paint(); },
 
   'open-lesson': el => openSheet(lessonSheet(el.dataset.id)),
@@ -901,6 +906,7 @@ const forms = {
     toast(t('toast.addedMove', { name: t(`workout.${type}`), min }));
     return null;
   },
+  measure: saveMeasures,
   weight: read => recordWeight(mass.toKg(Number(read('weight-value')))) ? null : t('error.weightLog'),
 };
 
@@ -933,6 +939,11 @@ document.addEventListener('input', event => {
     cancelAnimationFrame(figure.frame);
     drawFigure(Number(target.value) / 100);
     $('[data-scrub-label]')?.replaceChildren(scrubLabel(Number(target.value) / 100));
+    return;
+  }
+  // Keep forum drafts across repaints.
+  if (target.dataset && target.dataset.forum) {
+    forum.draft[target.dataset.forum] = target.value;
     return;
   }
   // Keep the recipe assistant's form in sync, so a repaint does not lose what was typed.
@@ -1072,6 +1083,7 @@ protectStreak();
 detectAssistant();
 startAccounts();
 loadPhotos();
+syncReminders();
 paint({ entering: true });
 if (!state.profile) playWelcomeFigure();
 else setTimeout(askForWeighIn, 800);

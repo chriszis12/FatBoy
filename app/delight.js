@@ -278,6 +278,10 @@ function recapSheet() {
       </div>
       <div class="recap-grid">${tiles.map(([label, value]) => html`
         <div class="recap-tile"><p class="caption">${label}</p><p class="recap-value num">${value}</p></div>`)}
+      </div>
+      <div class="row row-wrap">
+        <button class="btn btn-tonal" data-action="share-card">${icon('send')}${t('share.button')}</button>
+        <button class="btn btn-plain" data-action="post-card">${icon('chat')}${t('share.post')}</button>
       </div>`,
   };
 }

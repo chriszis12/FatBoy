@@ -34,6 +34,7 @@ function findResults() {
     <div class="list">${foodFind.results.map((food, i) => html`
       <div class="list-row">
         <div class="grow"><h3>${food.name}</h3><p class="caption">${food.brand ? `${food.brand}, ` : ''}${t('food.find.per100', { n: food.kcal100 })}</p></div>
+        <button class="icon-btn" data-action="save-found" data-index="${i}" aria-label="${t('food.saveMealNamed', { name: food.name })}">${icon('star')}</button>
         <button class="btn btn-tonal btn-small" data-action="add-found" data-index="${i}" aria-label="${t('food.find.addNamed', { name: food.name })}">${t('food.find.add')}</button>
       </div>`)}
     </div>
@@ -52,6 +53,7 @@ async function runFoodLookup(path, { barcode = false } = {}) {
     const products = barcode ? (data.status === 1 ? [data.product] : []) : (data.products || []);
     foodFind.results = products.map(foodFromProduct).filter(Boolean).slice(0, 12);
     foodFind.message = foodFind.results.length ? '' : t(barcode ? 'food.find.notFound' : 'food.find.none');
+    if (barcode && foodFind.results[0]) { rememberScan(foodFind.results[0]); saveState(); }
   } catch (error) {
     if (error.name === 'AbortError') return;
     foodFind.message = t('food.find.error');
@@ -91,6 +93,7 @@ function addFound(index) {
     paintFindResults();
     return;
   }
+  rememberScan(food);
   const name = cleanText(food.name, 40);
   const kcal = Math.max(1, Math.round((food.kcal100 * grams) / 100));
   const scale = grams / 100;
@@ -127,6 +130,8 @@ function foodSearchSheet() {
         <button class="btn btn-tonal" data-action="lookup-barcode">${t('food.find.lookup')}</button>
         ${window.fatboyScan ? html`<button class="btn btn-tonal" data-action="scan-barcode">${icon('scan')}${t('food.find.scan')}</button>` : ''}
       </div>
-      <div id="find-results" class="stack-tight" aria-live="polite"></div>`,
+      <div id="find-results" class="stack-tight" aria-live="polite"></div>
+      ${scanBlock()}
+      <button class="btn btn-plain" data-action="ask-community" data-title="${t('food.askTitle')}">${icon('chat')}${t('food.askCommunity')}</button>`,
   };
 }

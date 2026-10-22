@@ -9,6 +9,9 @@ Google sign-in, cloud sync, AI recipes and the APK.
    (Project Settings, API).
 2. Open the SQL editor and run `supabase/schema.sql`. It creates the sync table, row-level
    security, the delete-account function and a daily counter for recipes.
+   Then run `supabase/community.sql` the same way. It adds usernames, the forum, reports and blocks.
+   Then run `supabase/social.sql` the same way (once, after `community.sql`; never re-run `community.sql` afterwards). It adds profiles, friends, DMs, groups, challenges, duels, leagues, notifications, polls, reactions, the word filter (`banned_words` table) and the `post-images` storage bucket for photo posts. `social.sql` itself can be re-run safely.
+   Reports land in the `reports` table (Table editor); three different reporters hide a post automatically.
 
 ## 2. Google sign-in
 

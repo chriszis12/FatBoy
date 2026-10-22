@@ -57,6 +57,11 @@ const ICON_PATHS = {
   trophy: '<path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v2a3 3 0 0 0 4 3M16 6h4v2a3 3 0 0 1-4 3M12 13v4M8 21h8M10 17h4"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
   flag: '<path d="M6 21V4M6 5h11l-2 4 2 4H6"/>',
+  star: '<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.9 6.8 19.7l1-5.9-4.3-4.1 5.9-.8z"/>',
+  bell: '<path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15zM10 21h4"/>',
+  chat: '<path d="M4 5h16v11H10l-5 4v-4H4z"/>',
+  send: '<path d="M4 12l16-8-6 16-3-7z"/>',
+  more: '<path d="M5 12h.01M12 12h.01M19 12h.01"/>',
   trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
   food: '<path d="M7 3v8M4 3v5a3 3 0 0 0 6 0V3M7 11v10M17 3c-2.5 2-3 6-1 9h1v9"/>',
   alert: '<circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/>',
@@ -138,6 +143,10 @@ const defaultSettings = () => ({
   glass: 'clear',       // clear | solid
   dailyGoal: 30,        // XP
   reminder: '19:00',    // time of the daily calendar reminder
+  sound: 'on',          // on | off
+  muteWords: '',        // forum words to hide, comma separated
+  remind: 'off',        // on-device reminders (app only)
+  remindAt: '19:00',
 });
 
 const ACCENTS = ['blue', 'yellow', 'green', 'purple', 'pink'];
@@ -162,6 +171,9 @@ const createState = settings => ({
   water: {},            // date -> glasses
   moves: {},            // date -> [{ id, type, min, kcal }]
   weights: {},          // date -> kg
+  measures: {},         // date -> { waist, hips, chest, arm, thigh } in cm
+  meals: [],            // saved meals, { id, name, kcal, p, c, f }
+  scans: [],            // recently found foods, for quick re-adding
   saved: {},            // recipe id -> 1
   recipes: {},          // saved recipes written by Claude, by id
   cooked: {},           // date -> recipes logged
@@ -342,11 +354,13 @@ function protectStreak() {
 }
 
 function grantXp(xp, gems = 0) {
+  const before = Math.floor(state.xp / 150);
   state.days[today()] = xpToday() + xp;
   state.xp += xp;
   state.gems += gems;
   state.best = Math.max(state.best, currentStreak());
   saveState();
+  if (typeof sfx === 'function' && Math.floor(state.xp / 150) > before) sfx('level');
 }
 
 // Small first-time-each-day XP so logging alone keeps a streak alive.
