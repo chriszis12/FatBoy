@@ -1,9 +1,0 @@
-{
-	"appId": "com.fatboy.app",
-	"appName": "FatBoy",
-	"webDir": "www",
-	"backgroundColor": "#0b0c0f",
-	"android": {
-		"allowMixedContent": false
-	}
-}

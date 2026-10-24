@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">FatBoy</string>
-    <string name="title_activity_main">FatBoy</string>
-    <string name="package_name">com.fatboy.app</string>
-    <string name="custom_url_scheme">com.fatboy.app</string>
-</resources>
