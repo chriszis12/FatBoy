@@ -115,12 +115,16 @@ function startAccounts() {
   window.addEventListener('focus', refreshFromAccount);
   setInterval(() => { if (!document.hidden) refreshFromAccount(); }, 30000);
   cloudApi()?.onChange(onAccountChange);
-  window.addEventListener('fatboy-auth-error', event => toast(`${t('account.signInFailed')} (${event.detail})`.slice(0, 160)));
+  window.addEventListener('fatboy-auth-error', event => toast(/exchange external code|invalid_client|invalid_grant/i.test(event.detail) ? t('account.googleRejected') : `${t('account.signInFailed')} (${event.detail})`.slice(0, 160)));
 }
 
 const googleMark = () => html`<svg class="icon google-mark" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.5-.2-2.2H12v4.2h6.5a5.6 5.6 0 0 1-2.4 3.7v3h3.9c2.3-2.1 3.5-5.2 3.5-8.7z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 7.9-2.9l-3.9-3c-1.1.7-2.5 1.2-4 1.2-3.1 0-5.7-2.1-6.6-4.9H1.4v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.4 14.4a7.2 7.2 0 0 1 0-4.8V6.5H1.4a12 12 0 0 0 0 11z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.4 6.5l4 3.1C6.3 6.9 8.9 4.8 12 4.8z"/></svg>`;
 
-const signInButton = () => html`<button class="btn btn-tonal" data-action="sign-in">${googleMark()}${t('account.google')}</button>`;
+const signInButton = () => html`
+  <div class="stack-tight fill">
+    <button class="btn btn-tonal" data-action="sign-in">${googleMark()}${t('account.google')}</button>
+    <button class="btn btn-tonal" data-action="auth-open" data-mode="signin">${icon('send')}${t('account.emailContinue')}</button>
+  </div>`;
 
 function accountCard() {
   if (!cloudApi()) return '';
@@ -152,3 +156,105 @@ const deleteAccountSheet = () => ({
     <button class="btn btn-large" data-action="close-sheet">${t('reset.keep')}</button>
     <button class="btn btn-plain btn-danger" data-action="confirm-delete-account">${t('account.deleteConfirm')}</button>`,
 });
+
+
+/* --- Email accounts (Supabase email and password) ----------------------------------------------- */
+const auth = { mode: 'signin', busy: false, error: '', info: '', agree: false, email: '' };
+
+const authErrorText = error => {
+  const code = error?.code || '';
+  const known = { invalid_credentials: 'account.errCredentials', email_taken: 'account.errTaken', weak_password: 'account.errWeak', email_unconfirmed: 'account.errUnconfirmed', rate_limited: 'account.errRate', invalid_email: 'account.errEmail', network: 'account.errNetwork' };
+  return t(known[code] || 'account.errGeneric');
+};
+
+function emailSheet() {
+  const m = auth.mode;
+  const signup = m === 'signup';
+  const reset = m === 'reset';
+  const recover = m === 'recover';
+  const title = t(`account.${m === 'signin' ? 'signInTitle' : m === 'signup' ? 'signUpTitle' : m === 'reset' ? 'resetTitle' : 'recoverTitle'}`);
+  return {
+    label: title,
+    body: html`
+      ${sheetHeader(title, reset ? t('account.resetHelp') : recover ? t('account.recoverHelp') : '')}
+      <form class="stack" data-auth-form novalidate>
+        ${recover ? '' : html`
+          <div class="field">
+            <label for="auth-email">${t('account.email')}</label>
+            <input class="input" id="auth-email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" maxlength="120" value="${auth.email}">
+          </div>`}
+        ${reset ? '' : html`
+          <div class="field">
+            <label for="auth-password">${recover ? t('account.newPassword') : t('account.password')}</label>
+            <input class="input" id="auth-password" type="password" autocomplete="${signup || recover ? 'new-password' : 'current-password'}" maxlength="72">
+            ${signup || recover ? html`<p class="caption">${t('account.passwordHelp')}</p>` : ''}
+          </div>`}
+        ${signup ? html`
+          <button type="button" class="choice" role="checkbox" aria-checked="${String(auth.agree)}" data-action="auth-agree">
+            <span class="check-box">${auth.agree ? icon('check') : ''}</span><span>${t('account.agreeTerms')}</span>
+          </button>
+          <div class="row row-wrap"><button type="button" class="btn btn-plain" data-action="show-terms">${t('legal.termsTitle')}</button><button type="button" class="btn btn-plain" data-action="show-privacy">${t('legal.privacyTitle')}</button></div>` : ''}
+        ${auth.error ? html`<p class="error" role="alert">${auth.error}</p>` : ''}
+        ${auth.info ? html`<p class="caption" role="status">${auth.info}</p>` : ''}
+        <button class="btn btn-large" type="submit" ${attributes({ disabled: auth.busy })}>${auth.busy ? t('account.working') : t(`account.${m === 'signin' ? 'signInButton' : m === 'signup' ? 'signUpButton' : m === 'reset' ? 'resetButton' : 'recoverButton'}`)}</button>
+      </form>
+      ${recover ? '' : html`
+        <div class="row row-wrap center-row">
+          ${m !== 'signin' ? html`<button class="btn btn-plain" data-action="auth-mode" data-mode="signin">${t('account.haveAccount')}</button>` : ''}
+          ${m !== 'signup' ? html`<button class="btn btn-plain" data-action="auth-mode" data-mode="signup">${t('account.createAccount')}</button>` : ''}
+          ${m === 'signin' ? html`<button class="btn btn-plain" data-action="auth-mode" data-mode="reset">${t('account.forgot')}</button>` : ''}
+        </div>`}`,
+  };
+}
+
+const openAuth = mode => {
+  auth.mode = mode; auth.error = ''; auth.info = ''; auth.busy = false;
+  openSheet(emailSheet());
+  setTimeout(() => (document.getElementById('auth-email') || document.getElementById('auth-password'))?.focus(), 80);
+};
+
+function readAuthFields() {
+  auth.email = (document.getElementById('auth-email')?.value || auth.email).trim();
+  return { email: auth.email, password: document.getElementById('auth-password')?.value || '' };
+}
+
+async function submitAuth() {
+  const api = cloudApi();
+  const { email, password } = readAuthFields();
+  const m = auth.mode;
+  auth.error = ''; auth.info = '';
+  if (m !== 'recover' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { auth.error = t('account.errEmail'); return openSheet(emailSheet()); }
+  if ((m === 'signup' || m === 'recover') && password.length < 8) { auth.error = t('account.errWeak'); return openSheet(emailSheet()); }
+  if (m === 'signin' && !password) { auth.error = t('account.errCredentials'); return openSheet(emailSheet()); }
+  if (m === 'signup' && !auth.agree) { auth.error = t('account.errAgree'); return openSheet(emailSheet()); }
+  auth.busy = true; openSheet(emailSheet());
+  try {
+    if (m === 'signin') { await api.signInEmail(email, password); closeSheet(); auth.busy = false; return; }
+    if (m === 'signup') {
+      const result = await api.signUp(email, password);
+      auth.busy = false;
+      if (result?.needsConfirm) { auth.mode = 'signin'; auth.info = t('account.checkEmail'); return openSheet(emailSheet()); }
+      closeSheet(); return;
+    }
+    if (m === 'reset') { await api.resetPassword(email); auth.busy = false; auth.info = t('account.resetSent'); return openSheet(emailSheet()); }
+    if (m === 'recover') { await api.setPassword(password); auth.busy = false; closeSheet(); toast(t('account.passwordChanged')); return; }
+  } catch (error) {
+    auth.error = authErrorText(error);
+  }
+  auth.busy = false;
+  openSheet(emailSheet());
+}
+
+document.addEventListener('submit', event => {
+  if (!event.target.closest('[data-auth-form]')) return;
+  event.preventDefault();
+  submitAuth();
+});
+
+window.addEventListener('fatboy-password-recovery', () => openAuth('recover'));
+
+const authActions = {
+  'auth-open': el => openAuth(el.dataset.mode || 'signin'),
+  'auth-mode': el => { readAuthFields(); auth.mode = el.dataset.mode; auth.error = ''; auth.info = ''; openSheet(emailSheet()); },
+  'auth-agree': () => { readAuthFields(); auth.agree = !auth.agree; openSheet(emailSheet()); },
+};

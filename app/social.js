@@ -29,7 +29,12 @@ const dropPost = id => {
   if (forum.d.group) forum.d.group.posts = forum.d.group.posts.filter(post => post.id !== id);
 };
 
-const leagueName = key => `${LEAGUE_ICONS[key] || ''} ${t(`league.${key}`)}`;
+const BEAD_HUES = ['blue', 'green', 'purple', 'pink', 'orange', 'yellow'];
+const groupBead = (group, big = false) => {
+  const seed = [...String(group.id || group.name || '')].reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+  return html`<span class="group-emoji${big ? ' big' : ''}" data-c="${BEAD_HUES[seed % BEAD_HUES.length]}" aria-hidden="true">${(group.name || '?').slice(0, 1).toUpperCase()}</span>`;
+};
+const leagueName = key => t(`league.${key}`);
 const metricLabel = key => t(`metric.${key}`);
 
 /* --- Profile page ---------------------------------------------------------------------- */
@@ -81,7 +86,7 @@ function profilePage() {
       </div>
       ${p.visible && p.streak != null ? html`
         <div class="count-row">
-          <div><strong class="num">🔥 ${p.streak}</strong><span class="caption">${t('profile.streak')}</span></div>
+          <div><strong class="num inline-icon">${icon('flame')}${p.streak}</strong><span class="caption">${t('profile.streak')}</span></div>
           <div><strong class="num">${formatInt(p.xp)}</strong><span class="caption">XP</span></div>
         </div>` : ''}
       ${p.visible && (p.badges || []).length ? html`
@@ -166,7 +171,7 @@ const friendRow = f => html`
     ${avatar(f)}
     <span class="grow"><span class="post-name">@${f.username}${f.buddy ? html` <span class="tag">${t('friends.buddy')}</span>` : ''}</span>
       <span class="caption line-clamp">${f.lastBody || t('friends.noMessages')}</span></span>
-    ${f.streak ? html`<span class="caption num" aria-label="${t('profile.streak')}">🔥 ${f.streak}</span>` : ''}
+    ${f.streak ? html`<span class="caption num" aria-label="${t('profile.streak')}">${icon('flame')}${f.streak}</span>` : ''}
     ${f.unread ? html`<span class="dot-badge static" aria-label="${f.unread}">${f.unread}</span>` : ''}
   </button>`;
 
@@ -211,7 +216,7 @@ function friendsView() {
       </div>
     </section>
     <section class="card" aria-labelledby="buddy-title">
-      <h2 id="buddy-title">🤝 ${t('buddy.title')}</h2>
+      <h2 id="buddy-title">${t('buddy.title')}</h2>
       <p class="measure">${t('buddy.help')}</p>
       ${d.waiting
         ? html`<p class="note" role="status">${t('buddy.waiting')}</p><button class="btn btn-tonal" data-action="forum-buddy-cancel">${t('buddy.cancel')}</button>`
@@ -265,7 +270,7 @@ async function loadGroups({ quiet = false } = {}) {
 
 const groupRow = (g, joined) => html`
   <div class="list-row group-row">
-    <button class="group-open" data-action="forum-group" data-id="${g.id}"><span class="group-emoji" aria-hidden="true">${g.emoji}</span>
+    <button class="group-open" data-action="forum-group" data-id="${g.id}">${groupBead(g)}
       <span class="grow"><span class="post-name">${g.name}</span><span class="caption line-clamp">${g.description || t('group.members', { n: g.memberCount })}</span></span></button>
     ${joined ? html`<span class="caption">${t('group.members', { n: g.memberCount })}</span>`
       : html`<button class="btn btn-tonal btn-small" data-action="forum-group-join" data-id="${g.id}">${t('group.join')}</button>`}
@@ -304,9 +309,6 @@ const newGroupSheet = () => {
     label: t('group.create'),
     body: html`
       ${sheetHeader(t('group.create'))}
-      <div class="field"><span class="field-label" id="ge-label">${t('group.emoji')}</span>
-        <div class="avatar-grid" role="radiogroup" aria-labelledby="ge-label">${['💪', '🥗', '🏃', '🧘', '🚴', '🍎', '🔥', '🌱'].map(glyph => html`
-          <button class="avatar-pick${g.emoji === glyph ? ' is-on' : ''}" role="radio" aria-checked="${String(g.emoji === glyph)}" data-action="forum-group-emoji" data-value="${glyph}">${glyph}</button>`)}</div></div>
       <div class="field"><label for="group-name">${t('group.name')}</label><input class="input" id="group-name" maxlength="40" autocomplete="off" value="${g.name}"></div>
       <div class="field"><label for="group-desc">${t('group.description')}</label><textarea class="input" id="group-desc" rows="2" maxlength="200">${g.description}</textarea></div>
       <button class="choice" role="checkbox" aria-checked="${String(g.isPrivate)}" data-action="forum-group-private">
@@ -344,7 +346,7 @@ function groupPage() {
   const tabs = ['feed', 'challenges', 'members'];
   return html`
     <section class="card profile-card">
-      <div class="profile-top"><span class="group-emoji big" aria-hidden="true">${info.emoji}</span>
+      <div class="profile-top">${groupBead(info, true)}
         <div class="grow"><h2>${info.name}</h2><p class="caption">${t('group.members', { n: info.memberCount })}${info.isPrivate ? ` · ${t('group.privateTag')}` : ''}</p></div></div>
       ${info.description ? html`<p class="measure post-body">${info.description}</p>` : ''}
       ${mod && info.code ? html`<div class="code-box"><span class="code num" aria-label="${t('group.code')}">${info.code}</span><button class="btn btn-tonal btn-small" data-action="forum-group-share" data-name="${info.name}" data-code="${info.code}">${icon('send')}${t('friends.share')}</button></div>` : ''}
@@ -372,7 +374,7 @@ function challengesView(g) {
       <article class="card">
         <div class="row"><h3 class="grow">${c.title}</h3><span class="tag">${metricLabel(c.metric)}</span></div>
         <p class="caption">${c.active ? t('challenge.ends', { date: new Date(c.ends).toLocaleDateString(state.settings.language, { month: 'short', day: 'numeric' }) }) : t('challenge.over')} · ${t('challenge.members', { n: c.members })}</p>
-        ${c.leader ? html`<p>🥇 @${c.leader} · <span class="num">${c.leaderScore}</span></p>` : ''}
+        ${c.leader ? html`<p class="inline-icon">${icon('trophy')}@${c.leader} · <span class="num">${c.leaderScore}</span></p>` : ''}
         <p class="caption">${t('challenge.yourScore')}: <span class="num">${c.mine}</span></p>
         <div class="row row-wrap">
           <button class="btn btn-tonal btn-small" data-action="forum-challenge-open" data-id="${c.id}">${t('challenge.board')}</button>
@@ -453,7 +455,7 @@ function ranksView() {
   const scope = d.scope || 'friends';
   const metric = d.metric || 'xp';
   return html`
-    ${d.league ? html`<section class="card league-card"><span class="league-icon" aria-hidden="true">${LEAGUE_ICONS[d.league]}</span><div><h2>${t('ranks.yourLeague', { name: t(`league.${d.league}`) })}</h2><p class="caption">${t('ranks.leagueHelp')}</p></div></section>` : ''}
+    ${d.league ? html`<section class="card league-card"><span class="league-icon" data-l="${d.league}" aria-hidden="true">${icon('trophy')}</span><div><h2>${t('ranks.yourLeague', { name: t(`league.${d.league}`) })}</h2><p class="caption">${t('ranks.leagueHelp')}</p></div></section>` : ''}
     <div class="chips" role="radiogroup" aria-label="${t('ranks.scope')}">${SCOPES.map(key => html`<button class="chip" role="radio" data-action="forum-scope" data-value="${key}" aria-checked="${String(scope === key)}">${t(`ranks.${key}`)}</button>`)}</div>
     <div class="chips" role="radiogroup" aria-label="${t('duel.metric')}">${METRICS.map(key => html`<button class="chip" role="radio" data-action="forum-metric" data-value="${key}" aria-checked="${String(metric === key)}">${metricLabel(key)}</button>`)}</div>
     <p class="caption">${t('ranks.week')}</p>
@@ -463,7 +465,7 @@ function ranksView() {
             <span class="grow post-name">@${row.username}${row.mine ? ` (${t('ranks.you')})` : ''}</span><span class="num">${formatInt(row.score)}</span></button>`)}</div>`
         : emptyState(t('ranks.empty'))}
     <section class="stack-tight" aria-labelledby="duels-title">
-      <h2 id="duels-title">⚔️ ${t('duel.title')}</h2>
+      <h2 id="duels-title">${t('duel.title')}</h2>
       ${(d.duels || []).length ? html`<div class="stack">${d.duels.map(duelCard)}</div>` : html`<p class="caption measure">${t('duel.empty')}</p>`}
     </section>`;
 }
@@ -568,7 +570,6 @@ const socialActions = {
   'forum-group': el => { forum.d.group = null; forumGo('group', el.dataset.id); },
   'forum-group-tab': el => { forum.d.group.tab = el.dataset.value; paint(); },
   'forum-group-new': () => { forum.d.newGroup = { name: '', description: '', emoji: '💪', isPrivate: false }; openSheet(newGroupSheet()); },
-  'forum-group-emoji': el => { const g = forum.d.newGroup; g.name = $('#group-name').value; g.description = $('#group-desc').value; g.emoji = el.dataset.value; openSheet(newGroupSheet()); },
   'forum-group-private': () => { const g = forum.d.newGroup; g.name = $('#group-name').value; g.description = $('#group-desc').value; g.isPrivate = !g.isPrivate; openSheet(newGroupSheet()); },
   'forum-group-save': async () => {
     const g = forum.d.newGroup;

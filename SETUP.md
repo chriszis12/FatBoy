@@ -20,6 +20,15 @@ Google sign-in, cloud sync, AI recipes and the APK.
 2. In Supabase, Authentication, Sign In / Providers, enable **Google** and paste the client ID and secret.
 3. In Supabase, Authentication, URL Configuration, add `com.fatboy.app://auth` to **Redirect URLs**.
 
+### Email accounts (besides Google)
+
+1. In Supabase, Authentication, Sign In / Providers, make sure **Email** is enabled.
+2. Decide on **Confirm email**. On: people must click a link in an email before they can sign in (safer, but the free built-in email sender is limited to a few emails per hour,
+   so set up your own SMTP, for example Resend, under Authentication, SMTP Settings). Off: sign-up logs people in at once (easier, less safe).
+3. Under Authentication, Sign In / Providers, Email, set the minimum password length to 8. If your plan has it, turn on leaked password protection.
+4. Under Authentication, Email Templates, you can reword the confirmation and reset emails. The links come back into the app through `com.fatboy.app://auth`.
+5. Reset password: the person taps the emailed link, the app opens and asks for a new password.
+
 ## 3. AI recipes with Gemini (optional)
 
 ```
@@ -64,3 +73,15 @@ The APK is at `android/app/build/outputs/apk/debug/app-debug.apk`. Copy it to a 
   one up in Android Studio (Build, Generate Signed Bundle).
 - Deleting an account in the app removes the account and the cloud copy. Progress on the phone is
   removed with Settings, Reset all data.
+
+## Troubleshooting Google sign-in
+
+If the app says "Sign-in did not finish ... Unable to exchange external code", Google rejected the code when Supabase tried to use it.
+That is a settings problem, not an app problem. Check, in order:
+
+1. Supabase, Authentication, Sign In / Providers, Google: re-paste the **Client ID** and **Client secret** from the same Google OAuth client,
+   with no spaces before or after. If you ever reset the secret in Google Cloud, the old one stops working.
+2. The Google OAuth client must be of type **Web application** (not Android), with the authorized redirect URI
+   `https://<your-project-ref>.supabase.co/auth/v1/callback`.
+3. If the Google consent screen is in "Testing", add your Google account under Test users (or publish the app).
+4. Wait a minute after saving, then tap Continue with Google once (a double tap opens two sign-in tabs).

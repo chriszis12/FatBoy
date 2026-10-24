@@ -29,3 +29,5 @@ Still local to each phone: progress photos.
 - Done: Social tab (feed, search, polls, reactions, @mentions, photo posts), friends/DMs, groups, challenges, duels, leagues, notifications, tips, age gate, mute words, saved meals, scan history, measurements, weekly goal ring, sounds, on-device reminders, share cards.
 - Not possible in this build: home-screen widget, step counter / Health Connect, server push notifications, custom avatar photos (emoji avatars instead).
 - Needs a real-device check: Supabase social.sql on the live project, Google login return, local notifications, share sheet.
+
+- v2 polish: accent art + vibrance/design sliders, frost slider on cards, email accounts, legal screens (legal/ folder to host), expressive motion, comfort settings.

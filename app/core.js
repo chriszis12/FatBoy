@@ -140,7 +140,16 @@ const defaultSettings = () => ({
   language: detectLanguage(),
   motion: 'auto',       // auto | full | reduced
   accent: 'blue',       // blue | yellow | green | purple | pink
-  glass: 'clear',       // clear | solid
+  glass: 'clear',       // legacy: clear | solid (now the frost slider)
+  frost: 50,            // 0 clear glass .. 100 heavy frost
+  textSize: 'normal',   // small | normal | large | xl
+  haptics: 'on',        // on | off
+  density: 'cozy',      // cozy | compact
+  tabLabels: 'on',      // on | off
+  weekStart: 'mon',     // mon | sun
+  volume: 'medium',     // low | medium | high
+  vibe: 45,             // 0 calm .. 100 vivid colour and glow
+  art: 45,              // 0 none .. 100 bold accent patterns
   dailyGoal: 30,        // XP
   reminder: '19:00',    // time of the daily calendar reminder
   sound: 'on',          // on | off
@@ -193,6 +202,7 @@ function loadState() {
       const settings = { ...fresh.settings, ...saved.settings };
       if (saved.plus && !(saved.settings && saved.settings.accent)) settings.accent = 'yellow'; // old Plus look lives on as a theme
       delete saved.plus;
+      if (saved.settings && saved.settings.frost === undefined && saved.settings.glass === 'solid') settings.frost = 100;
       return { ...fresh, ...saved, settings };
     }
   } catch (error) { /* storage can be blocked; fall back to a fresh state */ }

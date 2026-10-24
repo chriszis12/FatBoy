@@ -19,6 +19,20 @@ const SCHEME = 'com.fatboy.app://auth';
 
 const failure = (code, message) => Object.assign(new Error(message || code), { code });
 
+// Turns Supabase auth errors into short codes the page can translate.
+const authFailure = error => {
+  const text = `${error?.code || ''} ${error?.message || ''}`.toLowerCase();
+  let code = 'generic';
+  if (/invalid login|invalid_credentials/.test(text)) code = 'invalid_credentials';
+  else if (/already registered|already been registered|user_already_exists/.test(text)) code = 'email_taken';
+  else if (/password|weak_password/.test(text)) code = 'weak_password';
+  else if (/not confirmed|email_not_confirmed/.test(text)) code = 'email_unconfirmed';
+  else if (/rate|too many|over_email_send_rate_limit|429/.test(text)) code = 'rate_limited';
+  else if (/valid email|email_address_invalid|invalid email/.test(text)) code = 'invalid_email';
+  else if (/fetch|network/.test(text)) code = 'network';
+  return failure(code, error?.message);
+};
+
 // Saves a text file to the phone's cache and opens the share sheet so the person can pick where it goes.
 const downloads = {
   async save({ filename, data }) {
@@ -41,6 +55,7 @@ if (URL_ && KEY) {
   // Google sign-in runs in the system browser and returns through the com.fatboy.app link.
   const report = message => window.dispatchEvent(new CustomEvent('fatboy-auth-error', { detail: String(message || '') }));
   let listeners = [];
+  let lastSignIn = 0;
   const announce = session => listeners.forEach(callback => callback(userOf(session)));
 
   App.addListener('appUrlOpen', async ({ url }) => {
@@ -72,9 +87,14 @@ if (URL_ && KEY) {
   window.fatboyCloud = {
     onChange(callback) {
       listeners.push(callback);
-      client.auth.onAuthStateChange((_event, session) => callback(userOf(session)));
+      client.auth.onAuthStateChange((event, session) => {
+        if (event === 'PASSWORD_RECOVERY') window.dispatchEvent(new CustomEvent('fatboy-password-recovery'));
+        callback(userOf(session));
+      });
     },
     async signIn() {
+      if (Date.now() - lastSignIn < 4000) return;   // a double tap would open two sign-in tabs
+      lastSignIn = Date.now();
       const { data, error } = await client.auth.signInWithOAuth({
         provider: 'google',
         options: { redirectTo: SCHEME, skipBrowserRedirect: true },
@@ -84,6 +104,28 @@ if (URL_ && KEY) {
       const target = new URL(data.url);
       if (!target.searchParams.has('apikey')) target.searchParams.set('apikey', KEY);
       await Browser.open({ url: target.toString() });
+    },
+    // Email and password accounts. Supabase sends the confirmation or reset email itself.
+    async signUp(email, password) {
+      const { data, error } = await client.auth.signUp({ email, password, options: { emailRedirectTo: SCHEME } });
+      if (error) throw authFailure(error);
+      // An address that already exists comes back with no identities (so nobody can probe for emails).
+      if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) throw failure('email_taken');
+      if (data.session) announce(data.session);
+      return { needsConfirm: !data.session };
+    },
+    async signInEmail(email, password) {
+      const { data, error } = await client.auth.signInWithPassword({ email, password });
+      if (error) throw authFailure(error);
+      announce(data.session);
+    },
+    async resetPassword(email) {
+      const { error } = await client.auth.resetPasswordForEmail(email, { redirectTo: SCHEME });
+      if (error) throw authFailure(error);
+    },
+    async setPassword(password) {
+      const { error } = await client.auth.updateUser({ password });
+      if (error) throw authFailure(error);
     },
     async signOut() {
       const { error } = await client.auth.signOut();
@@ -249,6 +291,12 @@ window.claude.use = async name => {
 
 
 // Google's code scanner opens its own camera screen, so the app needs no camera permission.
+// Android back button: let the page close sheets and go back first; leave the app only from the home tab.
+App.addListener('backButton', () => {
+  const leave = window.dispatchEvent(new CustomEvent('fatboy-back', { cancelable: true }));
+  if (leave) App.exitApp();
+});
+
 window.fatboyScan = {
   async scan() {
     const { available } = await BarcodeScanner.isGoogleBarcodeScannerModuleAvailable();

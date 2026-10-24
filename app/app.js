@@ -484,6 +484,7 @@ function logFood(name, kcal, meal, macros = {}, day = today()) {
   if (day === today()) grantDailyBonus('food', 5);
   saveState();
   sfx('log');
+  celebrate(0.8);
   checkWeekGoal();
   syncReminders();
 }
@@ -620,7 +621,7 @@ function finishOnboarding() {
   ui.tab = 'learn';
   paint({ entering: true });
   scrollTo(0, 0);
-  toast(t('toast.welcome', { name: profile.name }));
+  setTimeout(() => openSheet(planRevealSheet()), 500);
 }
 
 function focusFirstInvalid() {
@@ -633,6 +634,7 @@ function focusFirstInvalid() {
 const actions = {
   ...communityActions,
   ...polishActions,
+  ...authActions,
   'go-tab': el => { buzz(6); ui.day = null; if (el.dataset.tab !== ui.tab || ui.profileView !== 'main') goTo(el.dataset.tab); if (el.dataset.tab === 'forum') forumEnter(); },
   'go-panel': el => { buzz(6); ui.trackPanel = el.dataset.panel; ui.errors = {}; paint(); },
 
@@ -689,6 +691,8 @@ const actions = {
     closeSheet();
     try { await cloudApi().deleteAccount(); toast(t('toast.accountDeleted')); } catch (error) { toast(t('account.deleteFailed')); }
   },
+  'show-legal': el => openSheet(legalSheet(el.dataset.kind)),
+  'show-terms': () => openSheet(legalSheet('terms')),
   'show-health': () => openSheet(legalSheet('health')),
   'show-privacy': () => openSheet(legalSheet('privacy')),
   'toggle-agree': () => { ui.draft.agree = !ui.draft.agree; delete ui.errors.agree; paint(); $('#ob-agree')?.focus({ preventScroll: true }); },
@@ -758,7 +762,7 @@ const actions = {
     if (glasses >= 8) state.flags.hydrated = true;
     if (glasses > 0) grantDailyBonus('water', 5);
     ui.newCup = glasses === tapped ? tapped - 1 : null;
-    if (glasses > before) floaty(t('quick.plusGlass'));
+    if (glasses > before) { floaty(t('quick.plusGlass')); celebrate(0.6); }
     buzz(8);
     saveState();
     paint();

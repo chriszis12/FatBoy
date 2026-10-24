@@ -16,7 +16,7 @@ const resolvedTheme = () => {
 
 const motionOn = () => {
   const { motion } = state.settings;
-  return motion === 'full' || (motion === 'auto' && !systemReduced.matches);
+  return motion === 'full' || motion === 'expressive' || (motion === 'auto' && !systemReduced.matches);
 };
 
 // Refraction uses an SVG filter inside backdrop-filter, which only Chromium-based engines draw.
@@ -28,13 +28,33 @@ const canRefract = (() => {
   } catch (error) { return false; }
 })();
 
+// Frost slider: 0 is clear glass with no blur and a faint tint, 50 is the default look, 100 is heavy, tinted frost.
+function applyFrost() {
+  const raw = Number(state.settings.frost);
+  const f = Math.min(100, Math.max(0, Number.isFinite(raw) ? raw : 50));
+  const blur = f <= 50 ? (f / 50) * 14 : 14 + ((f - 50) / 50) * 26;
+  const tint = f <= 50 ? 4 + (f / 50) * 53 : 57 + ((f - 50) / 50) * 39;
+  const style = document.documentElement.style;
+  style.setProperty('--frost-blur', `${blur.toFixed(1)}px`);
+  style.setProperty('--frost-tint', `${tint.toFixed(1)}%`);
+  style.setProperty('--sheet-tint', `${(58 + (f / 100) * 40).toFixed(1)}%`);
+  document.documentElement.dataset.frost = f === 0 ? 'none' : 'on';
+  const pct = (value, fallback) => Math.min(100, Math.max(0, Number.isFinite(Number(value)) ? Number(value) : fallback)) / 100;
+  style.setProperty('--vibe', String(pct(state.settings.vibe, 45)));
+  style.setProperty('--art', String(pct(state.settings.art, 45)));
+}
+
 function applySettings() {
   const root = document.documentElement;
   root.dataset.theme = resolvedTheme();
   root.dataset.accent = ACCENTS.includes(state.settings.accent) ? state.settings.accent : 'blue';
   if (canRefract) root.dataset.lens = 'on';
-  root.dataset.glass = state.settings.glass === 'solid' ? 'solid' : 'clear';
+  applyFrost();
   root.dataset.motion = motionOn() ? 'full' : 'reduced';
+  root.dataset.expressive = motionOn() && state.settings.motion === 'expressive' ? 'on' : 'off';
+  root.dataset.density = state.settings.density === 'compact' ? 'compact' : 'cozy';
+  root.dataset.tablabels = state.settings.tabLabels === 'off' ? 'off' : 'on';
+  root.style.setProperty('--ts', String({ small: 0.92, normal: 1, large: 1.12, xl: 1.25 }[state.settings.textSize] || 1));
   root.lang = state.settings.language;
 }
 
@@ -53,7 +73,7 @@ systemReduced.addEventListener('change', applySettings);
 
 // Run `callback` after the animation has had time to play (straight away when motion is off).
 // A short buzz on phones that support it, so taps feel like something happened.
-const buzz = pattern => { if (motionOn()) navigator.vibrate?.(pattern); };
+const buzz = pattern => { if (motionOn() && state.settings.haptics !== 'off') navigator.vibrate?.(pattern); };
 
 const afterMotion = (callback, ms) => setTimeout(callback, motionOn() ? ms : 0);
 

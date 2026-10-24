@@ -26,7 +26,7 @@ function sfx(kind) {
       osc.type = 'sine';
       osc.frequency.value = freq;
       gain.gain.setValueAtTime(0.0001, start + delay);
-      gain.gain.exponentialRampToValueAtTime(0.07, start + delay + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.07 * ({ low: 0.5, medium: 1, high: 1.8 }[state.settings.volume] || 1), start + delay + 0.015);
       gain.gain.exponentialRampToValueAtTime(0.0001, start + delay + length + 0.05);
       osc.connect(gain).connect(audioCtx.destination);
       osc.start(start + delay);
@@ -127,7 +127,7 @@ function saveMeasures(read) {
 
 /* --- Weekly goal ring ------------------------------------------------------------------------- */
 const WEEK_GOAL = 5;
-const weekKey = () => { const d = parseKey(today()); const monday = addDays(today(), -((d.getDay() + 6) % 7)); return monday; };
+const weekKey = () => { const d = parseKey(today()); const back = state.settings.weekStart === 'sun' ? d.getDay() : (d.getDay() + 6) % 7; return addDays(today(), -back); };
 const weekLogged = () => {
   const start = weekKey();
   return Array.from({ length: 7 }, (_, i) => addDays(start, i)).filter(key => key <= today() && foodOn(key).length).length;
@@ -279,7 +279,8 @@ function polishSettings() {
           <input class="input" id="set-remind-at" type="time" value="${settings.remindAt || '19:00'}" data-setting-text="remindAt">
           <p class="caption">${t('settings.remindHelp')}</p>
         </div>` : html``}
-    </section>`;
+    </section>
+    ${comfortSettings()}`;
 }
 
 document.addEventListener('input', event => {
@@ -328,3 +329,72 @@ const polishActions = {
   'post-card': () => postCardNow(),
   'ask-community': el => askCommunity(el.dataset.title || ''),
 };
+
+document.addEventListener('input', event => {
+  const slider = event.target.closest?.('[data-setting-range]');
+  if (!slider) return;
+  state.settings[slider.dataset.settingRange] = Number(slider.value);
+  slider.setAttribute('aria-valuetext', `${slider.value}%`);
+  applyFrost();
+  saveState();
+});
+
+/* --- Plan reveal after setup ------------------------------------------------------------------ */
+function planRevealSheet() {
+  const { profile } = state;
+  const plan = planCalories(profile, currentWeightKg(), profile.pace);
+  const toLose = Math.max(0, profile.weightKg - profile.goalKg);
+  const weeks = Math.max(1, Math.ceil(toLose / Math.max(0.1, profile.pace)));
+  return {
+    label: t('plan.revealTitle'),
+    body: html`
+      <div class="center stack">
+        ${figureMark('figure-sm')}
+        <h2>${t('plan.revealTitle')}</h2>
+        <div class="grid-2 fill">
+          <div class="tile"><p class="caption">${t('plan.daily')}</p><h2 class="num">${formatInt(plan.target)}</h2><p class="caption">kcal</p></div>
+          <div class="tile"><p class="caption">${t('plan.timeline')}</p><h2 class="num">${weeks}</h2><p class="caption">${t('plan.weeks')}</p></div>
+        </div>
+        <p class="caption measure">${t('plan.revealBody', { goal: mass.format(profile.goalKg) })}</p>
+        <button class="btn btn-large" data-action="close-sheet">${t('plan.start')}</button>
+      </div>`,
+  };
+}
+
+/* --- Android back button: close things in order, leave the app only from the first tab -------- */
+window.addEventListener('fatboy-back', event => {
+  if (roots.sheet.childElementCount) { closeSheet(); event.preventDefault(); return; }
+  if (typeof session !== 'undefined' && session) {
+    session.confirmingQuit = !session.confirmingQuit;
+    drawLesson();
+    event.preventDefault();
+    return;
+  }
+  if (ui.tab === 'forum' && forum.page) { forumBack(); event.preventDefault(); return; }
+  if (ui.tab === 'profile' && ui.profileView !== 'main') { ui.profileView = 'main'; paint({ entering: true }); event.preventDefault(); return; }
+  if (state.profile && ui.tab !== 'learn') { goTo('learn'); event.preventDefault(); }
+});
+
+
+/* --- Comfort settings and expressive motion --------------------------------------------------- */
+function comfortSettings() {
+  const { settings } = state;
+  const pick = (id, field, options) => segmented({ id: `set-${id}`, label: t(`settings.${id}`), action: 'set-setting', field, value: settings[field],
+    options: options.map(([value, key]) => [value, t(key)]) });
+  return html`
+    <section class="card" aria-labelledby="comfort-title">
+      <h2 id="comfort-title">${t('settings.comfort')}</h2>
+      ${pick('textSize', 'textSize', [['small', 'settings.small'], ['normal', 'settings.normal'], ['large', 'settings.large'], ['xl', 'settings.xl']])}
+      ${pick('density', 'density', [['cozy', 'settings.cozy'], ['compact', 'settings.compact']])}
+      ${pick('tabLabels', 'tabLabels', [['on', 'settings.soundOn'], ['off', 'settings.soundOff']])}
+      ${pick('haptics', 'haptics', [['on', 'settings.soundOn'], ['off', 'settings.soundOff']])}
+      ${pick('volume', 'volume', [['low', 'settings.low'], ['medium', 'settings.medium'], ['high', 'settings.high']])}
+      ${pick('weekStart', 'weekStart', [['mon', 'settings.monday'], ['sun', 'settings.sunday']])}
+    </section>`;
+}
+
+const expressive = () => document.documentElement.dataset.expressive === 'on';
+function celebrate(power = 1) {
+  if (!expressive()) return;
+  burst(innerWidth / 2, innerHeight * 0.68, { count: Math.round(22 * power), spread: 170 * power });
+}

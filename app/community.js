@@ -12,7 +12,6 @@ const FORUM_VIEWS = ['feed', 'friends', 'groups', 'ranks'];
 const REACTIONS = [['like', '❤️'], ['strong', '💪'], ['fire', '🔥'], ['clap', '👏']];
 const AVATAR_COLORS = ['blue', 'yellow', 'green', 'purple', 'pink', 'orange'];
 const LEAGUES = ['bronze', 'silver', 'gold', 'sapphire', 'diamond'];
-const LEAGUE_ICONS = { bronze: '🥉', silver: '🥈', gold: '🥇', sapphire: '🔷', diamond: '💎' };
 
 const forum = {
   profile: undefined,   // undefined = not loaded, null = no username yet
@@ -222,13 +221,18 @@ const commentCount = n => t(n === 1 ? 'forum.commentOne' : 'forum.commentMany', 
 
 const personButton = (who, inner) => html`<button class="person" data-action="forum-profile" data-id="${who.userId}">${inner}</button>`;
 
-const reactionBar = post => html`
+const reactionBar = post => {
+  const open = forum.picker === post.id;
+  const shown = REACTIONS.filter(([kind]) => open || post.myReaction === kind || (post.reactions && post.reactions[kind] > 0));
+  return html`
   <div class="reactions" role="group" aria-label="${t('forum.react')}">
-    ${REACTIONS.map(([kind, glyph]) => html`
+    ${shown.map(([kind, glyph]) => html`
       <button class="forum-act${post.myReaction === kind ? ' is-on' : ''}" data-action="forum-react" data-id="${post.id}" data-kind="${kind}" aria-pressed="${String(post.myReaction === kind)}" aria-label="${t(`react.${kind}`)}">
         <span aria-hidden="true">${glyph}</span><span class="num">${(post.reactions && post.reactions[kind]) || 0}</span>
       </button>`)}
+    <button class="forum-act" data-action="forum-picker" data-id="${post.id}" aria-expanded="${String(open)}" aria-label="${t('forum.react')}">${icon(open ? 'close' : 'plus')}</button>
   </div>`;
+};
 
 function pollView(post) {
   const poll = post.poll;
@@ -294,15 +298,17 @@ const usernameCard = () => html`
     <button class="choice" data-action="forum-agree" role="checkbox" aria-checked="${String(forum.agree)}">
       <span class="check-box">${forum.agree ? icon('check') : ''}</span><span>${t('forum.age')}</span>
     </button>
+    <div class="row row-wrap"><button class="btn btn-plain" data-action="show-legal" data-kind="guidelines">${t('legal.guidelinesTitle')}</button><button class="btn btn-plain" data-action="show-legal" data-kind="terms">${t('legal.termsTitle')}</button></div>
     <button class="btn" data-action="forum-claim" ${attributes({ disabled: forum.busy })}>${t('forum.claim')}</button>
   </section>`;
 
 /* --- Feed ------------------------------------------------------------------------- */
 const welcomeCard = () => (state.flags.forumWelcome ? '' : html`
   <section class="card pinned" aria-labelledby="welcome-title">
-    <div class="row"><h2 class="grow" id="welcome-title">📌 ${t('forum.welcomeTitle')}</h2>
+    <div class="row"><h2 class="grow" id="welcome-title">${t('forum.welcomeTitle')}</h2>
       <button class="icon-btn" data-action="forum-hide-welcome" aria-label="${t('common.close')}">${icon('close')}</button></div>
     <p class="measure">${t('forum.welcomeBody')}</p>
+    <button class="btn btn-plain" data-action="show-legal" data-kind="guidelines">${t('legal.guidelinesTitle')}</button>
   </section>`);
 
 const forumTipCard = () => (forum.tip ? html`
@@ -639,7 +645,9 @@ const communityActions = {
     forum.busy = false;
     paint();
   },
+  'forum-picker': el => { forum.picker = forum.picker === el.dataset.id ? null : el.dataset.id; paint(); },
   'forum-react': async el => {
+    forum.picker = null;
     const post = findPost(el.dataset.id);
     if (!post) return;
     const kind = el.dataset.kind;

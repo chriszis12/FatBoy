@@ -438,10 +438,10 @@ function trackScreen() {
   const panel = TRACK_PANELS.find(item => item.id === ui.trackPanel);
   return html`
     <div class="page-title"><h1>${t('track.title')}</h1><p class="caption">${t('track.subtitle')}</p></div>
-    ${todayCard()}
     <div class="segmented" role="tablist" aria-label="${t('track.tracker')}">
       ${TRACK_PANELS.map(item => html`<button role="tab" data-action="go-panel" data-panel="${item.id}" aria-selected="${item.id === ui.trackPanel}">${t(`panel.${item.id}`)}</button>`)}
     </div>
+    ${todayCard()}
     <div role="tabpanel" class="stack">${panel.render()}</div>`;
 }
 
@@ -627,13 +627,13 @@ function profileScreen() {
         <p class="caption">${t('profile.previewHelp')}</p>
       </div>
     </section>
-    <div class="grid-2">
-      <div class="tile"><p class="caption">${t('profile.streak')}</p><h2 class="num">${currentStreak()}</h2></div>
-      <div class="tile"><p class="caption">${t('profile.best')}</p><h2 class="num">${state.best}</h2></div>
-      <div class="tile"><p class="caption">${t('profile.lessons')}</p><h2 class="num">${t('common.ofTotal', { n: lessonsDone(), total: TOTAL_LESSONS })}</h2></div>
-      <div class="tile"><p class="caption">${t('profile.lost')}</p><h2 class="num">${lost > 0 ? mass.format(lost) : `0 ${mass.unit()}`}</h2></div>
-      <div class="tile"><p class="caption">${t('profile.bmi')}</p><h2 class="num">${formatDecimal(bmiOf(current, profile.heightCm))}</h2></div>
-      <div class="tile"><p class="caption">${t('profile.cooked')}</p><h2 class="num">${Object.values(state.cooked).reduce((sum, n) => sum + n, 0)}</h2></div>
+    <div class="list">
+      ${statRow(t('profile.streak'), currentStreak())}
+      ${statRow(t('profile.best'), state.best)}
+      ${statRow(t('profile.lessons'), t('common.ofTotal', { n: lessonsDone(), total: TOTAL_LESSONS }))}
+      ${statRow(t('profile.lost'), lost > 0 ? mass.format(lost) : `0 ${mass.unit()}`)}
+      ${statRow(t('profile.bmi'), formatDecimal(bmiOf(current, profile.heightCm)))}
+      ${statRow(t('profile.cooked'), Object.values(state.cooked).reduce((sum, n) => sum + n, 0))}
     </div>
     <section class="card" aria-labelledby="goal-heading">
       <h2 id="goal-heading">${t('profile.goal')}</h2>
@@ -671,9 +671,19 @@ function settingsScreen() {
       <h2 id="appearance-title">${t('settings.appearance')}</h2>
       ${segmented({ id: 'set-theme', label: t('settings.theme'), action: 'set-setting', field: 'theme', value: settings.theme,
         options: [['system', t('settings.system')], ['light', t('settings.light')], ['dark', t('settings.dark')]] })}
-      ${segmented({ id: 'set-glass', label: t('settings.glass'), action: 'set-setting', field: 'glass', value: settings.glass,
-        options: [['clear', t('settings.glassClear')], ['solid', t('settings.glassSolid')]] })}
-      <p class="caption">${t('settings.glassHelp')}</p>
+      <div class="field">
+        <label for="set-frost">${t('settings.frost')}</label>
+        <input class="range" id="set-frost" type="range" min="0" max="100" step="1" value="${Number.isFinite(Number(settings.frost)) ? Number(settings.frost) : 50}" data-setting-range="frost" aria-valuetext="${Math.round(Number(settings.frost) || 0)}%">
+        <div class="row between"><span class="caption">${t('settings.frostClear')}</span><span class="caption">${t('settings.frostFrosted')}</span></div>
+        <p class="caption">${t('settings.frostHelp')}</p>
+      </div>
+      ${['vibe', 'art'].map(key => html`
+        <div class="field">
+          <label for="set-${key}">${t(`settings.${key}`)}</label>
+          <input class="range" id="set-${key}" type="range" min="0" max="100" step="1" value="${Number.isFinite(Number(settings[key])) ? Number(settings[key]) : 45}" data-setting-range="${key}" aria-valuetext="${Math.round(Number(settings[key]) || 0)}%">
+          <div class="row between"><span class="caption">${t(`settings.${key}Low`)}</span><span class="caption">${t(`settings.${key}High`)}</span></div>
+          <p class="caption">${t(`settings.${key}Help`)}</p>
+        </div>`)}
       <div class="field">
         <span class="field-label" id="set-accent-label">${t('settings.colour')}</span>
         <div class="swatches" role="radiogroup" aria-labelledby="set-accent-label">
@@ -688,7 +698,7 @@ function settingsScreen() {
       <div class="field">
         <span class="field-label" id="set-motion-label">${t('settings.animations')}</span>
         <div class="segmented" role="radiogroup" aria-labelledby="set-motion-label">
-          ${[['auto', 'settings.automatic'], ['full', 'settings.full'], ['reduced', 'settings.reduced']].map(([value, key]) => html`
+          ${[['auto', 'settings.automatic'], ['full', 'settings.full'], ['expressive', 'settings.expressive'], ['reduced', 'settings.reduced']].map(([value, key]) => html`
             <button type="button" role="radio" data-action="set-setting" data-field="motion" data-value="${value}" aria-checked="${String(settings.motion === value)}">${t(key)}</button>`)}
         </div>
         <p class="caption">${t('settings.motionHelp')}</p>
@@ -717,7 +727,7 @@ function settingsScreen() {
 
     ${accountCard()}
 
-    <section class="card" aria-labelledby="reminder-title">
+    ${window.fatboyNotify ? html`` : html`<section class="card" aria-labelledby="reminder-title">
       <h2 id="reminder-title">${t('settings.reminder')}</h2>
       <p class="caption measure">${t('settings.reminderHelp')}</p>
       <div class="field">
@@ -725,7 +735,7 @@ function settingsScreen() {
         <input ${attributes({ class: 'input', id: 'reminder-time', type: 'time', value: settings.reminder, 'data-reminder': '' })}>
       </div>
       <button class="btn btn-tonal" data-action="add-reminder">${icon('next')}${t('settings.reminderAdd')}</button>
-    </section>
+    </section>`}
 
     <section class="card" aria-labelledby="backup-title">
       <h2 id="backup-title">${t('settings.backup')}</h2>
@@ -740,9 +750,8 @@ function settingsScreen() {
     <section class="card" aria-labelledby="about-title">
       <h2 id="about-title">${t('settings.about')}</h2>
       <p class="caption measure">${t('app.disclaimer')}</p>
-      <div class="row row-wrap">
-        <button class="btn btn-tonal" data-action="show-health">${t('legal.healthTitle')}</button>
-        <button class="btn btn-tonal" data-action="show-privacy">${t('legal.privacyTitle')}</button>
+      <div class="row row-wrap">${['health', 'privacy', 'terms', 'guidelines', 'sources', 'help'].map(kind => html`
+        <button class="btn btn-tonal" data-action="show-legal" data-kind="${kind}">${t(`legal.${kind}Title`)}</button>`)}
       </div>
       <button class="btn btn-plain btn-danger" data-action="reset-data">${t('settings.reset')}</button>
     </section>`;
@@ -972,7 +981,7 @@ const legalSheet = kind => ({
   body: html`
     ${sheetHeader(t(`legal.${kind}Title`))}
     <ul class="check-list">
-      ${(kind === 'privacy' ? [1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5]).map(n => html`<li>${icon('check')}<span>${t(`legal.${kind}.${n}`)}</span></li>`)}
+      ${Array.from({ length: { health: 6, privacy: 8, terms: 8, guidelines: 7, sources: 5, help: 5 }[kind] || 5 }, (_, i) => i + 1).map(n => html`<li>${icon('check')}<span>${t(`legal.${kind}.${n}`)}</span></li>`)}
     </ul>`,
 });
 

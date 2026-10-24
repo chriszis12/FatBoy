@@ -14,6 +14,7 @@ script = "\n".join(read(name) for name in SCRIPTS)
 
 page = f"""<title>FatBoy</title>
 <style>
+{read("fonts.css")}
 {read("style.css")}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><path id="fb-figure" vector-effect="non-scaling-stroke"/><path id="fb-figure-soft" vector-effect="non-scaling-stroke"/>{lens_defs()}</defs></svg>
