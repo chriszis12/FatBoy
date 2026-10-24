@@ -1034,4 +1034,5 @@ STRINGS.es = {
   'settings.legal': "Legal y seguridad",
   'forum.age': "Tengo 18 años o más y acepto las normas de la comunidad.",
   'forum.errAge': "Confirma que tienes 18 años o más para continuar.",
+  'forum.setup': "Social aún no está configurado en el servidor. Ejecuta community.sql y social.sql en Supabase e inténtalo de nuevo.",
 };

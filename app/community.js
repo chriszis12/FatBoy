@@ -124,6 +124,8 @@ async function forumLoad({ append = false } = {}) {
   } catch (error) {
     if (token !== forum.token) return;
     forum.failed = true;
+    const text = String(error && error.message || '');
+    forum.errorText = /function|schema cache|relation|does not exist|PGRST/i.test(text) ? t('forum.setup') : text.slice(0, 160);
   }
   forum.loading = false;
   paint();
@@ -335,7 +337,7 @@ function feedView() {
     ${forum.category === 'all' && !forum.query ? welcomeCard() : ''}
     ${forum.category === 'all' && !forum.query ? forumTipCard() : ''}
     ${forum.failed
-      ? forumNote(t('forum.failed'), '', html`<button class="btn btn-tonal" data-action="forum-retry">${t('forum.retry')}</button>`)
+      ? forumNote(t('forum.failed'), forum.errorText || '', html`<button class="btn btn-tonal" data-action="forum-retry">${t('forum.retry')}</button>`)
       : forum.loading && !forum.posts.length ? skeletonRows(3)
       : !posts.length ? emptyState(t(forum.category === 'following' ? 'forum.emptyFollowing' : forum.query ? 'forum.emptySearch' : 'forum.empty'))
       : html`<div class="stack">${posts.map(postCard)}</div>

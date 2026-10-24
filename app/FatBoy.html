@@ -1542,6 +1542,9 @@ html { background: color-mix(in srgb, var(--accent) calc(var(--vibe) * 9%), var(
 .post-foot, .forum-actions { flex-wrap: wrap; }
 .mascot.mood-sleepy::after { right: 2px; }
 
+/* toast must stay readable over busy content */
+.toast.glass, :root[data-lens] .toast.glass { background: color-mix(in srgb, var(--surface-2) 94%, transparent); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><path id="fb-figure" vector-effect="non-scaling-stroke"/><path id="fb-figure-soft" vector-effect="non-scaling-stroke"/><filter id="fb-lens-bar" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22x%22%20x1%3D%220%22%20x2%3D%221%22%20y1%3D%220%22%20y2%3D%220%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22rgb%28255%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%225%25%22%20stop-color%3D%22rgb%28128%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%2295%25%22%20stop-color%3D%22rgb%28128%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22rgb%280%2C255%2C255%29%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22y%22%20x1%3D%220%22%20x2%3D%220%22%20y1%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22rgb%28255%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%2230%25%22%20stop-color%3D%22rgb%28255%2C128%2C255%29%22/%3E%3Cstop%20offset%3D%2270%25%22%20stop-color%3D%22rgb%28255%2C128%2C255%29%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22rgb%28255%2C0%2C255%29%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23fff%22/%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22url%28%23x%29%22/%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22url%28%23y%29%22%20style%3D%22mix-blend-mode%3Amultiply%22/%3E%3C/svg%3E" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="map"/><feDisplacementMap in="SourceGraphic" in2="map" scale="26" xChannelSelector="R" yChannelSelector="G"/></filter><filter id="fb-lens-pill" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22x%22%20x1%3D%220%22%20x2%3D%221%22%20y1%3D%220%22%20y2%3D%220%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22rgb%28255%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%2214%25%22%20stop-color%3D%22rgb%28128%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%2286%25%22%20stop-color%3D%22rgb%28128%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22rgb%280%2C255%2C255%29%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22y%22%20x1%3D%220%22%20x2%3D%220%22%20y1%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22rgb%28255%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%2238%25%22%20stop-color%3D%22rgb%28255%2C128%2C255%29%22/%3E%3Cstop%20offset%3D%2262%25%22%20stop-color%3D%22rgb%28255%2C128%2C255%29%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22rgb%28255%2C0%2C255%29%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23fff%22/%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22url%28%23x%29%22/%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22url%28%23y%29%22%20style%3D%22mix-blend-mode%3Amultiply%22/%3E%3C/svg%3E" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="map"/><feDisplacementMap in="SourceGraphic" in2="map" scale="18" xChannelSelector="R" yChannelSelector="G"/></filter><filter id="fb-lens-sheet" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22x%22%20x1%3D%220%22%20x2%3D%221%22%20y1%3D%220%22%20y2%3D%220%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22rgb%28255%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%224%25%22%20stop-color%3D%22rgb%28128%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%2296%25%22%20stop-color%3D%22rgb%28128%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22rgb%280%2C255%2C255%29%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%22y%22%20x1%3D%220%22%20x2%3D%220%22%20y1%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22rgb%28255%2C255%2C255%29%22/%3E%3Cstop%20offset%3D%225%25%22%20stop-color%3D%22rgb%28255%2C128%2C255%29%22/%3E%3Cstop%20offset%3D%2295%25%22%20stop-color%3D%22rgb%28255%2C128%2C255%29%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22rgb%28255%2C0%2C255%29%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23fff%22/%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22url%28%23x%29%22/%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22url%28%23y%29%22%20style%3D%22mix-blend-mode%3Amultiply%22/%3E%3C/svg%3E" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="map"/><feDisplacementMap in="SourceGraphic" in2="map" scale="28" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>
 <div id="app">
@@ -2620,6 +2623,7 @@ STRINGS.en = {
   'forum.age': "I am 18 or older and I agree to the community rules.",
   'forum.errAge': "Confirm you are 18 or older to continue.",
   'account.agreeTerms': "I am 18 or older and I accept the Terms of Use and Privacy Policy.",
+  'forum.setup': "Social is not set up on the server yet. Run community.sql and social.sql in Supabase, then try again.",
 };
 
 'use strict';
@@ -3658,6 +3662,7 @@ STRINGS.el = {
   'settings.legal': "Νομικά και ασφάλεια",
   'forum.age': "Είμαι 18 ετών ή μεγαλύτερος/η και συμφωνώ με τους κανόνες της κοινότητας.",
   'forum.errAge': "Επιβεβαίωσε ότι είσαι 18 ετών ή μεγαλύτερος/η για να συνεχίσεις.",
+  'forum.setup': "Το Social δεν έχει στηθεί ακόμα στον διακομιστή. Τρέξτε τα community.sql και social.sql στο Supabase και δοκιμάστε ξανά.",
 };
 
 'use strict';
@@ -4696,6 +4701,7 @@ STRINGS.es = {
   'settings.legal': "Legal y seguridad",
   'forum.age': "Tengo 18 años o más y acepto las normas de la comunidad.",
   'forum.errAge': "Confirma que tienes 18 años o más para continuar.",
+  'forum.setup': "Social aún no está configurado en el servidor. Ejecuta community.sql y social.sql en Supabase e inténtalo de nuevo.",
 };
 
 'use strict';
@@ -9954,6 +9960,8 @@ async function forumLoad({ append = false } = {}) {
   } catch (error) {
     if (token !== forum.token) return;
     forum.failed = true;
+    const text = String(error && error.message || '');
+    forum.errorText = /function|schema cache|relation|does not exist|PGRST/i.test(text) ? t('forum.setup') : text.slice(0, 160);
   }
   forum.loading = false;
   paint();
@@ -10165,7 +10173,7 @@ function feedView() {
     ${forum.category === 'all' && !forum.query ? welcomeCard() : ''}
     ${forum.category === 'all' && !forum.query ? forumTipCard() : ''}
     ${forum.failed
-      ? forumNote(t('forum.failed'), '', html`<button class="btn btn-tonal" data-action="forum-retry">${t('forum.retry')}</button>`)
+      ? forumNote(t('forum.failed'), forum.errorText || '', html`<button class="btn btn-tonal" data-action="forum-retry">${t('forum.retry')}</button>`)
       : forum.loading && !forum.posts.length ? skeletonRows(3)
       : !posts.length ? emptyState(t(forum.category === 'following' ? 'forum.emptyFollowing' : forum.query ? 'forum.emptySearch' : 'forum.empty'))
       : html`<div class="stack">${posts.map(postCard)}</div>

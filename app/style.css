@@ -1535,3 +1535,6 @@ html { background: color-mix(in srgb, var(--accent) calc(var(--vibe) * 9%), var(
 .forum-act { padding: 0 var(--sp-3); white-space: nowrap; flex: none; }
 .post-foot, .forum-actions { flex-wrap: wrap; }
 .mascot.mood-sleepy::after { right: 2px; }
+
+/* toast must stay readable over busy content */
+.toast.glass, :root[data-lens] .toast.glass { background: color-mix(in srgb, var(--surface-2) 94%, transparent); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }

@@ -1034,4 +1034,5 @@ STRINGS.en = {
   'forum.age': "I am 18 or older and I agree to the community rules.",
   'forum.errAge': "Confirm you are 18 or older to continue.",
   'account.agreeTerms': "I am 18 or older and I accept the Terms of Use and Privacy Policy.",
+  'forum.setup': "Social is not set up on the server yet. Run community.sql and social.sql in Supabase, then try again.",
 };
